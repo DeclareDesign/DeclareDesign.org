@@ -1,3 +1,3 @@
 Package: newwebsite
 Title: What the Package Does (One Line, Title Case)
-Requires: pkgdown, DeclareDesign, fabricatr, estimatr, randomizr, DesignLibrary, tidyverse
+Depends: pkgdown, DeclareDesign, fabricatr, estimatr, randomizr, DesignLibrary, tidyverse
