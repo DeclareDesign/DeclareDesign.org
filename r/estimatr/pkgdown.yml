@@ -2,6 +2,15 @@ pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  custom_functions: custom_functions.html
-last_built: 2020-12-04T22:38Z
+  absorbing-fixed-effects: absorbing-fixed-effects.html
+  benchmarking-estimatr: benchmarking-estimatr.html
+  emmeans-examples: emmeans-examples.html
+  estimatr-in-the-tidyverse: estimatr-in-the-tidyverse.html
+  getting-started: getting-started.html
+  mathematical-notes: mathematical-notes.html
+  regression-tables: regression-tables.html
+  simulations-debiasing-dim: simulations-debiasing-dim.html
+  simulations-ols-variance: simulations-ols-variance.html
+  stata-wls-hat: stata-wls-hat.html
+last_built: 2020-12-04T23:00Z
 

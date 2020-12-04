@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • DeclareDesign</title>
+<title>Changelog • estimatr</title>
 
 
 <!-- jquery -->
@@ -70,8 +70,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">DeclareDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.25.0</span>
+        <a class="navbar-link" href="../index.html">estimatr</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.27.0</span>
       </span>
     </div>
 
@@ -94,7 +94,34 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom_functions.html">Custom functions and DeclareDesign</a>
+      <a href="../articles/absorbing-fixed-effects.html">Absorbing Fixed Effects with estimatr</a>
+    </li>
+    <li>
+      <a href="../articles/benchmarking-estimatr.html">Benchmarking estimatr</a>
+    </li>
+    <li>
+      <a href="../articles/emmeans-examples.html">Examples with emmeans</a>
+    </li>
+    <li>
+      <a href="../articles/estimatr-in-the-tidyverse.html">estimatr in the Tidyverse</a>
+    </li>
+    <li>
+      <a href="../articles/getting-started.html">Getting started using estimatr</a>
+    </li>
+    <li>
+      <a href="../articles/mathematical-notes.html">Mathematical notes for estimatr</a>
+    </li>
+    <li>
+      <a href="../articles/regression-tables.html">Regression Tables with estimatr</a>
+    </li>
+    <li>
+      <a href="../articles/simulations-debiasing-dim.html">Simulations - Debiasing Difference-in-Means</a>
+    </li>
+    <li>
+      <a href="../articles/simulations-ols-variance.html">Simulations - OLS and Variance</a>
+    </li>
+    <li>
+      <a href="../articles/stata-wls-hat.html">How Stata's hat matrix differs with weights</a>
     </li>
   </ul>
 </li>
@@ -104,7 +131,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/DeclareDesign/DeclareDesign/">
+  <a href="https://github.com/DeclareDesign/estimatr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -123,94 +150,181 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/DeclareDesign/DeclareDesign/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/DeclareDesign/estimatr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="declaredesign-0250" class="section level1">
-<h1 class="page-header" data-toc-text="0.25.0">
-<a href="#declaredesign-0250" class="anchor"></a>DeclareDesign 0.25.0<small> Unreleased </small>
+    <div id="estimatr-0260" class="section level1">
+<h1 class="page-header" data-toc-text="0.26.0">
+<a href="#estimatr-0260" class="anchor"></a>estimatr 0.26.0<small> 2020-09-07 </small>
 </h1>
 <ul>
-<li>Allow estimands to be functions of other estimands</li>
+<li>Test suite changes</li>
 </ul>
 </div>
-    <div id="declaredesign-0240" class="section level1">
+    <div id="estimatr-0240" class="section level1">
 <h1 class="page-header" data-toc-text="0.24.0">
-<a href="#declaredesign-0240" class="anchor"></a>DeclareDesign 0.24.0<small> 2020-11-14 </small>
+<a href="#estimatr-0240" class="anchor"></a>estimatr 0.24.0<small> 2020-09-02 </small>
 </h1>
 <ul>
-<li>Add new step <code>declare_measurement</code> for measuring outcome variables.</li>
-<li>Add <code>declare_test</code> to enable hypothesis testing where no estimand is targeted. For example, <code>declare_test</code> could be used for a K-S test of distributional equality and <code>declare_estimator</code> for a difference-in-means estimate of an average treatment effect.</li>
-<li>Add <code>model_summary</code> option to <code>declare_estimator</code>, to enable specifying a model and then a separate post-estimation function to extract coefficient estimates (e.g., estimate of a treatment effect) or model summary statistics (e.g., R^2 or the result of an F-test from a regression).</li>
-<li>Simplify <code>declare_diagnosands</code> functionality. <code><a href="../reference/diagnose_design.html">diagnose_design()</a></code> by default runs an internal function with a set of default diagnosands, including power, RMSE, bias, type S rate, coverage, mean estimate, and mean estimand.</li>
-<li>Improve compatibility with dplyr verbs as handlers. <code>filter</code> now works.</li>
-<li>Rename <code>declare_reveal</code> to <code>reveal_outcomes</code>. Both continue to work.</li>
+<li>tidy: rename nobs, nclusters, nblocks</li>
+<li>tidy: new arguments conf.int, conf.level</li>
+<li>Added <code>update.iv_robust()</code>
+</li>
+<li>Bug fix regarding fixed effects with large numbers</li>
 </ul>
 </div>
-    <div id="declaredesign-0220" class="section level1">
+    <div id="estimatr-0220" class="section level1">
 <h1 class="page-header" data-toc-text="0.22.0">
-<a href="#declaredesign-0220" class="anchor"></a>DeclareDesign 0.22.0<small> 2020-03-24 </small>
+<a href="#estimatr-0220" class="anchor"></a>estimatr 0.22.0<small> 2020-03-19 </small>
 </h1>
 <ul>
-<li>Fix ability to set <code>sampling_variable</code> in <code>declare_sampling</code>.</li>
-<li>Add ability to retain nonsampled data after sampling via <code>drop_nonsampled</code> flag in <code>declare_sampling</code>.</li>
+<li>Bug fixes</li>
 </ul>
 </div>
-    <div id="declaredesign-0200" class="section level1">
+    <div id="estimatr-0200" class="section level1">
 <h1 class="page-header" data-toc-text="0.20.0">
-<a href="#declaredesign-0200" class="anchor"></a>DeclareDesign 0.20.0<small> 2019-09-10 </small>
+<a href="#estimatr-0200" class="anchor"></a>estimatr 0.20.0<small> 2019-09-09 </small>
 </h1>
 <ul>
-<li>Add <code>compare_diagnoses</code> function to compare two designs on the basis of their design diagnoses.</li>
-<li>Compatibility with <code>rlang</code> 0.4.0</li>
-<li>Bug fixes</li>
+<li>Added support for <code>emmeans</code> (thanks <a href='https://github.com/rvlenth'>@rvlenth</a>)!</li>
+<li>Fixed bug when estimating <code>diagnostics</code> in <code><a href="../reference/iv_robust.html">iv_robust()</a></code> without explicitly specifying <code>se_type</code> (issue <a href='https://github.com/DeclareDesign/estimatr/issues/310'>#310</a>)</li>
+<li>Support for <code>rlang</code> 0.4.0</li>
 </ul>
 </div>
-    <div id="declaredesign-0180" class="section level1">
+    <div id="estimatr-0180" class="section level1">
 <h1 class="page-header" data-toc-text="0.18.0">
-<a href="#declaredesign-0180" class="anchor"></a>DeclareDesign 0.18.0<small> 2019-04-30 </small>
+<a href="#estimatr-0180" class="anchor"></a>estimatr 0.18.0<small> 2019-05-26 </small>
 </h1>
 <ul>
-<li>Add <code>compare_designs</code> functions to compare the code and output of designs side-by-side.</li>
-<li>Bug fixes</li>
+<li>Fixed bug where collinear covariates caused fixed effects estimator to crash (issue <a href='https://github.com/DeclareDesign/estimatr/issues/294'>#294</a>)</li>
+<li>Added <code><a href="../reference/estimatr_glancers.html">glance.lh_robust()</a></code> and fixed some issues with printing and summarizing <code><a href="../reference/lh_robust.html">lh_robust()</a></code> objects (issues <a href='https://github.com/DeclareDesign/estimatr/issues/295'>#295</a> and <a href='https://github.com/DeclareDesign/estimatr/issues/296'>#296</a>)</li>
+<li>Fixes CRAN errors in testing with new <code>clubSandwich</code> package</li>
 </ul>
 </div>
-    <div id="declaredesign-0160" class="section level1">
+    <div id="estimatr-0160" class="section level1">
 <h1 class="page-header" data-toc-text="0.16.0">
-<a href="#declaredesign-0160" class="anchor"></a>DeclareDesign 0.16.0<small> 2019-01-26 </small>
+<a href="#estimatr-0160" class="anchor"></a>estimatr 0.16.0<small> Unreleased </small>
 </h1>
 <ul>
-<li>Add <code>draw_assignment</code> function to draw an assignment vector(s) given data</li>
-<li>Add <code>draw_sample</code> function to draw a sample or multiple sequential samples from data</li>
-<li>Rewrite <code>draw_data</code> to optionally take a data argument. <code>draw_data</code> now can be used to draw data for the full design, or for subsets of it. <code>start</code> and <code>end</code> flags are added to select which portions of the design to run</li>
-<li>Bug fixes</li>
+<li>Add <code>diagnostics</code> to <code><a href="../reference/iv_robust.html">iv_robust()</a></code>
+</li>
+<li>Add <code><a href="https://generics.r-lib.org/reference/glance.html">glance()</a></code> methods for all estimators</li>
+<li>Add <code><a href="../reference/lh_robust.html">lh_robust()</a></code> for easy interface to <code><a href="https://rdrr.io/pkg/car/man/linearHypothesis.html">car::linearHypothesis()</a></code>
+</li>
+<li>Fixed minor bug with a formula such as <code><a href="https://rdrr.io/r/base/NA.html">is.na(var)</a></code> in the <code>covariates</code> formula in <code><a href="../reference/lm_lin.html">lm_lin()</a></code> (issue <a href='https://github.com/DeclareDesign/estimatr/issues/283'>#283</a>)</li>
 </ul>
 </div>
-    <div id="declaredesign-0140" class="section level1">
+    <div id="estimatr-0140" class="section level1">
 <h1 class="page-header" data-toc-text="0.14.0">
-<a href="#declaredesign-0140" class="anchor"></a>DeclareDesign 0.14.0<small> 2019-01-07 </small>
+<a href="#estimatr-0140" class="anchor"></a>estimatr 0.14.0<small> Unreleased </small>
 </h1>
 <ul>
-<li>Improved generics interoperability</li>
-<li>Bug fixes</li>
+<li>Removes <code>broom</code> hack for <code>tidy</code> method and instead relies on importing <code>generics</code>
+</li>
 </ul>
 </div>
-    <div id="declaredesign-0120" class="section level1">
+    <div id="estimatr-0120" class="section level1">
 <h1 class="page-header" data-toc-text="0.12.0">
-<a href="#declaredesign-0120" class="anchor"></a>DeclareDesign 0.12.0<small> 2018-11-09 </small>
+<a href="#estimatr-0120" class="anchor"></a>estimatr 0.12.0<small> Unreleased </small>
 </h1>
 <ul>
-<li>Add ability to use <code>get_estimates</code> with data, useful for example for getting estimates after data is collected for a study. To draw estimates or estimands from simulated data, now use renamed <code>draw_estimates</code> and <code>draw_estimands</code> functions.</li>
-<li>Documentation improvements</li>
-<li>Bug fixes</li>
+<li>Fixed ambiguity about how interacted covariates were centered in <code>lm_lin</code>
+</li>
+<li>A series of fixes for bugs that occurred with multiple outcomes (multivariate regression):
+<ul>
+<li>Fixed bug pointed out by James Pustejovsky via the <code>sandwich</code> version 2.5-0 and off-diagonal blocks of multivariate regression vcov matrices</li>
+<li>Fixed bugs in <code>lm_lin</code> preventing multivariate regression</li>
+<li>Fixed bug that truncated degrees of freedom with “CR2” standard errors</li>
+<li>Fixed bug that returned incorrect R-squared for the second or later outcomes</li>
+</ul>
+</li>
+<li>Fixed bug preventing integration with latest version of <code>margins</code>
+</li>
+<li>Fixed bug with <code>difference_in_means</code> when using <code>condition1</code> and <code>condition2</code> to subset a treatment vector with more than two treatment conditions. Previous estimates and standard errors were incorrect.</li>
 </ul>
 </div>
-    <div id="declaredesign-0100" class="section level1">
+    <div id="estimatr-0100" class="section level1">
 <h1 class="page-header" data-toc-text="0.10.0">
-<a href="#declaredesign-0100" class="anchor"></a>DeclareDesign 0.10.0<small> 2018-07-29 </small>
+<a href="#estimatr-0100" class="anchor"></a>estimatr 0.10.0<small> 2018-07-12 </small>
 </h1>
 <ul>
-<li>First CRAN version</li>
+<li>Changed names of confidence interval columns in tidied data from <code>ci.lower</code> and <code>ci.upper</code> to <code>conf.low</code> and <code>conf.high</code> to be in line with other tidy methods</li>
+<li>Added support for <code>fixed_effects</code> that are just one block</li>
+<li>Added support for specifing <code>condition_prs</code> in <code><a href="../reference/horvitz_thompson.html">horvitz_thompson()</a></code> as a single number</li>
+<li>Added t- and z-statistics to output</li>
+<li>Limit unnecessary messaging in <code><a href="../reference/horvitz_thompson.html">horvitz_thompson()</a></code>
+</li>
+</ul>
+</div>
+    <div id="estimatr-080" class="section level1">
+<h1 class="page-header" data-toc-text="0.8.0">
+<a href="#estimatr-080" class="anchor"></a>estimatr 0.8.0<small> 2018-06-02 </small>
+</h1>
+<ul>
+<li>Added support for absorbing fixed effects in <code>lm_robust</code> and <code>iv_robust</code>
+</li>
+<li>Added <code>commarobust</code> and <code>starprep</code> for stargazer integration</li>
+<li>Added <code>texreg</code> support for 2SLS IV models</li>
+<li>Fixed bugs for incorrect F-statistics with robust standard errors</li>
+<li>Refactor of main fitting engine for linear models</li>
+</ul>
+</div>
+    <div id="estimatr-060" class="section level1">
+<h1 class="page-header" data-toc-text="0.6.0">
+<a href="#estimatr-060" class="anchor"></a>estimatr 0.6.0<small> 2018-03-28 </small>
+</h1>
+<ul>
+<li>Added support for multivariate linear models</li>
+<li>Added support for instrumental variables regression</li>
+<li>Major change to name of object output elements to mostly match with <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy</a></code>
+<ul>
+<li>old -&gt; new</li>
+<li>
+<code>coefficient_names</code> -&gt; <code>term</code>
+</li>
+<li>
+<code>se</code> -&gt; <code>std.error</code>
+</li>
+<li>
+<code>p</code> -&gt; <code>p.values</code>
+</li>
+<li>
+<code>ci_lower</code> -&gt; <code>ci.lower</code>
+</li>
+<li>
+<code>ci_upper</code> -&gt; <code>ci.upper</code>
+</li>
+<li>All of the above changes are also made to the column names on the output of <code>tidy</code>; furthermore for <code>tidy</code> objects one further name change from <code>coefficients</code> -&gt; <code>estimate</code> has been made</li>
+</ul>
+</li>
+<li>Fixed bug that caused variances, standard errors, and p-values to be wrong for weighted “CR2” variance estimation</li>
+<li>Fixed incorrect estimates when both weights and blocks were passed to <code>difference_in_means</code>
+</li>
+<li>Rewrite NSE handling to be done by <code>rlang</code>
+</li>
+<li>Rewrite <code>na.omit</code> handler in R</li>
+<li>Major refactor of C++ underlying regression estimators</li>
+</ul>
+</div>
+    <div id="estimatr-040" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.0">
+<a href="#estimatr-040" class="anchor"></a>estimatr 0.4.0<small> 2018-02-15 </small>
+</h1>
+<ul>
+<li>Changed suffix added to centered variables in <code><a href="../reference/lm_lin.html">lm_lin()</a></code> from <code>_bar</code> to <code>_c</code>
+</li>
+<li>Added all vignettes to <code>.Rbuildignore</code>, only available on website now</li>
+<li>Fixed <code>lm_robust_helper.cpp</code> algorithm to not catch own exception and to deal with <code>valgrind</code> memory errors</li>
+<li>Bugfix where passing a formula as an object within a function would fail</li>
+<li>Simplified some tests for various CRAN test platforms</li>
+</ul>
+</div>
+    <div id="estimatr-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#estimatr-020" class="anchor"></a>estimatr 0.2.0<small> 2018-01-29 </small>
+</h1>
+<ul>
+<li>First <strong>CRAN</strong> upload</li>
 </ul>
 </div>
   </div>
@@ -226,7 +340,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Graeme Blair, Jasper Cooper, Alexander Coppock, Macartan Humphreys, Neal Fultz.</p>
+  <p>Developed by Graeme Blair, Jasper Cooper, Alexander Coppock, Macartan Humphreys, Luke Sonnet.</p>
 </div>
 
 <div class="pkgdown">

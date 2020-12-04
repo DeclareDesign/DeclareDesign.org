@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • DeclareDesign</title>
+<title>Changelog • fabricatr</title>
 
 
 <!-- jquery -->
@@ -70,8 +70,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">DeclareDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.25.0</span>
+        <a class="navbar-link" href="../index.html">fabricatr</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
       </span>
     </div>
 
@@ -94,7 +94,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom_functions.html">Custom functions and DeclareDesign</a>
+      <a href="../articles/advanced_features.html">Advanced features</a>
+    </li>
+    <li>
+      <a href="../articles/building_importing.html">Building and Importing Data</a>
+    </li>
+    <li>
+      <a href="../articles/common_social.html">Common Social Science variables</a>
+    </li>
+    <li>
+      <a href="../articles/cross_classified.html">Panel and Cross-classified data</a>
+    </li>
+    <li>
+      <a href="../articles/getting_started.html">Getting started with fabricatr</a>
+    </li>
+    <li>
+      <a href="../articles/other_packages.html">Using other data generating packages with fabricatr</a>
+    </li>
+    <li>
+      <a href="../articles/resampling.html">Resampling data with fabricatr</a>
+    </li>
+    <li>
+      <a href="../articles/time_series.html">Time series data with fabricatr</a>
+    </li>
+    <li>
+      <a href="../articles/variable_generation.html">Generating discrete random variables with fabricatr</a>
     </li>
   </ul>
 </li>
@@ -104,7 +128,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/DeclareDesign/DeclareDesign/">
+  <a href="https://github.com/DeclareDesign/fabricatr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -123,95 +147,60 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/DeclareDesign/DeclareDesign/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/DeclareDesign/fabricatr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="declaredesign-0250" class="section level1">
-<h1 class="page-header" data-toc-text="0.25.0">
-<a href="#declaredesign-0250" class="anchor"></a>DeclareDesign 0.25.0<small> Unreleased </small>
-</h1>
-<ul>
-<li>Allow estimands to be functions of other estimands</li>
-</ul>
-</div>
-    <div id="declaredesign-0240" class="section level1">
-<h1 class="page-header" data-toc-text="0.24.0">
-<a href="#declaredesign-0240" class="anchor"></a>DeclareDesign 0.24.0<small> 2020-11-14 </small>
-</h1>
-<ul>
-<li>Add new step <code>declare_measurement</code> for measuring outcome variables.</li>
-<li>Add <code>declare_test</code> to enable hypothesis testing where no estimand is targeted. For example, <code>declare_test</code> could be used for a K-S test of distributional equality and <code>declare_estimator</code> for a difference-in-means estimate of an average treatment effect.</li>
-<li>Add <code>model_summary</code> option to <code>declare_estimator</code>, to enable specifying a model and then a separate post-estimation function to extract coefficient estimates (e.g., estimate of a treatment effect) or model summary statistics (e.g., R^2 or the result of an F-test from a regression).</li>
-<li>Simplify <code>declare_diagnosands</code> functionality. <code><a href="../reference/diagnose_design.html">diagnose_design()</a></code> by default runs an internal function with a set of default diagnosands, including power, RMSE, bias, type S rate, coverage, mean estimate, and mean estimand.</li>
-<li>Improve compatibility with dplyr verbs as handlers. <code>filter</code> now works.</li>
-<li>Rename <code>declare_reveal</code> to <code>reveal_outcomes</code>. Both continue to work.</li>
-</ul>
-</div>
-    <div id="declaredesign-0220" class="section level1">
-<h1 class="page-header" data-toc-text="0.22.0">
-<a href="#declaredesign-0220" class="anchor"></a>DeclareDesign 0.22.0<small> 2020-03-24 </small>
-</h1>
-<ul>
-<li>Fix ability to set <code>sampling_variable</code> in <code>declare_sampling</code>.</li>
-<li>Add ability to retain nonsampled data after sampling via <code>drop_nonsampled</code> flag in <code>declare_sampling</code>.</li>
-</ul>
-</div>
-    <div id="declaredesign-0200" class="section level1">
-<h1 class="page-header" data-toc-text="0.20.0">
-<a href="#declaredesign-0200" class="anchor"></a>DeclareDesign 0.20.0<small> 2019-09-10 </small>
-</h1>
-<ul>
-<li>Add <code>compare_diagnoses</code> function to compare two designs on the basis of their design diagnoses.</li>
-<li>Compatibility with <code>rlang</code> 0.4.0</li>
-<li>Bug fixes</li>
-</ul>
-</div>
-    <div id="declaredesign-0180" class="section level1">
-<h1 class="page-header" data-toc-text="0.18.0">
-<a href="#declaredesign-0180" class="anchor"></a>DeclareDesign 0.18.0<small> 2019-04-30 </small>
-</h1>
-<ul>
-<li>Add <code>compare_designs</code> functions to compare the code and output of designs side-by-side.</li>
-<li>Bug fixes</li>
-</ul>
-</div>
-    <div id="declaredesign-0160" class="section level1">
-<h1 class="page-header" data-toc-text="0.16.0">
-<a href="#declaredesign-0160" class="anchor"></a>DeclareDesign 0.16.0<small> 2019-01-26 </small>
-</h1>
-<ul>
-<li>Add <code>draw_assignment</code> function to draw an assignment vector(s) given data</li>
-<li>Add <code>draw_sample</code> function to draw a sample or multiple sequential samples from data</li>
-<li>Rewrite <code>draw_data</code> to optionally take a data argument. <code>draw_data</code> now can be used to draw data for the full design, or for subsets of it. <code>start</code> and <code>end</code> flags are added to select which portions of the design to run</li>
-<li>Bug fixes</li>
-</ul>
-</div>
-    <div id="declaredesign-0140" class="section level1">
-<h1 class="page-header" data-toc-text="0.14.0">
-<a href="#declaredesign-0140" class="anchor"></a>DeclareDesign 0.14.0<small> 2019-01-07 </small>
-</h1>
-<ul>
-<li>Improved generics interoperability</li>
-<li>Bug fixes</li>
-</ul>
-</div>
-    <div id="declaredesign-0120" class="section level1">
-<h1 class="page-header" data-toc-text="0.12.0">
-<a href="#declaredesign-0120" class="anchor"></a>DeclareDesign 0.12.0<small> 2018-11-09 </small>
-</h1>
-<ul>
-<li>Add ability to use <code>get_estimates</code> with data, useful for example for getting estimates after data is collected for a study. To draw estimates or estimands from simulated data, now use renamed <code>draw_estimates</code> and <code>draw_estimands</code> functions.</li>
-<li>Documentation improvements</li>
-<li>Bug fixes</li>
-</ul>
-</div>
-    <div id="declaredesign-0100" class="section level1">
+    <div id="fabricatr-0100" class="section level1">
 <h1 class="page-header" data-toc-text="0.10.0">
-<a href="#declaredesign-0100" class="anchor"></a>DeclareDesign 0.10.0<small> 2018-07-29 </small>
-</h1>
+<a href="#fabricatr-0100" class="anchor"></a><small> 2019-09-04 </small><strong>fabricatr</strong> 0.10.0</h1>
 <ul>
-<li>First CRAN version</li>
+<li>Changes for compatibility with <code>rlang</code> 0.4.0</li>
+<li>Minor bug fixes</li>
 </ul>
+</div>
+    <div id="fabricatr-080" class="section level1">
+<h1 class="page-header" data-toc-text="0.8.0">
+<a href="#fabricatr-080" class="anchor"></a><small> 2019-03-12 </small><strong>fabricatr</strong> 0.8.0</h1>
+<ul>
+<li>Changes to prepare for R 3.6.0</li>
+</ul>
+</div>
+    <div id="fabricatr-060" class="section level1">
+<h1 class="page-header" data-toc-text="0.6.0">
+<a href="#fabricatr-060" class="anchor"></a><small> 2018-08-23 </small><strong>fabricatr</strong> 0.6.0</h1>
+<ul>
+<li>Added split-modify-combine functionality to <code>modify_level</code> via the <code>by</code> argument.</li>
+<li>Changed behavior of <code>draw_ordered</code> to ensure categories are data-independent and adding a <code>strict</code> option that replaces values with <code>NA</code> if values are outside all breaks.</li>
+<li>Labeled <code>correlate</code> functionality as experimental.</li>
+<li>Many bug fixes.</li>
+</ul>
+</div>
+    <div id="fabricatr-040" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.0">
+<a href="#fabricatr-040" class="anchor"></a><small> 2018-03-21 </small><strong>fabricatr</strong> 0.4.0</h1>
+<ul>
+<li>
+<code><a href="../reference/recycle.html">recycle()</a></code> helper function for expanding and recycling data</li>
+<li>Added <code><a href="../reference/correlate.html">correlate()</a></code> function to allow users to generate arbitrary correlated random variables.</li>
+<li>Added <code>category_labels</code> argument to <code>draw_categorical</code>
+</li>
+<li>Added <code>draw_quantile</code> and <code>split_quantile</code> functions</li>
+<li>Major updates to test harness</li>
+<li>Changed ID label stapling behaviour in <code>fabricate</code> calls.</li>
+<li>Allow users to pass <code>ID_label</code> in level creation calls to allow back-door unnamed level calls.</li>
+<li>Bugfix for constants in certain <code>modify_level</code> contexts.</li>
+<li>Changed specification of latent variables with links; users should now provide <code>latent</code> as an argument when using a link.</li>
+<li>New syntax for using <code><a href="https://rdrr.io/r/base/length.html">length(ID)</a></code> from upper level to define <code>N</code> of lower level.</li>
+<li>When passing a vector to <code>draw_categorical</code> prob argument, package now sends message instead of warning.</li>
+<li>Major additions to documentation and vignettes, including vignettes for common social sciences variables, time series, and using other creation packages with fabricatr.</li>
+<li>Bugfix in certain cases with single-level variables autocompleting to “data” and not working.</li>
+<li>Added <code>unique_labels</code> argument to <code>resample_data</code> to allow block-level statistic calculation.</li>
+</ul>
+</div>
+    <div id="fabricatr-020" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.0">
+<a href="#fabricatr-020" class="anchor"></a><small> 2018-01-25 </small><strong>fabricatr</strong> 0.2.0</h1>
+<p>First CRAN submission for <strong>fabricatr</strong></p>
 </div>
   </div>
 
@@ -226,7 +215,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Graeme Blair, Jasper Cooper, Alexander Coppock, Macartan Humphreys, Neal Fultz.</p>
+  <p>Developed by Graeme Blair, Jasper Cooper, Alexander Coppock, Macartan Humphreys, Aaron Rudkin, Neal Fultz.</p>
 </div>
 
 <div class="pkgdown">
