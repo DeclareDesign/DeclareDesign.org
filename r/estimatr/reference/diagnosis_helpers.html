@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Diagnose the design — diagnose_design • DeclareDesign</title>
+<title>Explore your design diagnosis — diagnosis_helpers • DeclareDesign</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Diagnose the design — diagnose_design" />
-<meta property="og:description" content="Generates diagnosands from a design or simulations of a design." />
+<meta property="og:title" content="Explore your design diagnosis — diagnosis_helpers" />
+<meta property="og:description" content="Explore your design diagnosis" />
 
 
 
@@ -123,64 +123,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Diagnose the design</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DeclareDesign/DeclareDesign/blob/master/R/diagnose_design.R'><code>R/diagnose_design.R</code></a></small>
-    <div class="hidden name"><code>diagnose_design.Rd</code></div>
+    <h1>Explore your design diagnosis</h1>
+    <small class="dont-index">Source: <a href='https://github.com/DeclareDesign/DeclareDesign/blob/master/R/diagnosis_helper_functions.R'><code>R/diagnosis_helper_functions.R</code></a></small>
+    <div class="hidden name"><code>diagnosis_helpers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generates diagnosands from a design or simulations of a design.</p>
+    <p>Explore your design diagnosis</p>
     </div>
 
-    <pre class="usage"><span class='fu'>diagnose_design</span><span class='op'>(</span>
-  <span class='va'>...</span>,
-  diagnosands <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sims <span class='op'>=</span> <span class='fl'>500</span>,
-  bootstrap_sims <span class='op'>=</span> <span class='fl'>100</span>,
-  add_grouping_variables <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span>
+    <pre class="usage"><span class='fu'>get_diagnosands</span><span class='op'>(</span><span class='va'>diagnosis</span><span class='op'>)</span>
 
-<span class='fu'>diagnose_designs</span><span class='op'>(</span>
-  <span class='va'>...</span>,
-  diagnosands <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sims <span class='op'>=</span> <span class='fl'>500</span>,
-  bootstrap_sims <span class='op'>=</span> <span class='fl'>100</span>,
-  add_grouping_variables <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+<span class='fu'>get_simulations</span><span class='op'>(</span><span class='va'>diagnosis</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>A design or set of designs typically created using the + operator, or a <code>data.frame</code> of simulations, typically created by <code><a href='simulate_design.html'>simulate_design</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>diagnosands</th>
-      <td><p>A set of diagnosands created by <code><a href='diagnosand_handler.html'>declare_diagnosands</a></code>. By default, these include bias, root mean-squared error, power, frequentist coverage, the mean and standard deviation of the estimate(s), the "type S" error rate (Gelman and Carlin 2014), and the mean of the estimand(s).</p></td>
-    </tr>
-    <tr>
-      <th>sims</th>
-      <td><p>The number of simulations, defaulting to 500. sims may also be a vector indicating the number of simulations for each step in a design, as described for <code><a href='simulate_design.html'>simulate_design</a></code></p></td>
-    </tr>
-    <tr>
-      <th>bootstrap_sims</th>
-      <td><p>Number of bootstrap replicates for the diagnosands to obtain the standard errors of the diagnosands, defaulting to <code>100</code>. Set to FALSE to turn off bootstrapping.</p></td>
-    </tr>
-    <tr>
-      <th>add_grouping_variables</th>
-      <td><p>Variables used to generate groups of simulations for diagnosis. Added to list default list: c("design_label", "estimand_label", "estimator_label", "term")</p></td>
+      <th>diagnosis</th>
+      <td><p>A design diagnosis created by <code><a href='diagnose_design.html'>diagnose_design</a></code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a list with a data frame of simulations, a data frame of diagnosands, a vector of diagnosand names, and if calculated, a data frame of bootstrap replicates.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>If the diagnosand function contains a <code>group_by</code> attribute, it will be used to split-apply-combine diagnosands rather than the intersecting column names.</p>
-<p>If <code>sims</code> is named, or longer than one element, a fan-out strategy is created and used instead.</p>
-<p>If the packages <code>future</code> and <code>future.apply</code> are installed, you can set <code><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></code> to run multiple simulations in parallel.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>500</span>, noise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
@@ -193,20 +157,20 @@
 
 <span class='va'>my_estimand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimand.html'>declare_estimand</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>my_reveal</span> <span class='op'>&lt;-</span> <span class='fu'><a href='reveal_outcomes.html'>reveal_outcomes</a></span><span class='op'>(</span><span class='op'>)</span>
-
 <span class='va'>my_estimator</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='va'>my_estimand</span><span class='op'>)</span>
 
+<span class='va'>my_reveal</span> <span class='op'>&lt;-</span> <span class='fu'><a href='reveal_outcomes.html'>reveal_outcomes</a></span><span class='op'>(</span><span class='op'>)</span>
+
 <span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_population</span> <span class='op'>+</span>
-   <span class='va'>my_potential_outcomes</span> <span class='op'>+</span>
-   <span class='va'>my_estimand</span> <span class='op'>+</span>
-   <span class='va'>my_assignment</span> <span class='op'>+</span>
-   <span class='va'>my_reveal</span> <span class='op'>+</span>
-   <span class='va'>my_estimator</span>
+  <span class='va'>my_potential_outcomes</span> <span class='op'>+</span>
+  <span class='va'>my_estimand</span> <span class='op'>+</span>
+  <span class='va'>my_assignment</span> <span class='op'>+</span>
+  <span class='va'>my_reveal</span> <span class='op'>+</span>
+  <span class='va'>my_estimator</span>
 
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># using built-in defaults:</span>
-<span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'>diagnose_design</span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
+<span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'><a href='diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
 <span class='va'>diagnosis</span>
 <span class='op'>}</span>
 
@@ -214,20 +178,17 @@
 <span class='va'>my_diagnosand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='diagnosand_handler.html'>declare_diagnosands</a></span><span class='op'>(</span>absolute_error <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span><span class='op'>(</span><span class='va'>estimate</span> <span class='op'>-</span> <span class='va'>estimand</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'>diagnose_design</span><span class='op'>(</span><span class='va'>design</span>, diagnosands <span class='op'>=</span> <span class='va'>my_diagnosand</span><span class='op'>)</span>
+<span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'><a href='diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>design</span>, diagnosands <span class='op'>=</span> <span class='va'>my_diagnosand</span><span class='op'>)</span>
 <span class='va'>diagnosis</span>
 
-<span class='fu'><a href='diagnosis_helpers.html'>get_diagnosands</a></span><span class='op'>(</span><span class='va'>diagnosis</span><span class='op'>)</span>
+<span class='fu'>get_diagnosands</span><span class='op'>(</span><span class='va'>diagnosis</span><span class='op'>)</span>
 
-<span class='fu'><a href='diagnosis_helpers.html'>get_simulations</a></span><span class='op'>(</span><span class='va'>diagnosis</span><span class='op'>)</span>
+<span class='fu'>get_simulations</span><span class='op'>(</span><span class='va'>diagnosis</span><span class='op'>)</span>
 
-<span class='op'>}</span>
-<span class='co'># Using an existing data frame of simulations</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>simulations</span> <span class='op'>&lt;-</span> <span class='fu'><a href='simulate_design.html'>simulate_design</a></span><span class='op'>(</span><span class='va'>designs</span>, sims <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-<span class='va'>diagnosis</span>   <span class='op'>&lt;-</span> <span class='fu'>diagnose_design</span><span class='op'>(</span>simulations_df <span class='op'>=</span> <span class='va'>simulations_df</span><span class='op'>)</span>
+<span class='fu'><a href='reshape_diagnosis.html'>reshape_diagnosis</a></span><span class='op'>(</span><span class='va'>diagnosis</span><span class='op'>)</span>
 
 <span class='op'>}</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
