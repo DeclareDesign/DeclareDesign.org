@@ -1,0 +1,80 @@
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    # run every day at 11 PM
+    - cron: '0 23 * * *'
+
+name: build-website
+
+jobs:
+  build:
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@master
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@master
+
+      - name: Setup pandoc
+        uses: r-lib/actions/setup-pandoc@master
+        
+      # - name: Cache R packages
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: ${{ env.R_LIBS_USER }}
+      #     key: r-6-${{ hashFiles('DESCRIPTION') }}
+      #     restore-keys: r-6-
+
+      # - name: Install pak
+      #   run: |
+      #     install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
+      #   shell: Rscript {0}
+      # 
+      # - name: Install dependencies
+      #   run: |
+      #     pak::local_install_dev_deps(upgrade = TRUE)
+      #   shell: Rscript {0}
+        
+      # - name: Search for rmd dependences
+      #   run: Rscript -e 'library(checkpoint); found_packages <- scanForPackages(".", use.knitr = TRUE)$pkgs; if(length(found_packages[!found_packages%in% installed.packages()]) > 0) install.packages(found_packages[!found_packages%in% installed.packages()])'
+
+      # - name: Cache bookdown results
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: _bookdown_files
+      #     key: bookdown-2-${{ hashFiles('**/*Rmd') }}
+      #     restore-keys: bookdown-2-
+
+      - name: Clone all DD packages
+        run: | 
+          git clone --branch newwebsite https://github.com/DeclareDesign/DeclareDesign DeclareDesign
+
+# git clone https://github.com/DeclareDesign/fabricatr fabricatr
+# git clone https://github.com/DeclareDesign/estimatr estimatr
+# git clone https://github.com/DeclareDesign/randomizr randomizr
+# git clone https://github.com/DeclareDesign/DesignLibrary DesignLibrary
+          
+      - name: Pkgdown
+        run: | 
+          Rscript -e 'pkgdown::build_site("DeclareDesign")'
+          
+      - name: Web site directory structure
+        run: |
+          mkdir tmpweb tmpweb/r tmpweb/r/declaredesign tmpweb/r/fabricatr
+          cp -R DeclareDesign/docs/* tmpweb/r/declaredesign/.
+
+      - name: Push to gh-pages
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: 'tmpweb'
+          CLEAN: true
+          
+          
