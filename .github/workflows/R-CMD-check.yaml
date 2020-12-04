@@ -65,31 +65,22 @@ jobs:
           pkgs <- installed.packages()[, "Package"]
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
-
+        
       - name: Clone all DD packages
         run: | 
           git clone --branch newwebsite https://github.com/DeclareDesign/DeclareDesign DeclareDesign
-          git clone --branch newwebsite https://github.com/DeclareDesign/fabricatr fabricatr
-          git clone --branch newwebsite https://github.com/DeclareDesign/estimatr estimatr
-          git clone --branch newwebsite https://github.com/DeclareDesign/randomizr randomizr
-
+          
       - name: Search for dependences in docs
         run: Rscript -e 'library(checkpoint); found_packages <- scanForPackages(".", use.knitr = TRUE)$pkgs; if(length(found_packages[!found_packages%in% installed.packages()[, 1]]) > 0) install.packages(found_packages[!found_packages%in% installed.packages()[,1]], repos = "https://cran.r-project.org")'
 
       - name: Pkgdown
         run: | 
           Rscript -e 'pkgdown::build_site("DeclareDesign")'
-          Rscript -e 'pkgdown::build_site("fabricatr")'
-          Rscript -e 'pkgdown::build_site("estimatr")'
-          Rscript -e 'pkgdown::build_site("randomizr")'
 
       - name: Web site directory structure
         run: |
           mkdir tmpweb tmpweb/r 
           cp -R DeclareDesign/docs tmpweb/r/declaredesign
-          cp -R fabricatr/docs tmpweb/r/fabricatr
-          cp -R estimatr/docs tmpweb/r/estimatr
-          cp -R randomizr/docs tmpweb/r/randomizr
 
       - name: Push to gh-pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
