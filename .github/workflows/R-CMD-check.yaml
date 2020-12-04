@@ -8,7 +8,6 @@ on:
   push:
     branches:
       - main
-      - master
 
 name: R-CMD-check
 
@@ -54,14 +53,6 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
-      - name: Install system dependencies
-        if: runner.os == 'Linux'
-        run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
-
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
@@ -89,10 +80,11 @@ jobs:
           cp -R DeclareDesign/docs/* tmpweb/r/declaredesign/.
 
       - name: Push to gh-pages
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: 'tmpweb'
           CLEAN: true
+          
