@@ -1,0 +1,3 @@
+Package: newwebsite
+Title: What the Package Does (One Line, Title Case)
+Requires: DeclareDesign, fabricatr, estimatr, randomizr, DesignLibrary, tidyverse
