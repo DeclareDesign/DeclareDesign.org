@@ -72,6 +72,7 @@ jobs:
           git clone --branch newwebsite https://github.com/DeclareDesign/fabricatr fabricatr
           git clone --branch newwebsite https://github.com/DeclareDesign/estimatr estimatr
           git clone --branch newwebsite https://github.com/DeclareDesign/randomizr randomizr
+          git clone --branch newwebsite https://github.com/DeclareDesign/DesignLibrary DesignLibrary
 
       - name: Search for dependences in docs
         run: Rscript -e 'library(checkpoint); found_packages <- scanForPackages(".", use.knitr = TRUE)$pkgs; if(length(found_packages[!found_packages%in% installed.packages()[, 1]]) > 0) install.packages(found_packages[!found_packages%in% installed.packages()[,1]], repos = "https://cran.r-project.org")'
@@ -82,6 +83,7 @@ jobs:
           Rscript -e 'pkgdown::build_site("fabricatr")'
           Rscript -e 'pkgdown::build_site("estimatr")'
           Rscript -e 'pkgdown::build_site("randomizr")'
+          Rscript -e 'pkgdown::build_site("DesignLibrary")'
 
       - name: Web site directory structure
         run: |
@@ -90,6 +92,7 @@ jobs:
           cp -R fabricatr/docs tmpweb/r/fabricatr
           cp -R estimatr/docs tmpweb/r/estimatr
           cp -R randomizr/docs tmpweb/r/randomizr
+          cp -R DesignLibrary/docs tmpweb/r/designlibrary
 
       - name: Push to gh-pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
