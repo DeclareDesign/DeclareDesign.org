@@ -87,9 +87,9 @@ jobs:
         run: |
           mkdir tmpweb tmpweb/r 
           cp -R DeclareDesign/docs tmpweb/r/declaredesign
-          cp -R DeclareDesign/docs tmpweb/r/fabricatr
-          cp -R DeclareDesign/docs tmpweb/r/estimatr
-          cp -R DeclareDesign/docs tmpweb/r/randomizr
+          cp -R fabricatr/docs tmpweb/r/fabricatr
+          cp -R estimatr/docs tmpweb/r/estimatr
+          cp -R randomizr/docs tmpweb/r/randomizr
 
       - name: Push to gh-pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
