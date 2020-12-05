@@ -66,6 +66,10 @@ jobs:
           sessioninfo::session_info(pkgs, include_base = TRUE)
         shell: Rscript {0}
         
+      - name: Build main Web site
+        run: | 
+          Rscript -e 'blogdown:::build_site()'
+        
       - name: Clone all DD packages
         run: | 
           git clone --branch newwebsite https://github.com/DeclareDesign/DeclareDesign DeclareDesign
@@ -79,8 +83,8 @@ jobs:
 
       - name: Web site directory structure
         run: |
-          mkdir tmpweb tmpweb/r 
-          cp -R DeclareDesign/docs tmpweb/r/declaredesign
+          mkdir public/r 
+          cp -R DeclareDesign/docs public/r/declaredesign
 
       - name: Push to gh-pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -88,6 +92,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: 'tmpweb'
+          FOLDER: 'public'
           CLEAN: true
           

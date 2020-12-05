@@ -1,0 +1,39 @@
+---
+title: "About DeclareDesign"
+output:
+  blogdown::html_page:
+    toc: false
+---
+
+The DeclareDesign project is directed by [Graeme Blair](https://graemeblair.com) (UCLA), [Jasper Cooper](http://jasper-cooper.com) (Columbia University), [Alexander Coppock](http://alexandercoppock.com) (Yale University), and [Macartan Humphreys](http://macartan.nyc) (Columbia University and WZB).
+
+## Project contributors
+
+DeclareDesign has benefited from the contributions of many researchers and coders. We recognize key contributors in addition to the principal investigators to each component:
+
+`DeclareDesign` for R: Neal Fultz
+
+`estimatr` for R: [Luke Sonnet](http://lukesonnet.com)
+
+`fabricatr` for R: [Aaron Rudkin](http://rudkin.ca)
+
+`randomizr` for Stata: John Ternovski
+
+`DeclareDesignWizard`: [Clara Bicalho](https://polisci.berkeley.edu/people/person/clara-bicalho-maia-correia), [Markus Konrad](https://twitter.com/_knrd), and [Sisi Huang](https://twitter.com/zerinahuang)
+
+`DesignLibrary`: [Clara Bicalho](https://polisci.berkeley.edu/people/person/clara-bicalho-maia-correia) and [Lily Medina](https://twitter.com/lilymiru)
+
+`declaredesign.org`: Nicholas Rivera
+
+We thank contributors to earlier iterations of the project Thomas Leavitt, Tara Slough, Georgiy Syunyaev, and Anna Wilke. We also thank early beta testers Lauren Young, Erin York, and Yang-Yang Zhou.
+
+# Contributing
+
+We encourage you to contribute to our [design library](/library/),
+as well as to submit bug reports and feature requests for our software as [Github](https://github.com/DeclareDesign) issues.
+We ask that contributors agree to our [code of conduct](/conduct/).
+
+# Funding
+
+We are grateful for major funding from the [Laura and John Arnold Foundation](http://www.arnoldfoundation.org/)
+and seed funding from [EGAP -- Evidence in Governance and Politics](http://egap.org).

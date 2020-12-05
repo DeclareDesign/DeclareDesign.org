@@ -1,0 +1,34 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{{.Hugo.Generator}}
+
+{{partial "page_title.html" .}}
+
+{{if eq .URL "/"}}
+<meta name="description" content="{{.Site.Params.description}}">
+{{else}}
+  {{if .Description}}
+  <meta name="description" content="{{.Description}}">
+  {{end}}
+{{end}}
+
+{{if .Keywords}}
+<meta name="keywords" content ="{{delimit .Keywords ", "}}">
+{{end}}
+
+{{if .RSSLink}}
+<link href="{{.RSSLink | relURL}}" rel="alternate" type="application/rss+xml" title="{{.Site.Title}}" />
+{{end}}
+
+{{partial "head_highlightjs.html" .}}
+{{partial "head_font_awesome.html" .}}
+{{partial "head_bootstrap.html" .}}
+{{partial "head_jquery.html" .}}
+{{partial "head_twitter_card.html" .}}
+
+{{range .Site.Params.customCSS}}
+  <link rel="stylesheet" href="{{. | relURL}}">
+{{end}}
+
+{{/* All non-partial items will go in head_custom. */}}
+{{partial "head_custom.html" .}}

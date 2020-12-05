@@ -1,0 +1,46 @@
+---
+title: "Home Page"
+output:
+  blogdown::html_page:
+    toc: false
+---
+# Declaring and Diagnosing Research Designs
+
+Empirical social scientists routinely face two research design problems. First, we need to select
+a high-quality design, given resource constraints. Second, we need to convince readers and
+reviewers of the design’s high quality.
+
+We describe in this Web site an approach to *declaring* the elements of a research design in code and *diagnosing* the properties of the design, such as power and sampling bias, given assumptions. We outline the [Model-Inquiry-Data Strategy-Answer Strategy (MIDA) approach](/mida), with further details in our [paper](https://declaredesign.org/declare.pdf) and the [supporting information](https://declaredesign.org/declare_SI.pdf).
+
+# Design library
+
+To make getting started easy, we provide a [library of common research designs](/library/) that you can diagnose, modify, and implement.
+
+# Software
+
+We provide five software packages to declare and diagnose research designs.
+
+1. randomizr (for [R](/r/randomizr/) and for [Stata](/stata/randomizr)): Easy-to-use tools for common forms of random assignment and sampling.
+2. [fabricatr](/r/fabricatr/): Imagine your data before you collect it.
+3. [estimatr](/r/estimatr/): Fast estimators for design-based inference.
+4. [DeclareDesign](/r/declaredesign/): Declare and diagnose research designs.
+5. [DesignLibrary](https://cran.r-project.org/web/packages/DesignLibrary/index.html): Templates for quick design declaration.
+
+The [Getting Started](/r/declaredesign/) guide for DeclareDesign provides an overview of
+the capabilities of these package and how to declare and diagnose designs in our framework.
+
+# Getting help
+
+If you get stuck, head to our [help forum](http://discuss.declaredesign.org) where
+we'll be happy to assist with our software or coding your design.
+
+# Contributing
+
+We  encourage you to contribute to our [design library](/library/),
+as well as to submit bug reports and feature requests as [Github](https://github.com/DeclareDesign) issues.
+We ask that you agree to our [code of conduct](/conduct/).
+
+# Funding
+
+We are grateful for core funding from the [Laura and John Arnold Foundation](http://www.arnoldfoundation.org/)
+and seed funding from [EGAP -- Evidence in Governance and Politics](http://egap.org).
