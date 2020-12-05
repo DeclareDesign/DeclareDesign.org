@@ -6,7 +6,7 @@
 <meta name="generator" content="Hugo 0.79.0" />
 
 
-  <title>Categories - DeclareDesign</title>
+  <title>DeclareDesign Holiday Hiatus - DeclareDesign</title>
 
 
 
@@ -16,8 +16,6 @@
 
 
 
-
-<link href="/categories/index.xml" rel="alternate" type="application/rss+xml" title="A Hugo website" />
 
 
 
@@ -41,8 +39,9 @@
 
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Categories">
-  <meta name="twitter:description" content='
+  <meta name="twitter:title" content="DeclareDesign Holiday Hiatus">
+  <meta name="twitter:description" content='We’ll be back on January 7 – Happy New Year!
+
 '>
 
 
@@ -65,22 +64,21 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="/getting-started">Getting Started</a></li>
-            <li class="nav-item"><a class="nav-link" href="/library">Library</a></li>
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/library.html">Library</a></li>
             <li class="nav-item dropdown">
               
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
-                <li><a class="dropdown-item" href="/r/randomizr/">randomizr for R</a></li>
-                <li><a class="dropdown-item" href="/stata/randomizr/">randomizr for Stata</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
                 <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
                 <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
-                <li><a class="dropdown-item" href="/library/">DesignLibrary</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
               </ul>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
-            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
             <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
           </ul>
         </div>
@@ -94,14 +92,52 @@
       
 
 
-  
-    <main class="container">
-      <div class="archive">
-        
-      </div>
-    </main>
-  
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
 
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">DeclareDesign Holiday Hiatus</h2>
+
+        
+        <span class="article-date">2018/12/20</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>We’ll be back on January 7 – Happy New Year!</p>
+<pre class="r"><code>library(DeclareDesign)
+library(ggplot2)
+
+pop &lt;-
+  declare_population(
+    N = 14,
+    X = c(&quot;H&quot;, &quot;A&quot;, &quot;P&quot;, &quot;P&quot;, &quot;Y&quot;, &quot; &quot;, 
+          &quot;H&quot;, &quot;O&quot;, &quot;L&quot;, &quot;I&quot;, &quot;D&quot;, &quot;A&quot;, &quot;Y&quot;, &quot;S&quot;),
+    position = N:1,
+    index = match(X, LETTERS)
+  )
+
+ggplot(data = pop(), aes(index, position, color = X)) +
+  geom_text(aes(label = X)) +
+  theme_bw() +
+  theme(legend.position = &quot;none&quot;, axis.title = element_blank())</code></pre>
+<p><img src="/blog/2018-12-20-holidays_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
 
     </div>
 

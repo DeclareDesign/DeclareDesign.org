@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>What does a p-value tell you about the probability a hypothesis is true? - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="What does a p-value tell you about the probability a hypothesis is true?">
+  <meta name="twitter:description" content='The humble (p)-value is much maligned and terribly misunderstood. The problem is that everyone wants to know the answer to the question: “what is the probability that [hypothesis] is true?” But (p) answers a different (and not terribly useful) question: “how (un)surprising is this evidence given [hypothesis]?” Can (p) shed insight on the question we really care about? Maybe, though there are dangers.
+
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/library.html">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
+
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">What does a p-value tell you about the probability a hypothesis is true?</h2>
+
+        
+        <span class="article-date">2018/11/13</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>The humble <span class="math inline">\(p\)</span>-value is much maligned and terribly misunderstood. The problem is that everyone wants to know the answer to the question: “what is the probability that [hypothesis] is true?” But <span class="math inline">\(p\)</span> answers a different (and not terribly useful) question: “how (un)surprising is this evidence given [hypothesis]?” Can <span class="math inline">\(p\)</span> shed insight on the question we really care about? Maybe, though there are dangers.</p>
+<p>This post is inspired by conversations with <a href="https://en.wikipedia.org/wiki/David_Colquhoun">@david_colquhoun</a> who has been doing a lot of work on the <a href="http://rsos.royalsocietypublishing.org/content/4/12/171085">misinterpretation of p-values</a> (see especially “<a href="https://arxiv.org/abs/1802.04888">The false positive risk: a proposal concerning what to do about p values</a>”). David poses the question “what is the probability that the null hypothesis is true given the observed <span class="math inline">\(p\)</span>-value?” and provides a nice approach to answering this in terms of a “false positive risk.” The approach we present here is similar in spirit though based on a simulation approach given defined priors rather than being based on likelihood ratios.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>The key insight is that there is something to the intuition that if the world doesn’t look how it ought to look if indeed some hypothesis is right, then maybe that hypothesis isn’t right. Formally the connection comes via Bayes rule; the <span class="math inline">\(p\)</span>-value (or, likelihood) plays a big role in Bayes’ formula for calculating the quantity of interest: posterior beliefs in hypotheses, given data.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> To use the rule though you need information on prior beliefs. Unfortunately, since “frequentist” statistics make no use of prior beliefs many researchers generally don’t report priors (indeed since frequentists and Bayesians think about probabilities differently, some will balk at the idea).</p>
+<p>But what if you did have access to priors? With priors, you can construct Bayesian inferences from the diagnosis of a frequentist design. If we encode our priors into the population declaration then we can map from <span class="math inline">\(p\)</span> to posteriors and let <span class="math inline">\(p\)</span> answer the question we keep on wanting it to answer.</p>
+<p>Here is an illustration. Unlike most other designs we have looked at, in this design the estimand has a distribution. For simplicity we consider a design with a binary outcome; the estimand is the average treatment effect (or in epidemiology the “absolute risk increase”). The distribution for <code>b</code> in our model of the world reflects our beliefs about the estimand: we assume that it is distributed uniform over 0 and 1.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<pre class="r"><code>N &lt;- 50
+design &lt;- 
+  declare_population(N = N, b = runif(1, min = 0, max = 1), u = runif(N, min = 0, max = 1)) +
+  declare_assignment(prob = .5) +
+  declare_potential_outcomes(Y ~ (u &lt; b)*Z + (u &gt; (1 + b)/2)) + 
+  declare_estimand(ATE = b[1]) +
+  declare_reveal(Y, Z) +
+  declare_estimator(Y ~ Z)</code></pre>
+<p>When we simulate this design, each run takes a different estimand (<code>b</code>) from the uniform distribution, generates data and calculates effects and <span class="math inline">\(p\)</span>-values.</p>
+<pre class="r"><code>simulations &lt;- simulate_design(design) </code></pre>
+<p>Now if we graph the estimand from each run against the <span class="math inline">\(p\)</span>-values from each run we can see the distribution of estimands <em>conditional</em> on the <span class="math inline">\(p\)</span>-value. We can now think of each vertical slice of this graph as displaying the posterior distribution of estimands given <span class="math inline">\(p\)</span>.</p>
+<pre class="r"><code>simulations %&gt;%
+  ggplot(aes(y = estimand, x = p.value)) +
+    geom_point(size = 1, alpha = 0.1) +
+    stat_smooth(se = FALSE) +
+    scale_x_continuous(trans=&#39;sqrt&#39;, breaks = c(0.001, 0.01, 0.05, 0.1, 0.25, 0.5, 1)) +
+    xlab(&quot;p.value (square root scale to clearly distinguish small values)&quot;)</code></pre>
+<p><img src="/blog/2018-11-13-learning-from-p_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>We see from the graph that a Bayesian who has access to the study design and who learns only about the <span class="math inline">\(p\)</span>-value from a study should update sharply about the size of the treatment effect.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> If they see a very low <span class="math inline">\(p\)</span> they should infer that the effect is large. Conversely, if they see a high <span class="math inline">\(p\)</span> they should infer that the effect is probably quite small: in other words, they <em>do</em> infer, contrary to frequentist wisdom, that absence of evidence is evidence of absence.</p>
+<div id="posterior-beliefs-about-a-null-require-prior-mass-on-the-null" class="section level1">
+<h1>Posterior beliefs about a null require prior mass on the null</h1>
+<p>We have shown a set of posterior distributions and marked the posterior mean, but we have not calculated the probability that the null is true. The reason is that, if the prior places a zero probability on the null hypothesis <span class="math inline">\(b=0\)</span>, then so will the posterior. To form a posterior on the null being true, one needs a prior distribution that is consistent with the null. One possibility is that you might think of the null hypothesis as being about a range (“the <code>ate</code> is small”) rather than a value (“the <code>ate</code> is 0”). Another possibility is that you really put prior probability mass on a point null, which is what we do here.</p>
+<p>Here we make a new design, in which we specify the prior belief that the true effect is 0 with 50% probability, and otherwise is flat over [0,1]. Remember, our priors are coded in the distribution we provide for <code>b</code> in our model of the world. Here’s the modified design:</p>
+<pre class="r"><code>pop_mass    &lt;- declare_population(N = N, 
+                                  b = sample(c(0, runif(1, min = 0, max = 1)), prob = c(.5, .5), size = 1), 
+                                  u = runif(N, min = 0, max = 1))
+design_mass &lt;- replace_step(design, 1, pop_mass)</code></pre>
+<p>We simulate the design again, but this time on the <span class="math inline">\(y\)</span>-axis we plot the proportion of simulations in which the true effect is 0 at a given <span class="math inline">\(p\)</span>-value: in other words, we graph the posterior probability that the estimand is zero.</p>
+<pre class="r"><code>simulations &lt;- simulate_design(design_mass)</code></pre>
+<p><img src="/blog/2018-11-13-learning-from-p_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The <span class="math inline">\(p\)</span>-value increases with the probability that the null hypothesis is true.</p>
+</div>
+<div id="warning-posteriors-depend-on-the-design-not-just-on-the-results" class="section level1">
+<h1>Warning: Posteriors depend on the design, not just on the results</h1>
+<p>It is nice that one can make inferences about estimands using <span class="math inline">\(p\)</span>-values. But unfortunately, there is no general mapping from <span class="math inline">\(p\)</span>-values to posteriors. Obviously priors matter. Less obviously, perhaps, you also need to have access to the design itself, which determines the likelihood. For instance, the inferences made from knowledge of a <span class="math inline">\(p\)</span>-value would be different for large and small studies.</p>
+<p>We illustrate briefly by expanding <code>design_mass</code> to two designs with different <span class="math inline">\(N\)</span>s and showing the mapping from <span class="math inline">\(p\)</span>s to posteriors on the null for each of these.</p>
+<pre class="r"><code>designs &lt;- redesign(design_mass, N = c(50, 500))</code></pre>
+<p><img src="/blog/2018-11-13-learning-from-p_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>We see here that for <em>any</em> <span class="math inline">\(p\)</span>-value your belief that the null is true will be greater in the large <span class="math inline">\(N\)</span> case than in the small <span class="math inline">\(N\)</span> case (of course if the null is not true, then you expect to have a smaller <span class="math inline">\(p\)</span> in the large <span class="math inline">\(N\)</span> case than in the small <span class="math inline">\(N\)</span> case).</p>
+</div>
+<div id="implications-for-frequentist-friends" class="section level1">
+<h1>Implications for frequentist friends</h1>
+<p>Design diagnosis does not substitute for proper Bayesian analysis. However, there is a payoff for Bayesians with frequentist friends. If you can get them to encode their prior beliefs <em>and</em> declare their designs, then you get a tool to quickly figure out what they should believe given what they find.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>David’s goal is more ambitious also as he is advocating for a new reporting norm for conveying the strength of evidence and so he explicitly seeks a statistic that is easy to calculate and can be calculated with a kind of common prior.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>If <span class="math inline">\(p\)</span> is the probability of the data under the null, and <span class="math inline">\(q\)</span> is the quantity we care about (the probability of the null given the data), <span class="math inline">\(\pi\)</span> is the prior on the null, and <span class="math inline">\(p&#39;\)</span> and <span class="math inline">\(\pi&#39;\)</span> are corresponding quantities for a complementary hypothesis, then Bayes rule says <span class="math inline">\(q = p \pi /(p \pi + p&#39; \pi&#39;)\)</span>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>More precisely we assume a process in which for effect <span class="math inline">\(b\)</span>, share <span class="math inline">\(b\)</span> of the units are affected positively by treatment, share <span class="math inline">\((1-b)/2\)</span> has outcome <span class="math inline">\(Y=0\)</span> regardless and share <span class="math inline">\((1-b)/2\)</span> has outcome <span class="math inline">\(Y=1\)</span> regardless. Note that this is an informative prior—in particular it rules out the possibility of negative effects.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>It’s easy and interesting to do the same thing to assess what one should believe about the estimand given the <em>estimate</em> (or given both the estimate and the <span class="math inline">\(p\)</span>-value.)<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about">About</a></li>
+                  <li><a href="/library">Library</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Contact</a></li>
+                  <li><a href="/funding">Funding</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign for R</a></li>
+                  <li><a href="/r/estimatr/">estimatr for R</a></li>
+                  <li><a href="/r/randomizr/">randomizr for R</a></li>
+                  <li><a href="/stata/randomizr/">randomizr for Stata</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr for R</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-3">
+                <p>Contributing</p>
+                <ul class="list-unstyled">
+                  <li><a target="_blank" href="http://github.com/declareDesign/">github</a></li>
+                  <li><a href="">twitter</a></li>
+                  <li><a href="">paper</a></li>
+                  <li><a href="">book</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">© 2019 <a href="https://declaredesign.org">DeclareDesign.org</a>. All rights reserved.</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/declareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+

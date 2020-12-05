@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>Sometimes you need to cluster standard errors above the level of treatment - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Sometimes you need to cluster standard errors above the level of treatment">
+  <meta name="twitter:description" content='In designs in which a treatment is assigned in clusters (e.g. classrooms), it’s usual practice to account for cluster-level correlations when you generate estimates of uncertainty about estimated effects. But units often share commonalities at higher levels, such as at a block level (e.g. schools). Sometimes you need to take account of this and sometimes you don’t. We show an instance of the usual procedure of clustering by assignment cluster (classrooms) working well and show how badly you can do with a more conservative approach (clustering by schools). We then show an example of a design in which clustering at the level of treatment assignment (classroom) is not good enough; in the troublesome example, schools are thought of as being sampled from a larger population of schools and treatment effects are different in different schools. In this case, if you want estimates of uncertainty for population level effects you have to cluster at the school level even though treatment is assigned within schools.
+
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/library.html">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
+
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">Sometimes you need to cluster standard errors above the level of treatment</h2>
+
+        
+        <span class="article-date">2018/12/18</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>In designs in which a treatment is assigned in clusters (e.g. classrooms), it’s usual practice to account for cluster-level correlations when you generate estimates of uncertainty about estimated effects. But units often share commonalities at higher levels, such as at a block level (e.g. schools). Sometimes you need to take account of this and sometimes you don’t. We show an instance of the usual procedure of clustering by assignment cluster (classrooms) working well and show how badly you can do with a more conservative approach (clustering by schools). We then show an example of a design in which clustering at the level of treatment assignment (classroom) is not good enough; in the troublesome example, schools are thought of as being sampled from a larger population of schools and treatment effects are different in different schools. In this case, if you want estimates of uncertainty for population level effects you have to cluster at the school level <em>even though</em> treatment is assigned <em>within</em> schools.</p>
+<p>David McKenzie discussed this issue a while ago <a href="https://blogs.worldbank.org/impactevaluations/when-should-you-cluster-standard-errors-new-wisdom-econometrics-oracle">here</a> following discussions by Chris Blattman <a href="https://chrisblattman.com/2015/12/11/clusterjerk-the-much-anticipated-sequel/">here</a>. While broadly in line with these discussions, our take-away leans a bit more in the direction that yes you really might want to cluster at higher levels than treatment assignment in an experiment in some cases, but only when you are targeting non-sample-based estimands such as population average effects.</p>
+<p>More generally, the post shows how to check for these kinds of issues when you declare a design, exploiting the fact that with a design declared you can compare the distribution of estimates of standard errors with the standard deviation of the estimates you get across many runs. So you can see <em>not just whether estimates of uncertainty are unbiased, but also whether they are precise</em>.</p>
+<div id="a-case-in-which-clustering-standard-errors-at-the-level-of-assignment-works-well" class="section level1">
+<h1>A case in which clustering standard errors at the level of assignment works well</h1>
+<p>Consider first a simple design in which there are block-level and cluster-level shocks, but treatment is assigned at the cluster level. The design has three strategies for estimating the standard error (the standard deviation of the estimator’s sampling distribution):</p>
+<ol style="list-style-type: lower-alpha">
+<li>ignore clustering;</li>
+<li>allow for error correlation at the cluster level; and</li>
+<li>allow for error correlation at the block level.</li>
+</ol>
+<p>Here is a full declaration of the design.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>design_1 &lt;- 
+  
+  declare_population(
+    schools    = add_level(N = 20, u_b = rnorm(N)), 
+    classrooms = add_level(N =  5, u_c = rnorm(N)), 
+    students   = add_level(N =  5, u_i = rnorm(N))) + 
+  
+  declare_potential_outcomes(Y ~  Z + (u_i + u_b + u_c)) +
+  
+  declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) +
+  
+  declare_assignment(clusters = classrooms) +
+  
+  declare_reveal(Y, Z) + 
+  
+  declare_estimator(Y ~ Z, estimand = &quot;ATE&quot;, model = lm_robust, 
+                    label = &quot;No clustering&quot;) +
+
+  declare_estimator(Y ~ Z, estimand = &quot;ATE&quot;, model = lm_robust, 
+                    clusters = classrooms,
+                    label = &quot;Assignment-level clustering&quot;) + 
+  
+  declare_estimator(Y ~ Z, estimand = &quot;ATE&quot;, model = lm_robust, 
+                    clusters = schools, 
+                    label = &quot;Higher-level clustering&quot;)</code></pre>
+<p>This design has twenty blocks, each with five clusters made up of five individuals. There are individual, cluster and block shocks, all with unit standard deviation. This means that the ICC is 2/3. Conditioning on block however, the ICC is just 1/2 (since the cluster level and individual level shocks have the same variance).</p>
+<p>We simulate the design many times (using <code>simulate_design(design_1)</code>). This generates a dataset with the point estimate from each run (which is common across approaches), as well as the estimate of the variance of the point estimates (the standard error squared). This provides enough information to see how well the estimates of uncertainty are doing.</p>
+<p>Below we plot the distribution of estimates of standard errors (squared) from each of the three strategies alongside the actual variance of estimates across runs (vertical line).</p>
+<p><img src="/blog/2018-12-18-cluster-level_files/figure-html/std.error_plot1-1.png" width="672" /></p>
+<p>The first thing that jumps out is the bias in the approach that assumes no error correlation: the average standard error (squared) is 0.02, which is well below the variance of the estimates across our repeated samples. That’s the anti-conservative bias that worries people when you fail to cluster standard errors for clustered treatments. It can be quite extreme, as here.</p>
+<p>By contrast, the approaches that allow for cluster- and block-level correlation in errors approximate the variance in the sampling distribution of the estimates nicely, and on average are about equal to the true variance of the estimates. You will notice though that the distribution of estimates of uncertainty exhibit a lot more variance when you cluster at the block level. What this means is that in this design clustering at too high a level makes it more likely that you will get the estimates of uncertainty wrong (even if you will be right on average).</p>
+<p>The hummable tune version: If you cluster too high your estimates of variance may have too much variance.</p>
+</div>
+<div id="a-case-in-which-it-makes-sense-to-cluster-errors-above-the-level-of-treatment-assignment" class="section level1">
+<h1>A case in which it makes sense to cluster errors <em>above</em> the level of treatment assignment</h1>
+<p>So does this mean you should only ever account for error correlation at the same level the treatment is assigned? Not always. Consider the following similar design, in which there are heterogenous treatment effects that depend on higher-level shocks (in this case at the school level), whereas treatment is still assigned at the lower level of classrooms.</p>
+<pre class="r"><code>new_potential_outcomes &lt;- declare_potential_outcomes(Y ~ u_i + u_b*Z)
+
+design_2 &lt;- replace_step(design_1, step = 2, new_potential_outcomes)</code></pre>
+<p>This kind of design might describe a situation in which individuals in different areas are selected at random to participate in area-level workshops; or one in which clusters of voters are assigned to get information about the political representative in their area before an election, and so on.</p>
+<p>The distribution of estimates of uncertainty now looks like this:</p>
+<p><img src="/blog/2018-12-18-cluster-level_files/figure-html/std.error_plot2-1.png" width="672" /></p>
+<p>We see that allowing for group-level correlation in errors among treated units provides estimates of uncertainty that, on average, track the variance of the sampling distribution quite well. Ignoring this correlation produces standard errors that are too small, leading to over-confidence.</p>
+<p>The design here is not particularly unusual. Heterogeneous effects across groups could be a feature of many studies. This suggests that the issue here could be fairly general.</p>
+</div>
+<div id="not-such-a-concern-if-your-focus-is-on-sample-average-treatment-effects" class="section level1">
+<h1>Not such a concern if your focus is on sample average treatment effects</h1>
+<p>A key feature of the last design is that the group-level treatment effects are stochastic, and so each simulation takes a draw of blocks from a large population of blocks. Thus, even though the <em>assignment</em> is not clustered by block, the units in each blocks are themselves clusters from a <em>sampling</em> process.</p>
+<p>This resonates with results in <span class="citation">Abadie et al. (2017)</span> (<a href="https://economics.mit.edu/files/13927">here</a>) which highlights the distinct sampling and assignment rationales for clustering. Here clustering at the assignment level does not account for the clustered sampling into the study. To illustrate this last point we make a small change to the design to remove this cluster-sampling feature. We draw a single dataset, and suppose that we are dealing with a finite population.</p>
+<pre class="r"><code>fixed_data &lt;- draw_data(design_2)</code></pre>
+<p>We then splice this new fixed data into the previous design to make a new design.</p>
+<pre class="r"><code>design_3 &lt;- replace_step(design_2, 1, declare_population(data = fixed_data))</code></pre>
+<p>Because we are holding the population data fixed, we are no longer sampling 20 clusters from the set of possible clusters. This restricts the variance of the sampling distribution to that generated by the assignment.</p>
+<p>Now the distribution of estimates of uncertainty look like this:</p>
+<p><img src="/blog/2018-12-18-cluster-level_files/figure-html/std.error_plot3-1.png" width="672" /></p>
+<p>The implications are that when we focus on the sample estimand the version that clusters standard errors at the level of assignment works fairly well (they are slightly conservative reflecting the fact that the Neyman standard errors are conservative). The standard errors that account for group-level error correlation are wildly conservative, since they are positing possible treatment effects that could never come into existence under this model. It’s the wrong sampling distribution.</p>
+</div>
+<div id="takeaways" class="section level1">
+<h1>Takeaways</h1>
+<p>The key takeaways:</p>
+<ul>
+<li><p><a href="https://www.ncbi.nlm.nih.gov/pubmed/15580598">Senn</a>’s “as ye randomize so shall ye analyze” principle works fine in standard set ups when you are interested in sample average estimands: it makes sense to cluster your standard errors at the level of treatment assignment.</p></li>
+<li><p><strong>You can still go too low</strong>: if your units of assignment (be they clusters or individuals) are themselves members of higher-level clusters that are sampled from a larger population <strong>and you are interested in population average estimands</strong>, then you may need to allow for correlation in errors at that level to account for clustering of effects generated by sampling</p></li>
+<li><p><strong>You can definitely go too high</strong>: but this doesn’t mean you should default to a “conservative” rule of thumb. If you assume a sampling process where one doesn’t exist, you can end up being wildly over-conservative in your estimates of the sampling distribution or having an estimate of uncertainty that is right in expectation but far off in realization.</p></li>
+<li><p><strong>If in doubt, diagnose</strong>.</p></li>
+</ul>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-abadie2017should">
+<p>Abadie, Alberto, Susan Athey, Guido W Imbens, and Jeffrey Wooldridge. 2017. “When Should You Adjust Standard Errors for Clustering?” National Bureau of Economic Research.</p>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This kind of design can also be made in a single line with the <code>DesignLibrary</code> package using the <code>block_cluster_two_arm_designer()</code>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about">About</a></li>
+                  <li><a href="/library">Library</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Contact</a></li>
+                  <li><a href="/funding">Funding</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign for R</a></li>
+                  <li><a href="/r/estimatr/">estimatr for R</a></li>
+                  <li><a href="/r/randomizr/">randomizr for R</a></li>
+                  <li><a href="/stata/randomizr/">randomizr for Stata</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr for R</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-3">
+                <p>Contributing</p>
+                <ul class="list-unstyled">
+                  <li><a target="_blank" href="http://github.com/declareDesign/">github</a></li>
+                  <li><a href="">twitter</a></li>
+                  <li><a href="">paper</a></li>
+                  <li><a href="">book</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">© 2019 <a href="https://declaredesign.org">DeclareDesign.org</a>. All rights reserved.</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/declareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+
