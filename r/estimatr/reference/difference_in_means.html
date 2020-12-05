@@ -305,10 +305,10 @@ More details of the about each of the estimators can be found in the
 <span class='co'># ----------</span>
 <span class='co'># 1. Unit randomized</span>
 <span class='co'># ----------</span>
-<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/fabricatr/man/fabricate.html'>fabricate</a></span><span class='op'>(</span>
+<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://declaredesign.org/r/fabricatr/reference/fabricate.html'>fabricate</a></span><span class='op'>(</span>
   N <span class='op'>=</span> <span class='fl'>100</span>,
   Y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>,
-  Z_comp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/randomizr/man/complete_ra.html'>complete_ra</a></span><span class='op'>(</span><span class='va'>N</span>, prob <span class='op'>=</span> <span class='fl'>0.4</span><span class='op'>)</span>,
+  Z_comp <span class='op'>=</span> <span class='fu'><a href='https://declaredesign.org/r/randomizr/reference/complete_ra.html'>complete_ra</a></span><span class='op'>(</span><span class='va'>N</span>, prob <span class='op'>=</span> <span class='fl'>0.4</span><span class='op'>)</span>,
 <span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_comp</span><span class='op'>)</span>
@@ -323,7 +323,7 @@ More details of the about each of the estimators can be found in the
 <span class='co'># ----------</span>
 <span class='co'># Accurates estimates and standard errors for clustered designs</span>
 <span class='va'>dat</span><span class='op'>$</span><span class='va'>clust</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>20</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_clust</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomizr/man/cluster_ra.html'>cluster_ra</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>clust</span>, prob <span class='op'>=</span> <span class='fl'>0.6</span><span class='op'>)</span>
+<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_clust</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://declaredesign.org/r/randomizr/reference/cluster_ra.html'>cluster_ra</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>clust</span>, prob <span class='op'>=</span> <span class='fl'>0.6</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_clust</span>, <span class='va'>dat</span><span class='op'>$</span><span class='va'>clust</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    
@@ -343,7 +343,7 @@ More details of the about each of the estimators can be found in the
 <span class='co'># 3. Block randomized</span>
 <span class='co'># ----------</span>
 <span class='va'>dat</span><span class='op'>$</span><span class='va'>block</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, each <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
-<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_block</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomizr/man/block_ra.html'>block_ra</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>block</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_block</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://declaredesign.org/r/randomizr/reference/block_ra.html'>block_ra</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>block</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_block</span>, <span class='va'>dat</span><span class='op'>$</span><span class='va'>block</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    
@@ -360,7 +360,7 @@ More details of the about each of the estimators can be found in the
 <span class='va'>dat</span><span class='op'>$</span><span class='va'>small_clust</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>50</span>, each <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 <span class='va'>dat</span><span class='op'>$</span><span class='va'>big_blocks</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, each <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 
-<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_blcl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomizr/man/block_and_cluster_ra.html'>block_and_cluster_ra</a></span><span class='op'>(</span>
+<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_blcl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://declaredesign.org/r/randomizr/reference/block_and_cluster_ra.html'>block_and_cluster_ra</a></span><span class='op'>(</span>
   blocks <span class='op'>=</span> <span class='va'>dat</span><span class='op'>$</span><span class='va'>big_blocks</span>,
   clusters <span class='op'>=</span> <span class='va'>dat</span><span class='op'>$</span><span class='va'>small_clust</span>
  <span class='op'>)</span>
@@ -381,7 +381,7 @@ More details of the about each of the estimators can be found in the
 <span class='co'># Specified same as blocked design, function learns that</span>
 <span class='co'># it is matched pair from size of blocks!</span>
 <span class='va'>dat</span><span class='op'>$</span><span class='va'>pairs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>50</span>, each <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_pairs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomizr/man/block_ra.html'>block_ra</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>pairs</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
+<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_pairs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://declaredesign.org/r/randomizr/reference/block_ra.html'>block_ra</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>pairs</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>$</span><span class='va'>pairs</span>, <span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_pairs</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;     
@@ -500,7 +500,7 @@ More details of the about each of the estimators can be found in the
 #&gt;   23  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  2  0  0  0  0
 #&gt;   24  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  2  0  0
 #&gt;   25  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  2</div><div class='input'>
-<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_mpcl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomizr/man/block_and_cluster_ra.html'>block_and_cluster_ra</a></span><span class='op'>(</span>
+<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_mpcl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://declaredesign.org/r/randomizr/reference/block_and_cluster_ra.html'>block_and_cluster_ra</a></span><span class='op'>(</span>
   blocks <span class='op'>=</span> <span class='va'>dat</span><span class='op'>$</span><span class='va'>cluster_pairs</span>,
   clusters <span class='op'>=</span> <span class='va'>dat</span><span class='op'>$</span><span class='va'>small_clust</span>
  <span class='op'>)</span>
@@ -520,7 +520,7 @@ More details of the about each of the estimators can be found in the
 
 <span class='co'># Also works with multi-valued treatments if users specify</span>
 <span class='co'># comparison of interest</span>
-<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_multi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/randomizr/man/simple_ra.html'>simple_ra</a></span><span class='op'>(</span>
+<span class='va'>dat</span><span class='op'>$</span><span class='va'>Z_multi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://declaredesign.org/r/randomizr/reference/simple_ra.html'>simple_ra</a></span><span class='op'>(</span>
   <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>,
   conditions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Treatment 2"</span>, <span class='st'>"Treatment 1"</span>, <span class='st'>"Control"</span><span class='op'>)</span>,
   prob_each <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.4</span>, <span class='fl'>0.4</span>, <span class='fl'>0.2</span><span class='op'>)</span>
