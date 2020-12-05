@@ -1,0 +1,191 @@
+---
+title: "Example Design Declaration and Diagnosis for Preanalysis Plans"
+subtitle: "In R"
+output:
+  html_document
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>This document shows some things researchers may wish to add to their preanalysis plans using design declaration and diagnosis.</p>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<pre class="r"><code>library(DeclareDesign)
+library(tidyverse)
+library(texreg)
+library(knitr)
+set.seed(343)</code></pre>
+</div>
+<div id="declare-the-design" class="section level1">
+<h1>Declare the Design</h1>
+<pre class="r"><code>sample_size    &lt;- 100
+effect_size    &lt;- 0.5
+number_treated &lt;- 50
+
+two_arm_design &lt;-
+  
+  # M: Model
+  declare_population(N = sample_size, u = rnorm(N)) +
+  declare_potential_outcomes(Y ~ effect_size * Z + u) +
+  
+  # I: Inquiry
+  declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) +
+  
+  # D: Data Strategy
+  declare_assignment(m = number_treated) +
+  declare_reveal(Y, Z) +
+  
+  # A: Answer Strategy
+  declare_estimator(Y ~ Z, model = lm_robust, estimand = &quot;ATE&quot;)</code></pre>
+</div>
+<div id="mock-figure" class="section level1">
+<h1>Mock Figure</h1>
+<pre class="r"><code>one_run &lt;- draw_data(two_arm_design)
+
+one_run &lt;-
+  one_run %&gt;%
+  mutate(treatment = factor(Z, levels = 0:1, labels = c(&quot;Control&quot;, &quot;Treatment&quot;)))
+
+summary_df &lt;- 
+  one_run %&gt;%
+  group_by(treatment) %&gt;%
+  do(tidy(lm_robust(Y ~ 1, data = .))) %&gt;%
+  mutate(Y = estimate)
+
+ggplot(summary_df, aes(treatment, Y)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0) +
+  geom_point(data = one_run, position = position_jitter(width = 0.1), alpha = 0.2) +
+  theme_bw() +
+  theme(axis.title.x = element_blank()) +
+  ylab(&quot;Outcome&quot;) +
+  ggtitle(&quot;Comparison of Control and Treatment Group Means&quot;, &quot;Simulated Data&quot;)</code></pre>
+<p><img src="static/pap/two_arm_design_r_files/figure-html/mock-figure-1.png" width="672" /></p>
+</div>
+<div id="mock-regression-table" class="section level1">
+<h1>Mock Regression Table</h1>
+<pre class="r"><code>fit &lt;- lm_robust(Y ~ treatment, data = one_run)
+htmlreg(
+  fit,
+  custom.coef.names = c(&quot;Intercept&quot;, &quot;Treatment&quot;),
+  include.ci = FALSE,
+  include.rmse = FALSE,
+  include.adjrs = FALSE,
+  stars = 0.05,
+  custom.note = &quot;%stars. HC2 robust standard errors are in parentheses.&quot;,
+  caption = &quot;Average Treatment Effect (Simulated Data)&quot;, 
+  caption.above = TRUE,
+  doctype = FALSE
+)</code></pre>
+<table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;color: #000000;border-top: 2px solid #000000;">
+<caption>
+Average Treatment Effect (Simulated Data)
+</caption>
+<thead>
+<tr>
+<th style="padding-left: 5px;padding-right: 5px;">
+ 
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 1
+</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+Intercept
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.23
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.12)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Treatment
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.75<sup>*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.17)
+</td>
+</tr>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+R<sup>2</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.16
+</td>
+</tr>
+<tr style="border-bottom: 2px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+Num. obs.
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+100
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="font-size: 0.8em;" colspan="2">
+<sup>*</sup>p &lt; 0.05. HC2 robust standard errors are in parentheses.
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div id="diagnosis" class="section level1">
+<h1>Diagnosis</h1>
+<pre class="r"><code>diagnosis &lt;- diagnose_design(two_arm_design)
+reshape_diagnosis(diagnosis, select = &quot;Power&quot;) %&gt;%
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Design Label</th>
+<th align="left">Estimand Label</th>
+<th align="left">Estimator Label</th>
+<th align="left">Term</th>
+<th align="left">N Sims</th>
+<th align="left">Power</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">two_arm_design</td>
+<td align="left">ATE</td>
+<td align="left">estimator</td>
+<td align="left">Z</td>
+<td align="left">500</td>
+<td align="left">0.67</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">(0.02)</td>
+</tr>
+</tbody>
+</table>
+</div>
