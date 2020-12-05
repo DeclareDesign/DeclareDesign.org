@@ -5,4 +5,5 @@
 *.DS_Store
 public/
 content/*.html
+content/blog/*.html
 index.html

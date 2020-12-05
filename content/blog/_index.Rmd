@@ -1,0 +1,5 @@
+---
+title: "Blog home"
+output:
+  blogdown::html_page
+---
