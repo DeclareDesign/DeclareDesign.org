@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • DeclareDesign</title>
+<title>Function reference • fabricatr</title>
 
 
 <!-- jquery -->
@@ -70,7 +70,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="https://declaredesign.org"><img height = 125% width = 125% src = "https://declaredesign.org/images/brand.svg"></a>
+        <a class="navbar-link" href="../index.html">fabricatr</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
       </span>
     </div>
 
@@ -93,7 +94,31 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/custom_functions.html">Custom functions and DeclareDesign</a>
+      <a href="../articles/advanced_features.html">Advanced features</a>
+    </li>
+    <li>
+      <a href="../articles/building_importing.html">Building and Importing Data</a>
+    </li>
+    <li>
+      <a href="../articles/common_social.html">Common Social Science variables</a>
+    </li>
+    <li>
+      <a href="../articles/cross_classified.html">Panel and Cross-classified data</a>
+    </li>
+    <li>
+      <a href="../articles/getting_started.html">Getting started with fabricatr</a>
+    </li>
+    <li>
+      <a href="../articles/other_packages.html">Using other data generating packages with fabricatr</a>
+    </li>
+    <li>
+      <a href="../articles/resampling.html">Resampling data with fabricatr</a>
+    </li>
+    <li>
+      <a href="../articles/time_series.html">Time series data with fabricatr</a>
+    </li>
+    <li>
+      <a href="../articles/variable_generation.html">Generating discrete random variables with fabricatr</a>
     </li>
   </ul>
 </li>
@@ -103,7 +128,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/DeclareDesign/DeclareDesign/">
+  <a href="https://github.com/DeclareDesign/fabricatr/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -147,183 +172,74 @@
       <tr>
         
         <td>
-          <p><code><a href="DeclareDesign.html">DeclareDesign</a></code> </p>
+          <p><code><a href="correlate.html">correlate()</a></code> </p>
         </td>
-        <td><p>DeclareDesign package</p></td>
+        <td><p>Perform generation of a correlated random variable.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="cite_design.html">cite_design()</a></code> </p>
+          <p><code><a href="cross_levels.html">cross_levels()</a></code> <code><a href="cross_levels.html">link_levels()</a></code> </p>
         </td>
-        <td><p>Obtain the preferred citation for a design</p></td>
+        <td><p>Creates panel or cross-classified data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="compare_diagnoses.html">compare_diagnoses()</a></code> </p>
+          <p><code><a href="draw_binary_icc.html">draw_binary_icc()</a></code> </p>
         </td>
-        <td><p>Compare Diagnoses</p></td>
+        <td><p>Draw binary data with fixed intra-cluster correlation.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="compare_functions.html">compare_designs()</a></code> <code><a href="compare_functions.html">compare_design_code()</a></code> <code><a href="compare_functions.html">compare_design_summaries()</a></code> <code><a href="compare_functions.html">compare_design_data()</a></code> <code><a href="compare_functions.html">compare_design_estimates()</a></code> <code><a href="compare_functions.html">compare_design_estimands()</a></code> </p>
+          <p><code><a href="draw_discrete.html">draw_binomial()</a></code> <code><a href="draw_discrete.html">draw_categorical()</a></code> <code><a href="draw_discrete.html">draw_ordered()</a></code> <code><a href="draw_discrete.html">draw_count()</a></code> <code><a href="draw_discrete.html">draw_binary()</a></code> <code><a href="draw_discrete.html">draw_likert()</a></code> <code><a href="draw_discrete.html">draw_quantile()</a></code> </p>
         </td>
-        <td><p>Compare two designs</p></td>
+        <td><p>Draw discrete variables including binary, binomial count, poisson count,
+ordered, and categorical</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="declare_assignment.html">declare_assignment()</a></code> <code><a href="declare_assignment.html">assignment_handler()</a></code> </p>
+          <p><code><a href="draw_normal_icc.html">draw_normal_icc()</a></code> </p>
         </td>
-        <td><p>Declare assignment procedure</p></td>
+        <td><p>Draw normal data with fixed intra-cluster correlation.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="declare_design.html">`+`(<i>&lt;dd&gt;</i>)</a></code> </p>
+          <p><code><a href="fabricate.html">fabricate()</a></code> <code><a href="fabricate.html">add_level()</a></code> <code><a href="fabricate.html">modify_level()</a></code> <code><a href="fabricate.html">nest_level()</a></code> </p>
         </td>
-        <td><p>Declare a design</p></td>
+        <td><p>Fabricate data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="declare_diagnosands.html">diagnosand_handler()</a></code> <code><a href="declare_diagnosands.html">declare_diagnosands()</a></code> </p>
+          <p><code><a href="fabricatr.html">fabricatr</a></code> </p>
         </td>
-        <td><p>Declare diagnosands</p></td>
+        <td><p>fabricatr package</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="declare_estimand.html">declare_estimand()</a></code> <code><a href="declare_estimand.html">declare_estimands()</a></code> <code><a href="declare_estimand.html">estimand_handler()</a></code> </p>
+          <p><code><a href="join.html">join()</a></code> </p>
         </td>
-        <td><p>Declare estimand</p></td>
+        <td><p>Helper function handling specification of which variables to join a
+cross-classified data on, and what kind of correlation structure needed.
+Correlation structures can only be provided if the underlying call is
+a <code>link_levels()</code> call.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="declare_estimator.html">declare_estimator()</a></code> <code><a href="declare_estimator.html">declare_estimators()</a></code> <code><a href="declare_estimator.html">label_estimator()</a></code> <code><a href="declare_estimator.html">model_handler()</a></code> </p>
+          <p><code><a href="recycle.html">recycle()</a></code> </p>
         </td>
-        <td><p>Declare estimator</p></td>
+        <td><p>Expands data to a given length through recycling.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="declare_measurement.html">declare_measurement()</a></code> </p>
+          <p><code><a href="resample_data.html">resample_data()</a></code> </p>
         </td>
-        <td><p>Declare measurement procedure</p></td>
+        <td><p>Resample data, including hierarchical data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="declare_population.html">declare_population()</a></code> </p>
+          <p><code><a href="split_quantile.html">split_quantile()</a></code> </p>
         </td>
-        <td><p>Declare the size and features of the population</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="declare_potential_outcomes.html">declare_potential_outcomes()</a></code> <code><a href="declare_potential_outcomes.html">potential_outcomes.formula()</a></code> <code><a href="declare_potential_outcomes.html">potential_outcomes.NULL()</a></code> </p>
-        </td>
-        <td><p>Declare potential outcomes</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="declare_sampling.html">declare_sampling()</a></code> <code><a href="declare_sampling.html">sampling_handler()</a></code> </p>
-        </td>
-        <td><p>Declare sampling procedure</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="declare_step.html">declare_step()</a></code> </p>
-        </td>
-        <td><p>Declare a custom step</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="declare_test.html">declare_test()</a></code> <code><a href="declare_test.html">label_test()</a></code> </p>
-        </td>
-        <td><p>Declare test</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="diagnose_design.html">diagnose_design()</a></code> <code><a href="diagnose_design.html">diagnose_designs()</a></code> </p>
-        </td>
-        <td><p>Diagnose the design</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="diagnosis_helpers.html">get_diagnosands()</a></code> <code><a href="diagnosis_helpers.html">get_simulations()</a></code> </p>
-        </td>
-        <td><p>Explore your design diagnosis</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="draw_functions.html">draw_data()</a></code> <code><a href="draw_functions.html">draw_estimands()</a></code> <code><a href="draw_functions.html">draw_estimates()</a></code> </p>
-        </td>
-        <td><p>Draw data, estimates, and estimands from a design</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="expand_design.html">expand_design()</a></code> </p>
-        </td>
-        <td><p>Declare a design via a designer</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_functions.html">get_estimates()</a></code> <code><a href="get_functions.html">draw_assignment()</a></code> <code><a href="get_functions.html">draw_sample()</a></code> </p>
-        </td>
-        <td><p>Get estimates, estimands, assignment vectors, or samples from a design given data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="modify_design.html">insert_step()</a></code> <code><a href="modify_design.html">delete_step()</a></code> <code><a href="modify_design.html">replace_step()</a></code> </p>
-        </td>
-        <td><p>Modify a design after the fact</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="post_design.html">print_code()</a></code> <code><a href="post_design.html">print(<i>&lt;design&gt;</i>)</a></code> <code><a href="post_design.html">summary(<i>&lt;design&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Explore your design</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="redesign.html">redesign()</a></code> </p>
-        </td>
-        <td><p>Redesign</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reshape_diagnosis.html">reshape_diagnosis()</a></code> </p>
-        </td>
-        <td><p>Clean up a diagnosis object for printing</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reveal_outcomes.html">reveal_outcomes()</a></code> <code><a href="reveal_outcomes.html">declare_reveal()</a></code> <code><a href="reveal_outcomes.html">reveal_outcomes_handler()</a></code> </p>
-        </td>
-        <td><p>Declare a reveal outcomes step</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="run_design.html">run_design()</a></code> </p>
-        </td>
-        <td><p>Execute a design</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="set_citation.html">set_citation()</a></code> </p>
-        </td>
-        <td><p>Set the citation of a design</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="set_diagnosands.html">set_diagnosands()</a></code> </p>
-        </td>
-        <td><p>Set the diagnosands for a design</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="simulate_design.html">simulate_design()</a></code> <code><a href="simulate_design.html">simulate_designs()</a></code> </p>
-        </td>
-        <td><p>Simulate a design</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_try.html">tidy_try()</a></code> </p>
-        </td>
-        <td><p>Tidy Model Results and Filter to Relevant Coefficients</p></td>
+        <td><p>Split data into quantile buckets (e.g. terciles, quartiles, quantiles,
+deciles).</p></td>
       </tr>
     </tbody>
     </table>
@@ -339,7 +255,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Graeme Blair, Jasper Cooper, Alexander Coppock, Macartan Humphreys, Neal Fultz.</p>
+  <p>Developed by Graeme Blair, Jasper Cooper, Alexander Coppock, Macartan Humphreys, Aaron Rudkin, Neal Fultz.</p>
 </div>
 
 <div class="pkgdown">

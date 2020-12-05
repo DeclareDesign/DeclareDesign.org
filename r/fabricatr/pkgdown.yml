@@ -2,6 +2,14 @@ pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  custom_functions: custom_functions.html
-last_built: 2020-12-05T18:24Z
+  advanced_features: advanced_features.html
+  building_importing: building_importing.html
+  common_social: common_social.html
+  cross_classified: cross_classified.html
+  getting_started: getting_started.html
+  other_packages: other_packages.html
+  resampling: resampling.html
+  time_series: time_series.html
+  variable_generation: variable_generation.html
+last_built: 2020-12-05T18:26Z
 
