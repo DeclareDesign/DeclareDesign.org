@@ -4,10 +4,11 @@ title = "A Hugo website"
 theme = "hugo-lithium"
 googleAnalytics = ""
 disqusShortname = ""
+uglyurls = true
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
 
 [permalinks]
-    blog = "/blog/:year/:slug/"
+    blog = "/blog/:slug"
 
 [[menu.main]]
     name = "About"

@@ -69,7 +69,7 @@ jobs:
         
       - name: Build main Web site
         run: | 
-          Rscript -e 'blogdown:::build_site()'
+          Rscript -e 'blogdown::build_site(build_rmd = TRUE)'
         
       - name: Clone all DD packages
         run: | 
