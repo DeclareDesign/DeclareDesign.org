@@ -94,10 +94,10 @@ jobs:
         run: |
           mkdir public/r 
           cp -R DeclareDesign/docs public/r/declaredesign
-          cp -R DeclareDesign/docs public/r/fabricatr
-          cp -R DeclareDesign/docs public/r/randomizr
-          cp -R DeclareDesign/docs public/r/estimatr
-          cp -R DeclareDesign/docs public/r/designlibrary
+          cp -R fabricatr/docs public/r/fabricatr
+          cp -R randomizr/docs public/r/randomizr
+          cp -R estimatr/docs public/r/estimatr
+          cp -R DesignLibrary/docs public/r/designlibrary
 
       - name: Push to gh-pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
