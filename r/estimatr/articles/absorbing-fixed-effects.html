@@ -37,10 +37,36 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+  <a href="http://discuss.declaredesign.org">Ask for Help</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Packages
      
+    <span class="caret"></span>
   </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="http://declaredesign.org/r/declaredesign/">DeclareDesign</a>
+    </li>
+    <li>
+      <a href="https://declaredesign.org/r/randomizr/">randomizr</a>
+    </li>
+    <li>
+      <a href="https://declaredesign.org/r/fabricatr/">fabricatr</a>
+    </li>
+    <li>
+      <a href="https://declaredesign.org/r/estimatr/">estimatr</a>
+    </li>
+    <li>
+      <a href="https://declaredesign.org/r/designlibrary/">DesignLibrary</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://declaredesign.org/r/estimatr/">estimatr home</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -83,17 +109,6 @@
       <a href="../articles/stata-wls-hat.html">How Stata's hat matrix differs with weights</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="../news/index.html">Changelog</a>
-</li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/DeclareDesign/estimatr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
 </li>
       </ul>
 </div>
@@ -173,10 +188,10 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr       min        lq      mean    median        uq       max
-##  base + sandwich 161.89227 164.90361 176.86806 168.20338 171.64956 284.08794
-##        lm_robust  72.87487  75.89544  77.87730  77.61374  79.53601  86.18496
-##  lm_robust + fes  45.90791  47.47233  51.43299  49.04004  50.20427 171.74335
+##             expr       min        lq      mean    median        uq      max
+##  base + sandwich 170.33535 177.78642 190.99450 179.34218 184.97113 303.8595
+##        lm_robust  76.47186  80.80404  83.70886  83.42362  86.03747 101.2495
+##  lm_robust + fes  49.19664  51.11910  56.10953  53.12578  55.07551 198.0309
 ##  neval cld
 ##     50   c
 ##     50  b 
@@ -203,14 +218,14 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr        min         lq      mean     median         uq
-##  base + sandwich 163.549747 170.669161 176.67638 172.501090 174.060175
-##        lm_robust  59.775630  62.220418  63.74818  63.719975  65.103031
-##  lm_robust + fes   7.056889   7.633136  11.03133   7.997454   8.588744
-##        max neval cld
-##  283.19575    50   c
-##   70.49799    50  b 
-##  126.17872    50 a</code></pre>
+##             expr        min         lq      mean     median        uq       max
+##  base + sandwich 171.837017 177.821249 189.37734 179.290040 184.28873 302.52191
+##        lm_robust  61.759890  64.576942  68.23188  66.752824  70.15860  93.11533
+##  lm_robust + fes   7.502471   7.926026  12.03615   8.619727  11.86815 136.32575
+##  neval cld
+##     50   c
+##     50  b 
+##     50 a</code></pre>
 </div>
   </div>
 
