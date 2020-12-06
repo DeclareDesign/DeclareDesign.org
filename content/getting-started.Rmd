@@ -96,7 +96,7 @@ diagnosis %>% reshape_diagnosis %>% select(-c("Design Label","Estimand Label","E
 
 You can find a few different entry points into these ideas and the software tools:
 
-- [`DeclareDesign 101`](https://declaredesign.org/getting-started.html)
+- [`DeclareDesign 101`](https://declaredesign.org/r/declaredesign/articles/DeclareDesign_101.html)
 - Short introduction to DeclareDesign on the [World Bank Development Impact blog](https://blogs.worldbank.org/impactevaluations/declaring-and-diagnosing-research-designs)
 - Our paper in the [*American Political Science Review*](/declare.pdf) ([appendices](/declare_SI.pdf))
 - [Library of research designs](r/designlibrary/), which includes a range of canonical designs that can be declared with a single line of code and then tailored for your own uses
