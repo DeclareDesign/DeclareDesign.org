@@ -17,11 +17,11 @@ DeclareDesign has benefited from the contributions of many researchers and coder
 
 `fabricatr` for R: [Aaron Rudkin](http://rudkin.ca)
 
-`randomizr` for Stata: John Ternovski
+`randomizr` for Stata: [John Ternovski](http://www.jter.co)
 
 `DeclareDesignWizard`: [Clara Bicalho](https://polisci.berkeley.edu/people/person/clara-bicalho-maia-correia), [Markus Konrad](https://twitter.com/_knrd), and [Sisi Huang](https://twitter.com/zerinahuang)
 
-`DesignLibrary`: [Clara Bicalho](https://polisci.berkeley.edu/people/person/clara-bicalho-maia-correia) and [Lily Medina](https://twitter.com/lilymiru)
+`DesignLibrary`: [Clara Bicalho](https://polisci.berkeley.edu/people/person/clara-bicalho-maia-correia) and [Lily Medina](https://polisci.berkeley.edu/people/person/lily-medina-jara)
 
 `declaredesign.org`: Nicholas Rivera
 
@@ -29,7 +29,7 @@ We thank contributors to earlier iterations of the project Thomas Leavitt, Tara 
 
 # Contributing
 
-We encourage you to contribute to our [design library](/library/),
+We encourage you to contribute to our [design library](/r/designlibrary/),
 as well as to submit bug reports and feature requests for our software as [Github](https://github.com/DeclareDesign) issues.
 We ask that contributors agree to our [code of conduct](/conduct/).
 
