@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>Should a pilot study change your study design decisions? - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Should a pilot study change your study design decisions?">
+  <meta name="twitter:description" content='Data collection is expensive, and we often only get one bite at the apple. In response, we often conduct an inexpensive (and small) pilot test to help better design the study. Pilot studies have many virtues, including practicing the logistics of data collection and improving measurement tools. But using pilots to get noisy estimates in order to determine sample sizes for scale up comes with risks.
+
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/r/designlibrary">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
+
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">Should a pilot study change your study design decisions?</h2>
+
+        
+        <span class="article-date">2019/01/23</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>Data collection is expensive, and we often only get one bite at the apple. In response, we often conduct an inexpensive (and small) pilot test to help better design the study. Pilot studies have many virtues, including practicing the logistics of data collection and improving measurement tools. But using pilots to get noisy estimates in order to determine sample sizes for scale up comes with risks.</p>
+<p>Pilot studies are often used to get a guess of the average effect size, which is then plugged into power calculators when designing the full study.</p>
+<p>The procedure is:</p>
+<ol style="list-style-type: decimal">
+<li>Conduct a small pilot study (say, N = 50)</li>
+<li>Obtain an estimate of the effect size (this is noisy, but better than nothing!)</li>
+<li>Conduct a power analysis for a larger study (say, N = 500) on the basis of the estimated effect size in the pilot</li>
+</ol>
+<p>We show in this post that this procedure turns out to be dangerous: at common true effect sizes found in the social sciences, you are at risk of selecting an underpowered design based on the noisy effect estimate in your pilot study. For a related argument about the dangers of <em>post-hoc</em> power analysis, which inspired this post, see <a href="https://statmodeling.stat.columbia.edu/2019/01/13/post-hoc-power-calculation-like-shit-sandwich/">Andy Gelman’s blog</a>.</p>
+<p>A different procedure has better properties:</p>
+<ol style="list-style-type: decimal">
+<li>Conduct a small pilot study (say, N = 50)</li>
+<li>Obtain an estimate of the <strong>standard deviation of the outcome variable</strong> (again, this is a noisy estimate but better than nothing!)</li>
+<li>Estimate the minimum detectable effect (MDE) for a larger study (say, N = 500), using the estimated standard deviation</li>
+</ol>
+<p>We show what happens in each procedure, using DeclareDesign. In each case, we’ll think about a decision the researcher wants to make based on the pilot: should I move forward with my planned study, or should I go back to the drawing board? We’ll rely on power to make that decision in the first procedure and the MDE in the second procedure.</p>
+<p>To get started, we set up a designer<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for a standard two-arm trial where half of units are assigned to treatment and we use a difference-in-means estimator. We will use the same designer to simulate the pilot (N = 50) and the main study (N = 500). The designer lets us change the sample size, the true effect size, as well as the true standard deviation of the outcome (<code>sd_y</code>).</p>
+<p>We will make use of a function that records estimates of the standard deviation of outcomes in each condition.</p>
+<pre class="r"><code>sd_estimator &lt;- function(data){
+  data.frame(sd_y_0_hat = sd(data$Y[data$Z == 0]), sd_y_1_hat = sd(data$Y[data$Z == 1]))
+}</code></pre>
+<pre class="r"><code>designer &lt;- 
+  function(sample_size = 50, true_effect_size = 0, sd_y = 1) {
+  design &lt;- 
+    declare_population(N = sample_size, u = rnorm(N, sd = sd_y)) +
+    declare_potential_outcomes(Y ~ true_effect_size * Z + u) +
+    declare_assignment(m = sample_size / 2) +
+    declare_reveal(Y, Z) +
+    declare_estimator(Y ~ Z, model = difference_in_means, label = &quot;dim&quot;) +
+    declare_estimator(handler = label_estimator(sd_estimator), label = &quot;sd_estimator&quot;)
+}</code></pre>
+<div id="should-you-use-your-pilot-to-estimate-the-effect-size-for-your-power-analysis" class="section level1">
+<h1>Should you use your pilot to estimate the effect size for your power analysis?</h1>
+<p>We first simulate the effect size estimates we would get from our small pilot study (N = 50). We look at how our piloting design works at true effect sizes from 0 to 0.5.</p>
+<pre class="r"><code># simulate estimated effect sizes from the pilot study
+pilot_designs &lt;- 
+  expand_design(designer, true_effect_size = seq(from = 0, to = 0.5, by = 0.1))
+
+simulations_pilot &lt;- simulate_design(pilot_designs, sims = sims)</code></pre>
+<p>For each true effect size, the simulations will give us a distribution of estimated effects that a researcher might use as a basis for power analysis. For example, for a true effect size of 0 the researcher might still estimate an effect of 0.10, and so conduct their power analysis assuming that the true effect is 0.10. For each true effect, we can thus construct a distribution of <em>power estimates</em> a researcher might obtain from <em>estimated</em> effects. Since we know the true power for the true underlying effect, we can compare the distribution of post-hoc power estimates to the true power one would estimate if one knew the true effect size.</p>
+<pre class="r"><code># estimate power for the full study for possible estimated effect sizes from the pilot study
+# (exploit fact that power is symmetric so we don&#39;t need to calculate power for negative effect sizes)
+
+max_pilot_estimate &lt;- max(simulations_pilot$estimate, na.rm = TRUE)
+
+study_designs &lt;- 
+  expand_design(designer, 
+                sample_size = 500, 
+                true_effect_size = seq(0, max_pilot_estimate, 0.01))
+
+diagnosis_study &lt;- diagnose_design(study_designs, sims = sims)</code></pre>
+<p>What did we find? In the plot, we show our guesses for the power of the main study based on our pilot effect size estimates.</p>
+<p>At high true effect sizes (top row), we do pretty well. Most of our guesses are above 80% power, leading us to the correct decision that the study is powered. Indeed we often <em>underestimate</em> our power in these cases meaning that we run larger studies than we need to.</p>
+<p>However, at low true effect sizes (bottom row) we show we are equally likely to find that the design is in fact powered as underpowered. We are equally likely to guess the power of the design is 90% as 10%. There is a good chance that we will falsely infer that our design is well powered just because we happened to get a high estimate from a noisy pilot.</p>
+<p><img src="/blog/2019-01-23-pilot-studies_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="how-about-estimating-the-standard-deviation-of-the-outcome" class="section level1">
+<h1>How about estimating the standard deviation of the outcome?</h1>
+<p>Now, let’s look at the second approach. Here, instead of using our pilot study to estimate the effect size for a power calculation, we estimate the <strong>standard deviation of the outcome</strong> and use this to calculate the main study’s minimum detectable effect. The decision we want to make is: is this MDE small enough to be able to rule out substantively important effects?</p>
+<p>We calculate the minimum detectable effect size using the approximation from <span class="citation">(Gelman and Hill 2006, pg. 441)</span>, 2.8 times the estimated standard error. We estimate the standard error using Equation 3.6 from <span class="citation">Gerber and Green (2012)</span>.</p>
+<pre class="r"><code>simulations_pilot &lt;-
+  simulations_pilot %&gt;%
+  mutate(se_hat_full_study = sqrt( sd_y_0_hat^2 / 250  + sd_y_1_hat^2 / 250),
+         mde_hat_full_study = 2.8 * se_hat_full_study)</code></pre>
+<p>We plot the distribution of MDE guesses. At each true effect size, our MDE estimates based on the estimated SD of the outcome variable in the treatment and control groups are unbiased for the true MDE (red dots). In other words, our piloting design will give us a good guess for the MDE of our full study.</p>
+<p><img src="/blog/2019-01-23-pilot-studies_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>In summary, pilot studies can be valuable in planning research for many reasons, but power calculations based on noisy effect size estimates can be misleading. A better approach is to use the pilot to learn about the distribution of outcome variables. The variability of the outcome variable can then be plugged into MDE formulas or even power calculations with, say, the smallest effect size of political, economic, or social importance.</p>
+<p>In the same spirit, pilot studies could also be used to learn the strength of the correlation between pre-treatment covariates and the outcome variable. With this knowledge in hand, researchers can develop their expectations about how much precision there is to be gained from covariate control or blocking.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-gelman2006data">
+<p>Gelman, Andrew, and Jennifer Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge University Press.</p>
+</div>
+<div id="ref-gerber2012field">
+<p>Gerber, Alan S., and Donald P. Green. 2012. <em>Field Experiments: Design, Analysis, and Interpretation</em>. WW Norton.</p>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>A designer is a function that writes designs.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about.html">About</a></li>
+                  <li><a href="/r/designlibrary">Library</a></li>
+                  <li><a href="/blog.html">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign</a></li>
+                  <li><a href="/r/estimatr/">estimatr</a></li>
+                  <li><a href="/r/randomizr/">randomizr</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr</a></li>
+                  <li><a href="/r/designlibrary/">DesignLibrary</a></li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">&copy; 2021 Graeme Blair, Jasper Cooper, Alexander Coppock, and Macartan Humphreys</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/DeclareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+

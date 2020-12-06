@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>A journal of null results is a flawed fix for a significance filter - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="A journal of null results is a flawed fix for a significance filter">
+  <meta name="twitter:description" content='Mostly we use design diagnostics to assess issues that arise because of design decisions. But you can also use these tools to examine issues that arise after implementation. Here we look at risks from publication bias and illustrate two distinct types of upwards bias that arise from a “significance filter.” A journal for publishing null results might help, but the results in there are also likely to be biased, downwards.
+
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/r/designlibrary">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
+
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">A journal of null results is a flawed fix for a significance filter</h2>
+
+        
+        <span class="article-date">2019/01/08</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>Mostly we use design diagnostics to assess issues that arise because of design decisions. But you can also use these tools to examine issues that arise <em>after</em> implementation. Here we look at risks from publication bias and illustrate two distinct types of upwards bias that arise from a “<a href="https://andrewgelman.com/2011/09/10/the-statistical-significance-filter/">significance filter</a>.” A journal for publishing null results might help, but the results in there are <em>also</em> likely to be biased, <em>downwards</em>.</p>
+<p>Two distinct problems arise if only significant results are published:</p>
+<ul>
+<li>The results of published studies will be <em>biased</em> towards larger magnitudes.</li>
+<li>The published studies will be <em>unrepresentative</em> of the distribution of true effects in the relevant population of studies.</li>
+</ul>
+<p>These two problems are quite distinct. The first problem is more familiar: conditional on any true effect size, larger estimates have an easier time passing the statistical significance filter, so the distribution of published results will be biased upwards because it will be missing all of the smaller estimates. The second problem is more subtle. If different studies seek to measure effects that are of different size, conditioning on statistical significance means that we are more likely to learn from places that have large effects than from places that have small effects. The significance filter means that our answers to any particular question will be biased <em>and</em> it means that the set of questions we see answers to will be biased as well. The <em>Journal of Significant Results</em> is a poor guide to the true distribution of causal effects.</p>
+<p>What about a <em>Journal of Null Results</em>? Such a journal would condition acceptance on <em>failing</em> to achieve statistical significance. The set of articles published in such a journal would <em>also</em> be biased. We’ll explore this idea with a quick simulation.</p>
+<p>The <code>two_arm_designer</code> function in the <code>DesignLibrary</code> package generates designs for a basic two-arm trial in which, by default, half the units are assigned to treatment and the remainder to control. (See <code>?two_arm_designer</code> for more details.) We’ll use this function to make a sequence of designs. We’ll vary the true value of the estimand, the average treatment effect (<code>ate</code>), from 0 to 1 and we’ll consider two sample sizes, <code>N = 20</code> and <code>N = 200</code>.</p>
+<pre class="r"><code>library(DesignLibrary)
+designs     &lt;- expand_design(two_arm_designer, 
+                             ate = seq(0, 1, 0.1), N = c(20, 200))
+simulations &lt;- simulate_design(designs)</code></pre>
+<p>The data.frame <code>simulations</code> records results from running these designs many times—equivalent here to implementing many independent studies from a large population of possible studies. The figure shows a scatterplot of the estimand versus the estimate for each run of the study. We facet by whether we condition on significance, nonsignificance, or nothing at all.</p>
+<pre><code>## `summarise()` regrouping output by &#39;N&#39; (override with `.groups` argument)</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
+<img src="/blog/2019-01-08_Significance_Filter_files/figure-html/unnamed-chunk-4-1.png" alt="Scatterplots of estimates against estimands (ranging between 0 and 1) for N = 20 and N = 200. Thick lines show mean values. If vertical and horizontal thick lines cross on the 45 degree line then estimates correspond to estimands on average." width="672" />
+<p class="caption">
+Figure 1: Scatterplots of estimates against estimands (ranging between 0 and 1) for N = 20 and N = 200. Thick lines show mean values. If vertical and horizontal thick lines cross on the 45 degree line then estimates correspond to estimands on average.
+</p>
+</div>
+<p>Looking first at the <em>Journal of Significant Results</em>, we see the familiar problem: the average estimate is biased away from the true value of the estimand. This problem is greatly helped by increasing the sample size. But we can also see the second problem – the distribution of estimands (the true effects under study) is also biased towards larger effects, this problem is also allayed, though less dramatically, by larger sample sizes.</p>
+<p>The <em>Journal of Null Results</em> suffers from a parallel problem, only in reverse. Now estimands are smaller than is typical in the population and, on average, estimates are biased down relative to these estimands. Strikingly, the bias in estimand selection is <em>worse</em> at the larger sample size (though downwards bias within the set of published studies is smaller).</p>
+<p>Now, we agree that proactively publishing null results may help when considering entire research literatures as a whole, and for this reason alone a <em>Journal of Null Results</em> is probably a good thing.</p>
+<p>But, better would be to not do any conditioning at all. The <em>Journal of Interesting Designs</em> would condition only on the question being interesting and the design being appropriate to answering the question. We see that the distribution of estimates and estimands are both centered on the correct average value.
+<!-- Of course, reasonable people may differ on what consititutes interesting questions and appropriate designs -- in this example, we make the (perhaps overly generous) assumption that all of the questions are worth asking and can be answered well by their designs. --></p>
+<!--
+# Keep thinking 
+
+Interestingly, if there is important heterogeneity in effects across studies, having a large *N* addresses the second problem described above but the first problem persists --- even though results for individual studies will be accurate, the results in the published record will not be accurate for the population.
+
+Can you show this?
+-->
+<div id="code-to-produce-figure" class="section level1">
+<h1>Code to produce figure</h1>
+<p>For those who are interested, here is the code to produce the above figure.</p>
+<pre class="r"><code>library(tidyverse)
+
+levels &lt;- c(&quot;Estimate is significant \n (Journal of Significant Results)&quot;, 
+            &quot;Estimate is not significant \n (Journal of Null Results)&quot;, 
+            &quot;No significance filter \n (Journal of Interesting Designs)&quot;)
+
+sims_1 &lt;- simulations %&gt;% mutate(filter = if_else(p.value &lt; 0.05, levels[1], levels[2]))
+
+sims_2 &lt;- simulations %&gt;% mutate(filter = levels[3])
+
+gg_df &lt;- bind_rows(sims_1, sims_2) %&gt;%
+  mutate(N = paste0(&quot;N = &quot;, N), filter = factor(filter, levels = levels))
+
+summary_df &lt;- gg_df %&gt;%
+  group_by(N, filter) %&gt;%
+  summarise(mean_estimand = mean(estimand),
+            mean_estimate = mean(estimate))
+
+ggplot(gg_df, aes(x = estimand, y = estimate, color = filter)) +
+  geom_point(alpha = 0.1) +
+  geom_vline(data = summary_df, aes(xintercept = mean_estimand), size = 1.2, alpha = 1, color = &quot;darkgrey&quot;) +
+  geom_hline(data = summary_df, aes(yintercept = mean_estimate), size = 1.2, alpha = 1, color = &quot;darkgrey&quot;) +
+  scale_colour_brewer(type = &quot;qual&quot;) +
+  geom_abline() +
+  geom_vline(xintercept = 0.5) +
+  facet_grid(N ~ filter) +
+  coord_cartesian(xlim = c(-0.5, 1.5), ylim = c(-0.5, 1.5)) +
+  theme_bw() +
+  theme(legend.position = &quot;none&quot;,
+        strip.background = element_blank()) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank())</code></pre>
+</div>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about.html">About</a></li>
+                  <li><a href="/r/designlibrary">Library</a></li>
+                  <li><a href="/blog.html">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign</a></li>
+                  <li><a href="/r/estimatr/">estimatr</a></li>
+                  <li><a href="/r/randomizr/">randomizr</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr</a></li>
+                  <li><a href="/r/designlibrary/">DesignLibrary</a></li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">&copy; 2021 Graeme Blair, Jasper Cooper, Alexander Coppock, and Macartan Humphreys</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/DeclareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+

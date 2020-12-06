@@ -1,0 +1,3416 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>Get me a random assignment YESTERDAY - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Get me a random assignment YESTERDAY">
+  <meta name="twitter:description" content='You’re partnering with an education nonprofit and you are planning on running a randomized control trial in 80 classrooms spread across 20 community schools. The request is in: please send us a spreadsheet with random assignments. The assignment’s gotta be blocked by school, it’s gotta be reproducible, and it’s gotta be tonight. The good news is that you can do all this in a couple of lines of code. We show how using some DeclareDesign tools and then walk through handling of more complex cases.
+
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/r/designlibrary">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
+
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">Get me a random assignment YESTERDAY</h2>
+
+        
+        <span class="article-date">2018/12/04</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
+
+
+<p>You’re partnering with an education nonprofit and you are planning on running a randomized control trial in 80 classrooms spread across 20 community schools. The request is in: please send us a spreadsheet with random assignments. The assignment’s gotta be blocked by school, it’s gotta be reproducible, and it’s gotta be tonight. The good news is that you can do all this in a couple of lines of code. We show how using some DeclareDesign tools and then walk through handling of more complex cases.</p>
+<div id="you-can-do-it" class="section level1">
+<h1>You can do it!</h1>
+<p>We’ll show first how you do it and then talk through some of the principles, wrinkles, and checks you might do. Here’s the code:</p>
+<pre class="r"><code>library(DeclareDesign)
+
+set.seed(20181204)
+
+here_you_go &lt;- fabricate(school = add_level(N = 20),
+                         class  = add_level(N = 4, treatment = block_ra(blocks = school)))</code></pre>
+<p>The spreadsheet looks like this:</p>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; overflow-x: scroll; width:75%; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+school
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+class
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+treatment
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+21
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+22
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+23
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+24
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+25
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+26
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+27
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+28
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+29
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+31
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+32
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+33
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+34
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+35
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+36
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+37
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+38
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+39
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+40
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+41
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+42
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+43
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+44
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+46
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+47
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+48
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+49
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+50
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+51
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+52
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+53
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+54
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+55
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+56
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+57
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+58
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+59
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+61
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+62
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+63
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+64
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+65
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+66
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+67
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+68
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+69
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+70
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+71
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+72
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+73
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+74
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+75
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+76
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+77
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+78
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+79
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+80
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br></p>
+<p>It has 20 schools with 4 classes in each and in each school exactly 2 classes are randomly assigned to treatment. The class variable provides a unique identifier for the experimental units.</p>
+<p>The basic work here is done in a single line of code using <code>fabricate</code> from the <code>fabricatr</code> package and <code>block_ra</code> from the <code>randomizr</code> package. The <code>fabricatr</code> package helped us make a multilevel dataset (using <code>add_level</code>) and the <code>randomizr</code> package lets us specify what we want to use as blocks for a blocked random assignment.</p>
+<p>You can then save this as a spreadsheet and send off:</p>
+<pre class="r"><code>write.csv(here_you_go, file = &quot;our_assignment_final_revised_final_version_3_latest.csv&quot;)</code></pre>
+<p>We’re done.</p>
+</div>
+<div id="some-principles-and-a-better-workflow" class="section level1">
+<h1>Some principles and a better workflow</h1>
+<p>We got the job done. How well did the approach do in terms of satisfying various randomization desiderata?</p>
+<ol style="list-style-type: decimal">
+<li><p>We want random assignment to be <em>transparent</em> in the sense that the process by which units were assigned to treatment conditions is fully understandable to interested parties. The code here provides much of the needed transparency. One point of slippage perhaps here is that the there is no specification for how the units here map into the actual units in the field. There should be no ambiguity as to which classroom we are talking about when we talk about classroom 5 in school 2. If this mapping can be determined later then the randomization can come undone.</p></li>
+<li><p>We want the random assignment to be <em>reproducible</em> in the sense that a person using the same software could generate the same random assignment. This is typically assured by setting a random number seed (<code>set.seed(20181204)</code>). If you give the computer a “seed” before randomizing you will get the same “random” result every time. Setting seeds produces a small risk to transparency since in principle one could select a seed to get a result you like. One approach used here is to use a rule for seed setting – such as setting the seed as the date of the randomization. Another is to publicly post a single seed that you or your lab will use for all projects.</p></li>
+<li><p>We want to be able to verify properties of the random assignment <em>procedure</em>, not just of a particular assignment. For that, we need to be able to generate many thousands of possible random assignments. It helps immensely if the random assignment procedure is itself a function that can be called repeatedly, rather than a script or a point-and-click workflow. We have not done that here so will walk through that below.</p></li>
+</ol>
+<p>Rather than writing code that produces an assignment and dataframe directly it can be useful to write down a <em>procedure</em> for generating data and assignment. <code>DeclareDesign</code> functions are good for this since these are mostly <em>functions that make functions</em>.</p>
+<pre class="r"><code>make_data  &lt;- declare_population(school = add_level(N = 20),
+                                 class  = add_level(N = 4))
+assignment &lt;- declare_assignment(blocks = class, prob = .5)</code></pre>
+<p>With these functions (<code>make_data()</code> and <code>assignment()</code> are functions!) written up, you have both the data structure and the assignment strategy declared. There are many ways now to run these one after another to generate a dataset with assignments. Some examples:</p>
+<pre class="r"><code>our_assignment &lt;- assignment(make_data())     # base R approach 
+
+our_assignment &lt;- make_data() %&gt;% assignment  # dplyr approach </code></pre>
+<p>The base R approach and the <code>dplyr</code> approach both run the first function and then apply the second function to the result.</p>
+<p>We advocate a design declaration approach that first concatenates the two steps into a design and then draws data using the design.</p>
+<pre class="r"><code>design         &lt;- make_data + assignment
+our_assignment &lt;- draw_data(design)           # DeclareDesign approach</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; overflow-x: scroll; width:75%; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+school
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+class
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Z
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Z_cond_prob
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+21
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+22
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+23
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+24
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+25
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+26
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+27
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+28
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+29
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+31
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+32
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+33
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+34
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+35
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+36
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+37
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+38
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+39
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+40
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+41
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+42
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+43
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:left;">
+44
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+46
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+47
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+48
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+49
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+50
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+51
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+52
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+53
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+54
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+55
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:left;">
+56
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+57
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+58
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+59
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+61
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+62
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+63
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:left;">
+64
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+65
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+66
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+67
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:left;">
+68
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+69
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+70
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+71
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:left;">
+72
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+73
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+74
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+75
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:left;">
+76
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+77
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+78
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+79
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:left;">
+80
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br></p>
+<p>A nice feature of the last approach is that not only can you conduct an actual random assignment from the design but you <em>also</em> obtain the probability that each unit is in the condition that it is in. This probability happens to be constant in this example, but it doesn’t need to be. If probabilities vary by unit, a standard approach is to weight each unit by the inverse of the probability of being in the condition that it is in.</p>
+<p>We will use this last approach going forward as we look at more bells and whistles.</p>
+</div>
+<div id="four-bells-and-whistles" class="section level1">
+<h1>Four bells and whistles</h1>
+<div id="incorporate-known-data-into-a-dataframe-before-randomization" class="section level2">
+<h2>Incorporate known data into a dataframe before randomization</h2>
+<p>In general the world is not quite as neat as in the example above. Say in fact our data came in like this (of course it would be easier if you were sent a nice dataset but you cannot always count on that):</p>
+<blockquote>
+<p>Just got the numbers: School 1 has 6 classes, school 2 has 8, schools 4 and 8 have 3 classes, schools 5 and 9 have 5, school 6 has 2, school 10 has 7. Remember we need this yesterday.</p>
+</blockquote>
+<p>We want to incorporate this information in the data fabrication step. The <code>add_level</code> functionality in the <code>fabricate</code> function is key here for respecting the multilevel nature of the dataset.</p>
+<pre class="r"><code>make_data &lt;- declare_population(school = add_level(N = 10),
+                                class  = add_level(N = c(6, 8, 4, 3, 5, 2, 4, 3, 5, 7)))</code></pre>
+<p>This new function would generate a data set that reflects the number of classes in each school.</p>
+</div>
+<div id="make-better-blocks-from-richer-data" class="section level2">
+<h2>Make better blocks from richer data</h2>
+<p>Say that you had even richer data about the sampling frame. Then you could use this to do even better assignments. Say this is what you get from your partner:</p>
+<blockquote>
+<p>We just got information on the class sizes. Here it is: School 1: 20, 25, 23, 30, 12, 15; School 2: 40, 42, 53, 67, 35, 22, 18, 18; School 3: 34, 37, 28, 30; School 4: 18, 24, 20; School 5: 10, 24, 13, 26, 18; School 6: 20, 25; School 7: 28, 34, 19, 24; School 8: 32, 25, 31; School 9: 23, 20, 33, 22, 35; School 10: 20, 31, 34, 35, 18, 23, 22</p>
+</blockquote>
+<p>We want to incorporate this information in the data fabrication step.</p>
+<pre class="r"><code>make_data &lt;- declare_population(
+    school = add_level(N = 10),
+    class = add_level(N = c(6, 8, 4, 3, 5, 2, 4, 3, 5, 7),
+                size = c(
+                  20, 25, 23, 30, 12, 15,         # students in each classroom of school 1
+                  40, 42, 53, 67, 35, 22, 18, 18, # students in each classroom of school 2
+                  34, 37, 28, 30,                 # etc...
+                  18, 24, 20,
+                  10, 24, 13, 26, 18,
+                  20, 25,
+                  28, 34, 19, 24,
+                  32, 25, 31,
+                  23, 20, 33, 22, 35,
+                  20, 31, 34, 35, 18, 23, 22
+                )))</code></pre>
+<p>This new data on class sizes might be very useful.</p>
+<p>If the NGO wants to examine individual level outcomes but is using a classroom-level intervention, then this design is using “clustered” random assignment (students clustered into classrooms). As noted in <span class="citation">Imai et al. (2009)</span>, however, if clusters are of uneven sizes, standard estimation approaches can be biased, even though it’s a randomized experiment. They propose blocking on cluster size in order to address this problem. We’ll use <a href="https://cran.r-project.org/web/packages/blockTools/index.html"><code>blockTools</code></a> (by Ryan T. Moore and Keith Schnakenberg) to block on both school and classroom size within schools.</p>
+<p>The <code>block</code> function within <code>blockTools</code> forms blocks as a function of <code>size</code> by pairing similarly-sized classrooms (blocks of size 2 is the default for the <code>block</code> function, though this can be changed). By telling the function that classes are grouped within schools, we can ensure that <code>blockTools</code> will pair classrooms within the same school. We turn this functionality into a design step like this:</p>
+<pre class="r"><code># A step to generate blocks
+block_function &lt;- function(data) {
+    out &lt;- block(data, id.vars = &quot;class&quot;, groups = &quot;school&quot;, block.vars = &quot;size&quot;)
+    mutate(data, block_id = createBlockIDs(out, data, id.var = &quot;class&quot;))}
+
+make_blocks &lt;- declare_step(handler =  block_function)</code></pre>
+<p>Let’s make a design that includes this step and now uses <code>block_id</code> instead of <code>class</code> for blocking:</p>
+<pre class="r"><code>design &lt;- make_data + make_blocks + declare_assignment(blocks = block_id)</code></pre>
+<p>When we draw data we now get the block variables and the assignment probabilities included. One out of two units is assigned to each block of two and singleton blocks are assigned independently with 0.5 probability to treatment.</p>
+<pre class="r"><code>our_df &lt;- draw_data(design)</code></pre>
+<pre><code>## Warning: `is.tibble()` is deprecated as of tibble 2.0.0.
+## Please use `is_tibble()` instead.
+## [90mThis warning is displayed once every 8 hours.[39m
+## [90mCall `lifecycle::last_warnings()` to see where this warning was generated.[39m</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; overflow-x: scroll; width:75%; ">
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+school
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+class
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+size
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+block_id
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Z
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Z_cond_prob
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+01
+</td>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:right;">
+53
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:right;">
+67
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+11
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02
+</td>
+<td style="text-align:left;">
+14
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+16
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+17
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03
+</td>
+<td style="text-align:left;">
+18
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+19
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+20
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04
+</td>
+<td style="text-align:left;">
+21
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+22
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+23
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+24
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+25
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+05
+</td>
+<td style="text-align:left;">
+26
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+27
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+06
+</td>
+<td style="text-align:left;">
+28
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+29
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+31
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+07
+</td>
+<td style="text-align:left;">
+32
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+33
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+34
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+08
+</td>
+<td style="text-align:left;">
+35
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+36
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+37
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+38
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+39
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+09
+</td>
+<td style="text-align:left;">
+40
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+41
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+42
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+43
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+44
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+46
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+47
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br></p>
+<p>The graph below shows that indeed, the blocking formed pairs of classrooms within each school that are similar to one another and correctly left some classrooms in a block by themselves when there was an odd number of classrooms in a school.</p>
+<pre class="r"><code>our_df %&gt;%
+  ggplot(aes(size, block_id, color = as.factor(Z))) +
+  geom_point() +
+  facet_wrap(~school, scales = &quot;free_y&quot;, ncol = 5)</code></pre>
+<p><img src="/blog/2018-12-04-randomization-yesterday_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="replicate-yourself" class="section level2">
+<h2>Replicate yourself</h2>
+<p>If you set up your assignments as functions like this then it is easy to implement the assignment multiple times:</p>
+<pre class="r"><code>many_assignments &lt;- replicate(1000, draw_data(design))</code></pre>
+<p>It’s useful to preserve a collection of assignments like this. One advantage is that it lets you see directly what the <em>real</em> assignment probabilities are—not just the intended assignment probabilities. This is especially useful in complex randomizations where different units might get assigned to treatment with quite different probabilities depending on their characteristics (for instance a procedure that rejects assignment profiles because of concerns with imbalance). Calculating the actual probabilities lets you figure out if you have set things up correctly and in some cases can even be useful for correcting things at the analysis stage if you have not!<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> In addition the collection of assignments stored in <code>many_assignment</code> are exactly the assignments you should use for some randomization inference tests.</p>
+</div>
+<div id="save-the-output-to-an-excel-spreadsheet" class="section level2">
+<h2>Save the output to an excel spreadsheet</h2>
+<p>Your partners mightn’t love csv spreadsheets. But you can easily save to other formats.</p>
+<p>Many people love Microsoft Excel. Using the <a href="https://cran.r-project.org/web/packages/writexl/index.html"><code>writexl</code></a> package (by Jeroen Ooms) will make them happy:</p>
+<pre class="r"><code>library(writexl)
+
+set_seed(20181204)
+
+our_df &lt;- draw_data(design)
+
+write_xlsx(our_df, path = &quot;students_with_random_assignment.xlsx&quot;)</code></pre>
+</div>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<ol style="list-style-type: decimal">
+<li>Sometimes you need to <em>make</em> data from bits of information. <code>fabricatr</code> can help with that.</li>
+<li>Sometimes you need to make blocks from multiple pieces of information. <code>blockTools</code> can help with that.</li>
+<li>Sometimes you need to conduct a random assignment (and make sure it’s reproducible). The functions in <code>randomizr</code> can help with that.</li>
+<li>Sometimes you need to share data with people who use Excel. <code>writexl</code> can help with that!</li>
+<li>Think of all this together as a part of a design declaration and you get a guarantee that all the bits <em>do</em> fit together in a transparent and replicable way, plus you are half way to a full declaration.</li>
+</ol>
+</div>
+<div id="references." class="section level1 unnumbered">
+<h1>References.</h1>
+<div id="refs" class="references">
+<div id="ref-imai2009essential">
+<p>Imai, Kosuke, Gary King, Clayton Nall, and others. 2009. “The Essential Role of Pair Matching in Cluster-Randomized Experiments, with Application to the Mexican Universal Health Insurance Evaluation.” <em>Statistical Science</em> 24 (1): 29–53.</p>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Some tools in the <code>randomizr</code> package make it even easier to obtain matrices of permutations and to learn about properties of your assignments. Using the <code>randomizr</code> package you can declare a randomization like this <code>ra_declaration &lt;- declare_ra(blocks = class)</code> and then get a print out of features of the assignments using <code>summary(ra_declaration)</code> and a whole matrix of assignments like this <code>perm_mat &lt;- obtain_permutation_matrix(ra_declaration)</code><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about.html">About</a></li>
+                  <li><a href="/r/designlibrary">Library</a></li>
+                  <li><a href="/blog.html">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign</a></li>
+                  <li><a href="/r/estimatr/">estimatr</a></li>
+                  <li><a href="/r/randomizr/">randomizr</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr</a></li>
+                  <li><a href="/r/designlibrary/">DesignLibrary</a></li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">&copy; 2021 Graeme Blair, Jasper Cooper, Alexander Coppock, and Macartan Humphreys</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/DeclareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+

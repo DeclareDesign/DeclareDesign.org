@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>How misleading are clustered SEs in designs with few clusters? - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How misleading are clustered SEs in designs with few clusters?">
+  <meta name="twitter:description" content='Cluster-robust standard errors are known to behave badly with too few clusters. There is a great discussion of this issue by Berk Özler “Beware of studies with a small number of clusters” drawing on studies by Cameron, Gelbach, and Miller (2008). See also this nice post by Cyrus Samii and a recent treatment by Esarey and Menger (2018). A rule of thumb is to start worrying about sandwich estimators when the number of clusters goes below 40. But here we show that diagnosis of a canonical design suggests that some sandwich approaches fare quite well even with fewer than 10 clusters.
+
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/r/designlibrary">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
+
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">How misleading are clustered SEs in designs with few clusters?</h2>
+
+        
+        <span class="article-date">2018/10/16</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>Cluster-robust standard errors are known to behave badly with too few clusters. There is a great discussion of this issue by Berk Özler <a href="https://blogs.worldbank.org/impactevaluations/beware-of-studies-with-a-small-number-of-clusters">“Beware of studies with a small number of clusters”</a> drawing on studies by <span class="citation">Cameron, Gelbach, and Miller (2008)</span>. See also this nice post by <a href="http://cyrussamii.com/?p=1246">Cyrus Samii</a> and a recent treatment by <span class="citation">Esarey and Menger (2018)</span>. A rule of thumb is to start worrying about sandwich estimators when the number of clusters goes below 40. But here we show that diagnosis of a canonical design suggests that some sandwich approaches fare quite well even with fewer than 10 clusters.</p>
+<!-- We can see the problem immediately by looking at a small-scale example and estimating Stata's default cluster-robust standard errors. We fabricate a dataset with two clusters, each containing three units: -->
+<!-- ```{r, eval = FALSE} -->
+<!-- dat <- fabricate(N = 6, -->
+<!--                  cl = c(0, 0, 0, 1, 1, 1), -->
+<!--                  Z = cl, -->
+<!--                  Y = Z + rnorm(N)) -->
+<!-- lm_robust(Y ~ Z, clusters = cl, data = dat, se_type = "stata") -->
+<!-- ``` -->
+<!-- ```{r, echo = FALSE} -->
+<!-- dat <- fabricate(N = 6, -->
+<!--                  cl = c(0, 0, 0, 1, 1, 1), -->
+<!--                  Z = cl, -->
+<!--                  Y = Z + rnorm(N)) -->
+<!-- fit <- lm_robust(Y ~ Z, clusters = cl, data = dat, se_type = "stata") -->
+<!-- kable(tidy(fit)[, c("term", "estimate", "std.error")], digits = 2) -->
+<!-- ``` -->
+<!-- The estimated standard error is essentially zero. Such precision is implausible with just two clusters.  -->
+<p>We’ll explore this question by looking at a range of cluster randomized trials. We do this by generating a base design which includes the number of clusters and the number of units per cluster as arguments and then using that design to make a sequence of designs that vary these arguments. In this design we draw separate errors at the individual and cluster levels so that outcomes are correlated within the clusters. Specifically, we assume a fairly large “intracluster correlation coefficient” (ICC) of 0.5. The design employs a range of different approaches for estimating standard errors from the <code>estimatr</code> package, alongside a naive approach that ignores the clusters entirely.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Here’s the basic design:</p>
+<pre class="r"><code>N_clusters &lt;- 4
+cluster_size &lt;- 5
+
+cluster_design &lt;- 
+  
+    declare_population(
+      clusters = add_level(N = N_clusters,   u_c = rnorm(N, sd = .707)),
+      units    = add_level(N = cluster_size, u_i = rnorm(N, sd = .707))) +
+      
+    declare_potential_outcomes(Y ~ u_i + u_c) +
+      
+    declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) +
+      
+    # cluster assignment
+    declare_assignment(clusters = clusters, prob = 0.5) +
+      
+    declare_reveal(Y, Z) +
+      
+    # analysis, with different approaches to clustering
+    declare_estimator(Y ~ Z, model = lm_robust,  
+                        estimand = &quot;ATE&quot;, label = &quot;1: Naive&quot;) + 
+
+    declare_estimator(Y ~ Z, model = lm_robust, clusters = clusters, 
+                        se_type = &quot;stata&quot;, estimand = &quot;ATE&quot;, label = &quot;2: stata&quot;) +
+      
+    declare_estimator(Y ~ Z, model = lm_robust, clusters = clusters, 
+                        se_type = &quot;CR0&quot;, estimand = &quot;ATE&quot;, label = &quot;3: CR0&quot;) +
+
+    declare_estimator(Y ~ Z, model = lm_robust, clusters = clusters, 
+                        se_type = &quot;CR2&quot;, estimand = &quot;ATE&quot;, label = &quot;4: CR2&quot;)</code></pre>
+<!-- data <- draw_data(cluster_design) -->
+<!-- M <- glm(formula = Y ~ Z, data = data) -->
+<!-- wild <- cluster.wild.glm(M, dat = data, cluster = ~ clusters, boot.reps = 1000) -->
+<p>We use the <code>redesign</code> function to make a sequence of related designs based on the base design.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> We’re especially interested in what happens at small numbers of clusters, since that’s where the trouble lies, so we will focus the sequence on the low end.</p>
+<pre class="r"><code>cluster_designs &lt;- redesign(cluster_design,
+                            N_clusters = c(4, 5, 6, 7, 8, 9, 10, 20, 30), 
+                            cluster_size = c(3, 30))</code></pre>
+<p>We diagnose all of these in one go:</p>
+<pre class="r"><code>diagnosis &lt;- diagnose_design(cluster_designs, sims = sims)</code></pre>
+<p>Let’s now graph the output separately for the expected standard error, power, and coverage.</p>
+<div id="standard-errors" class="section level2">
+<h2>Standard Errors</h2>
+<p>Our first plot compares the true standard error (the standard deviation of the estimates themselves) to the expected standard error <em>estimate</em>. The blue points are the true standard errors at each sample size; they go down as the number of clusters increases. The red points are the average estimated standard errors. When the number of clusters is small, we see that the average estimate is <strong>too small</strong>: the standard error estimators are downwardly biased. This problem is extreme for the naive approach. It is still clearly an issue for “CR0” (a variant of cluster-robust standard errors that appears in R code that circulates online) and Stata’s default standard errors. We see though that it is not as severe for the CR2 standard errors (a variant that mirrors the standard HC2 robust standard errors formula). We’re using the adjustment described in <span class="citation">Pustejovsky and Tipton (2018)</span>.</p>
+<pre class="r"><code>get_diagnosands(diagnosis) %&gt;%
+  gather(diagnosand, value, sd_estimate, mean_se) %&gt;%
+  ggplot(aes(N_clusters, value, group = diagnosand, color = diagnosand)) +
+  geom_point() + geom_line() +
+  theme(legend.position = &quot;bottom&quot;, strip.background = element_blank()) +
+  facet_grid(cluster_size ~ estimator_label, labeller = label_both)</code></pre>
+<p><img src="/blog/2018-10-16-few-clusters_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="power" class="section level2">
+<h2>Power</h2>
+<p>In our data-generating process, the true ATE is exactly zero. Statistical power is the probability of getting a significant estimate. Since the true ATE is exactly zero, this probability should be exactly 0.05, as we’re using the standard significance threshold. Just as the analysis of the standard errors showed, when the number of clusters is small, we’re <strong>anti</strong>conservative. The naive approach is again wildly off, particularly when there are large clusters. But the clustered approaches also have problems. When the number of clusters is smaller than 10, the CR0 and Stata estimators are falsely rejecting at rates exceeding 10%.</p>
+<pre class="r"><code>get_diagnosands(diagnosis) %&gt;%
+ggplot(aes(N_clusters, power)) +
+  geom_point() + geom_line() +
+  geom_hline(yintercept = 0.05, linetype = &quot;dashed&quot;) +
+  theme(strip.background = element_blank()) +
+  facet_grid(cluster_size ~ estimator_label, labeller = label_both)</code></pre>
+<p><img src="/blog/2018-10-16-few-clusters_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="coverage" class="section level2">
+<h2>Coverage</h2>
+<p>Coverage is the rate at which the estimated confidence intervals include the true value of the parameter. We’re estimating 95% confidence intervals, so if things are working as advertised, coverage would be 95%. But since at small numbers of clusters, we’re overconfident (the standard errors are too small), the coverage rates are well below the 95% target. Again though, <code>CR2</code> performs quite well.</p>
+<pre class="r"><code>get_diagnosands(diagnosis) %&gt;%
+ggplot(aes(N_clusters, coverage)) +
+  geom_point() + geom_line() +
+  geom_hline(yintercept = 0.95, linetype = &quot;dashed&quot;) +
+  theme(strip.background = element_blank()) +
+  facet_grid(cluster_size ~ estimator_label, labeller = label_both)</code></pre>
+<p><img src="/blog/2018-10-16-few-clusters_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="take-aways" class="section level1">
+<h1>Take aways</h1>
+<p>We’re surprised just how well <code>CR2</code> performs for this design. We see here very good performance for even small numbers of clusters and excellent performance once there are about 10 clusters. Can this be broken with a different data generating process—e.g. designs with non-normal errors or with unequal cluster sizes? We don’t know. We’d love to hear thoughts on when <code>CR2</code> doesn’t do as well as <code>CR0</code> or the Stata default.</p>
+<p>A second takeaway: although it can be hard in the abstract to assess how few clusters is too few, declaring and diagnosing a design tailored to your application is not that hard and might give a better handle than rules of thumb for assessing the credibility of the standard errors you estimate given the type of data you have.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-cameron2008bootstrap">
+<p>Cameron, A Colin, Jonah B Gelbach, and Douglas L Miller. 2008. “Bootstrap-Based Improvements for Inference with Clustered Errors.” <em>The Review of Economics and Statistics</em> 90 (3): 414–27.</p>
+</div>
+<div id="ref-esarey2018practical">
+<p>Esarey, Justin, and Andrew Menger. 2018. “Practical and Effective Approaches to Dealing with Clustered Data.” <em>Political Science Research and Methods</em>, 1–19.</p>
+</div>
+<div id="ref-pustejovsky2018">
+<p>Pustejovsky, James E., and Elizabeth Tipton. 2018. “Small-Sample Methods for Cluster-Robust Variance Estimation and Hypothesis Testing in Fixed Effects Models.” <em>Journal of Business &amp; Economic Statistics</em> 36 (4): 672–83. <a href="https://doi.org/10.1080/07350015.2016.1247004">https://doi.org/10.1080/07350015.2016.1247004</a>.</p>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Big thanks to <a href="http://lukesonnet.com/">Luke Sonnet</a> who played a huge role in developing this functionality in <code>estimatr</code>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>The <code>redesign</code> function changes the values of arguments that are given explicitly in step declaration. See <code>? redesign</code> for examples where <code>redesign</code> does not change the values of arguments that are used by a design but not given explicitly when steps are declared.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about.html">About</a></li>
+                  <li><a href="/r/designlibrary">Library</a></li>
+                  <li><a href="/blog.html">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign</a></li>
+                  <li><a href="/r/estimatr/">estimatr</a></li>
+                  <li><a href="/r/randomizr/">randomizr</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr</a></li>
+                  <li><a href="/r/designlibrary/">DesignLibrary</a></li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">&copy; 2021 Graeme Blair, Jasper Cooper, Alexander Coppock, and Macartan Humphreys</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/DeclareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+

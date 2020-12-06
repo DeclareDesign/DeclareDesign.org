@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>Blog home - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+<link href="/blog/index.xml" rel="alternate" type="application/rss+xml" title="A Hugo website" />
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Blog home">
+  <meta name="twitter:description" content='
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/r/designlibrary">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+
+  
+  <div class="archive">
+    <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+    
+      <article class="archive-item">
+        <a href="/blog/now-there-is-a-web-interface-for-declaring-and-diagnosing-research-designs.html" class="archive-item-link">Now there is a web interface for declaring and diagnosing research designs</a>
+        <span class="archive-item-date">
+          2020/01/08
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>By Clara Bicalho, Sisi Huang, and Markus Konrad</p></div>
+        
+          <div><a href="/blog/now-there-is-a-web-interface-for-declaring-and-diagnosing-research-designs.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/2019-02-05-instrumental-variables.html" class="archive-item-link">An instrument does not have to be exogenous to be consistent</a>
+        <span class="archive-item-date">
+          2019/02/19
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>We often think of an instrumental variable (<span class="math inline">\(Z\)</span>) as a random shock that generates exogenous variation in a treatment of interest <span class="math inline">\(X\)</span>. The randomness of <span class="math inline">\(Z\)</span> lets us identify the effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>, at least for units for which <span class="math inline">\(Z\)</span> perturbs <span class="math inline">\(X\)</span> in a way that’s not possible by just looking at the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. But surprisingly, we think, if effects are constant the instrumental variables estimator can be consistent for the effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> even when the relationship between the instrument (<span class="math inline">\(Z\)</span>) and the endogenous variable (<span class="math inline">\(X\)</span>) is confounded (for example, <span class="citation">Hernán and Robins (2006)</span>). That’s the good news. Less good news is that when there is effect heterogeneity you can get good estimates for some units but it can be hard to know <em>which</em> units those are <span class="citation">(Swanson and Hernán 2017)</span>. We use a declaration and diagnosis to illustrate these insights.
+<!-- We show first that instrumental variables approaches can do well even with confounded instruments if there are constant treatment effects. We then show that with a confounded instrument and effect heterogeneity  the interpretation of who the compliers are for "complier average effects" really depends on the nature of confounding.  --></p></div>
+        
+          <div><a href="/blog/2019-02-05-instrumental-variables.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/some-designs-have-badly-posed-questions-and-design-diagnosis-can-alert-you-to-the-problem.html" class="archive-item-link">Some designs have badly posed questions and design diagnosis can alert you to the problem</a>
+        <span class="archive-item-date">
+          2019/02/12
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>An obvious requirement of a good research design is that the question it seeks to answer does in fact <em>have</em> an answer, at least under plausible models of the world. But we can sometimes get quite far along a research path without being conscious that the questions we ask do not have answers and the answers we get are answering different questions.</p></div>
+        
+          <div><a href="/blog/some-designs-have-badly-posed-questions-and-design-diagnosis-can-alert-you-to-the-problem.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/estimating-average-treatment-effects-with-ordered-probit-is-it-worth-it.html" class="archive-item-link">Estimating Average Treatment Effects with Ordered Probit: Is it worth it?</a>
+        <span class="archive-item-date">
+          2019/02/06
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>We sometimes worry about whether we need to model data generating processes correctly. For example you have ordinal outcome variables, on a five-point Likert scale. How should you model the data generation process? Do you need to model it at all? Go-to approaches include ordered probit and ordered logit models which are designed for this kind of outcome variable. But maybe you don’t need them. After all, the argument that the difference-in-means procedure estimates the treatment effect doesn’t depend on any assumptions about the type of data (as long as expectations are defined)—ordered, count, censored, etc. We diagnose a design that hedges by using both differences in means and an ordered probit model. We do so assuming that the ordered probit model correctly describes data generation. Which does better?</p></div>
+        
+          <div><a href="/blog/estimating-average-treatment-effects-with-ordered-probit-is-it-worth-it.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/2019-01-30-process-tracing.html" class="archive-item-link">What can you learn from simulating qualitative inference strategies?</a>
+        <span class="archive-item-date">
+          2019/01/30
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>Qualitative process-tracing sometimes seeks to answer “cause of effects” claims using within-case data: how probable is the hypothesis that <span class="math inline">\(X\)</span> <em>did in fact</em> cause <span class="math inline">\(Y\)</span>? <span class="citation">Fairfield and Charman (2017)</span>, for example, ask whether the right changed position on tax reform during the 2005 Chilean presidential election (<span class="math inline">\(Y\)</span>) <em>because</em> of anti-inequality campaigns (<span class="math inline">\(X\)</span>) by examining whether the case study narrative bears evidence that you would only expect to see if this were true.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> When inferential logics are so clearly articulated, it becomes possible to do design declaration and diagnosis. Here we declare a Bayesian process-tracing design and use it to think through choices about what kinds of within-case information have the greatest probative value.</p></div>
+        
+          <div><a href="/blog/2019-01-30-process-tracing.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/2019-01-23-pilot-studies.html" class="archive-item-link">Should a pilot study change your study design decisions?</a>
+        <span class="archive-item-date">
+          2019/01/23
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>Data collection is expensive, and we often only get one bite at the apple. In response, we often conduct an inexpensive (and small) pilot test to help better design the study. Pilot studies have many virtues, including practicing the logistics of data collection and improving measurement tools. But using pilots to get noisy estimates in order to determine sample sizes for scale up comes with risks.</p></div>
+        
+          <div><a href="/blog/2019-01-23-pilot-studies.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/use-change-scores-or-control-for-pre-treatment-outcomes-depends-on-the-true-data-generating-process.html" class="archive-item-link">Use change scores or control for pre-treatment outcomes? Depends on the true data generating process</a>
+        <span class="archive-item-date">
+          2019/01/15
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>We’re in an observational study setting in which treatment assignment was not controlled by the researcher. We have pre-treatment data on baseline outcomes and we’d like to incorporate them, mainly to decrease bias due to confounding and but also, ideally, to increase precision. One approach is to use the difference between pre and post outcomes as the outcome variable; another is to use the baseline data as a control. Which is better?</p></div>
+        
+          <div><a href="/blog/use-change-scores-or-control-for-pre-treatment-outcomes-depends-on-the-true-data-generating-process.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/a-journal-of-null-results-is-a-flawed-fix-for-a-significance-filter.html" class="archive-item-link">A journal of null results is a flawed fix for a significance filter</a>
+        <span class="archive-item-date">
+          2019/01/08
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>Mostly we use design diagnostics to assess issues that arise because of design decisions. But you can also use these tools to examine issues that arise <em>after</em> implementation. Here we look at risks from publication bias and illustrate two distinct types of upwards bias that arise from a “<a href="https://andrewgelman.com/2011/09/10/the-statistical-significance-filter/">significance filter</a>.” A journal for publishing null results might help, but the results in there are <em>also</em> likely to be biased, <em>downwards</em>.</p></div>
+        
+          <div><a href="/blog/a-journal-of-null-results-is-a-flawed-fix-for-a-significance-filter.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/declaredesign-holiday-hiatus.html" class="archive-item-link">DeclareDesign Holiday Hiatus</a>
+        <span class="archive-item-date">
+          2018/12/20
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>We’ll be back on January 7 – Happy New Year!</p></div>
+        
+      </article>
+      <hr/>
+    
+      <article class="archive-item">
+        <a href="/blog/sometimes-you-need-to-cluster-standard-errors-above-the-level-of-treatment.html" class="archive-item-link">Sometimes you need to cluster standard errors above the level of treatment</a>
+        <span class="archive-item-date">
+          2018/12/18
+        </span>
+        
+          
+        
+        <div class="blog_summary"><p>In designs in which a treatment is assigned in clusters (e.g. classrooms), it’s usual practice to account for cluster-level correlations when you generate estimates of uncertainty about estimated effects. But units often share commonalities at higher levels, such as at a block level (e.g. schools). Sometimes you need to take account of this and sometimes you don’t. We show an instance of the usual procedure of clustering by assignment cluster (classrooms) working well and show how badly you can do with a more conservative approach (clustering by schools). We then show an example of a design in which clustering at the level of treatment assignment (classroom) is not good enough; in the troublesome example, schools are thought of as being sampled from a larger population of schools and treatment effects are different in different schools. In this case, if you want estimates of uncertainty for population level effects you have to cluster at the school level <em>even though</em> treatment is assigned <em>within</em> schools.</p></div>
+        
+          <div><a href="/blog/sometimes-you-need-to-cluster-standard-errors-above-the-level-of-treatment.html">Read More…</a></div>
+        
+      </article>
+      <hr/>
+    
+    
+
+<ul class="pagination justify-content-center">
+    
+    <li class="page-item">
+        <a href="/blog.html" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
+    </li>
+    
+    <li class="page-item disabled">
+    <a href="" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item active"><a class="page-link" href="/blog.html">1</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/blog/page/2.html">2</a></li>
+    
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    <li class="page-item"><a class="page-link" href="/blog/page/3.html">3</a></li>
+    
+    
+    <li class="page-item">
+    <a href="/blog/page/2.html" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+    
+    <li class="page-item">
+        <a href="/blog/page/3.html" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
+    </li>
+    
+</ul>
+
+
+  </div>
+  
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about.html">About</a></li>
+                  <li><a href="/r/designlibrary">Library</a></li>
+                  <li><a href="/blog.html">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign</a></li>
+                  <li><a href="/r/estimatr/">estimatr</a></li>
+                  <li><a href="/r/randomizr/">randomizr</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr</a></li>
+                  <li><a href="/r/designlibrary/">DesignLibrary</a></li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">&copy; 2021 Graeme Blair, Jasper Cooper, Alexander Coppock, and Macartan Humphreys</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/DeclareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+

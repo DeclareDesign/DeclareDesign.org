@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>You can&amp;rsquo;t speak meaningfully about spillovers without specifying an estimand - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="You can&amp;rsquo;t speak meaningfully about spillovers without specifying an estimand">
+  <meta name="twitter:description" content='A dangerous fact: it is quite possible to talk in a seemingly coherent way about strategies to answer a research question without ever properly specifying what the research question is. The risk is that you end up with the right solution to the wrong problem. The problem is particularly acute for studies where there are risks of “spillovers.”
+
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/r/designlibrary">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
+
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">You can&rsquo;t speak meaningfully about spillovers without specifying an estimand</h2>
+
+        
+        <span class="article-date">2018/09/18</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>A dangerous fact: it is quite possible to talk in a seemingly coherent way about strategies to answer a research question without ever properly specifying what the research question is. The risk is that you end up with the right solution to the wrong problem. The problem is particularly acute for studies where there are risks of “spillovers.”</p>
+<p>By spillovers we mean situations where one unit’s outcome depends upon how another unit is assigned to treatment. You often hear worries that estimates of average treatment effects are biased in the presence of such spillovers. And in particular that when there are positive spillovers, estimates will be biased downwards. Sensible as these worries sound, try to state them formally and you can run into some difficulties. The key issue is that the assumption of no spillovers runs so deep that it is often invoked even <em>prior to the definition of estimands</em>. If you write the “average treatment effect” estimand using potential outcomes notation, as <span class="math inline">\(E(Y(1) - Y(0))\)</span>, you are <em>already</em> assuming that a unit’s outcomes depend only on its own assignment to treatment and not on how other units are assigned to treatment. The definition of the estimand leaves no space to even describe spillovers.</p>
+<p>If there are in fact spillovers, then the estimand needs to be spelled out more carefully. In this case, the range of estimands to choose may be very wide and the appropriateness of different strategies is going to depend on which estimand you are shooting for.</p>
+<p>This post shows how:</p>
+<ul>
+<li>different types of spillover estimands might be formally declared</li>
+<li>positive spillovers may produce under- <em>or</em> over-estimates of treatment effects</li>
+<li>the merits of addressing spillovers through a sampling strategy depend on the estimand of interest</li>
+</ul>
+<p>Along the way, we show how to modify designs by switching up steps at different points.</p>
+<div id="estimands-given-spillovers" class="section level2">
+<h2>Estimands given spillovers</h2>
+<p>There are many different estimands that can take account of spillover effects, if there are any, but that correspond to the usual average treatment effects estimand when there are no spillovers. For instance, we can define the difference for a unit when it—and only it—is treated, compared to a situation in which no unit is treated. In potential outcomes notation that could be written, for unit 3, say, as:</p>
+<p><span class="math display">\[\tau_3 = Y(0,0,1,0,0,\dots) -  Y(0,0,0,0,0,\dots)\]</span></p>
+<p>One could then define a population estimand that is the average of all these differences over a population. Note that these differences specify different counterfactual assignment vectors for each individual. In the absence of spillovers, this estimand is equivalent to the usual average treatment effect. In the presence of spillovers, this estimand is well defined, whereas the usual average treatment effect estimand is not.</p>
+<p>There are many other possibilities. For example, the difference in outcomes when no units are treated and all units are treated. Or the difference between not being treated when all others are, and being treated when all others are. Or, the difference a change in your own condition would make given that others are assigned to the value that they actually have (see e.g. <span class="citation">Sävje, Aronow, and Hudgens (2017)</span>). In fact, with <span class="math inline">\(n\)</span> units and binary assignments, we can define <span class="math inline">\(2^n\times2^n\)</span> simple comparisons for each unit.</p>
+<p>Below, we declare a design that allows for the possibility of spillovers. Diagnosing the design shows how severe the problem of spillovers can be for estimation. Modifying the design lets us explore different types of solutions.</p>
+</div>
+<div id="how-spillovers-make-defining-and-estimating-average-effects-hard" class="section level2">
+<h2>How spillovers make defining and estimating average effects hard</h2>
+<p>Consider a situation in which units are grouped into triplets, indexed <span class="math inline">\(G\)</span>. Suppose that there are 80 triplets. If any member of group <span class="math inline">\(G\)</span> is treated, then all of its members receive some equal benefit (with marginal gains possibly increasing or decreasing in the numbers treated).</p>
+<p>We can declare this design as follows:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>N_groups &lt;- 80
+N_i_group &lt;- 3
+sd_i &lt;- 0.2
+gamma &lt;- 2
+
+population &lt;- declare_population(G = add_level(N = N_groups,
+                                               n = N_i_group),
+                                 i = add_level(N = n, I = 1:N, zeros = 0, ones = 1))
+
+dgp &lt;- function(i, Z, G, n) (sum(Z[G == G[i]])/n[i])^gamma + rnorm(1,0,sd_i)
+
+estimand &lt;- declare_estimand(Treat_one = mean(
+                 sapply(I, function(i) dgp(i, I==i, G, n) - dgp(i, zeros, G, n))
+                 ))
+
+assign    &lt;- declare_assignment(prob = .5)
+
+reveal_Y  &lt;- declare_reveal(Y = sapply(1:N, function(i) dgp(i, Z, G, n)),
+                           handler = fabricate)
+
+estimator &lt;- declare_estimator(Y ~ Z,  model = lm_robust,
+                               label = &quot;naive&quot;, estimand = &quot;Treat_one&quot;)
+
+spillover_design &lt;- population + estimand + assign + reveal_Y + estimator</code></pre>
+<p>The most complex part of this design declaration involves the specification of the estimand. We define a helper function, <code>dgp</code>, which reports an individual’s outcome given the full treatment assignment vector. We then apply that function to each unit separately and take the average.</p>
+<p>This design produces data that looks like this:</p>
+<pre class="r"><code>draw_data(spillover_design)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">G</th>
+<th align="right">n</th>
+<th align="left">i</th>
+<th align="right">I</th>
+<th align="right">zeros</th>
+<th align="right">ones</th>
+<th align="right">Z</th>
+<th align="right">Z_cond_prob</th>
+<th align="right">Y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">01</td>
+<td align="right">3</td>
+<td align="left">001</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.5</td>
+<td align="right">1.1426481</td>
+</tr>
+<tr class="even">
+<td align="left">01</td>
+<td align="right">3</td>
+<td align="left">002</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.5</td>
+<td align="right">0.8914236</td>
+</tr>
+<tr class="odd">
+<td align="left">01</td>
+<td align="right">3</td>
+<td align="left">003</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.5</td>
+<td align="right">1.1771557</td>
+</tr>
+<tr class="even">
+<td align="left">02</td>
+<td align="right">3</td>
+<td align="left">004</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0.5</td>
+<td align="right">0.0413922</td>
+</tr>
+<tr class="odd">
+<td align="left">02</td>
+<td align="right">3</td>
+<td align="left">005</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0.5</td>
+<td align="right">-0.0904998</td>
+</tr>
+<tr class="even">
+<td align="left">02</td>
+<td align="right">3</td>
+<td align="left">006</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.5</td>
+<td align="right">0.4877476</td>
+</tr>
+</tbody>
+</table>
+<p>And we can diagnose the design like this:</p>
+<pre class="r"><code>diagnosis &lt;- diagnose_design(spillover_design)</code></pre>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="10%" />
+<col width="15%" />
+<col width="13%" />
+<col width="8%" />
+<col width="13%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Bias</th>
+<th align="left">RMSE</th>
+<th align="left">Power</th>
+<th align="left">Coverage</th>
+<th align="left">Mean Estimate</th>
+<th align="left">SD Estimate</th>
+<th align="left">Mean Se</th>
+<th align="left">Type S Rate</th>
+<th align="left">Mean Estimand</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0.22</td>
+<td align="left">0.23</td>
+<td align="left">1.00</td>
+<td align="left">0.00</td>
+<td align="left">0.33</td>
+<td align="left">0.05</td>
+<td align="left">0.04</td>
+<td align="left">0.00</td>
+<td align="left">0.11</td>
+</tr>
+<tr class="even">
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+</tr>
+</tbody>
+</table>
+<p>We see considerable bias here because the difference-in-means estimator does not account for within-group spillovers. Many units in the control condition are affected by the treatments received by other members of their group.</p>
+<p>Interestingly, in this case, we have an <em>over</em>estimate of the effect, even though there are <em>positive</em> spillovers. In the assumed model, there are increasing returns to spillovers. Units that are treated are also likely to be in groups with a higher proportion of treated units (since, by definition, at least one member of their group is already treated). On average, treated units thus receive more positive spillover than untreated units, leading to exaggerated estimates.</p>
+</div>
+<div id="whether-a-sparser-sample-helps-depends-on-the-estimand-of-interest" class="section level2">
+<h2>Whether a sparser sample helps depends on the estimand of interest</h2>
+<p>There are multiple solutions to this kind of problem. How well they work depends, however, on how well we understand the structure of spillover effects in the first place.</p>
+<p>One approach is to alter assignment strategies (see, e.g., <span class="citation">Bowers et al. (2018)</span>). An even simpler one is to employ a sparser sample. This approach seems to go against one of the few near-universal principles of research design: study as many units as possible.</p>
+<p>But here there may be some wisdom to it. Although more units generally means greater precision, there may be a cost to this when there are risks of spillovers. If a larger study means treating more units, and this means more units interfere with each other, you might end up with a spuriously precise, biased estimate.</p>
+<p>Here is an alternative design that implements the original data and analysis strategies on a sample of one subject per group:</p>
+<pre class="r"><code>sparse_design &lt;- insert_step(spillover_design, after = &quot;Treat_one&quot;,
+                          declare_sampling(strata = G, prob = 1/3))</code></pre>
+<p>Note that it is important that the sampling takes place here <em>after</em> the definition of the estimand. Spillovers operate as a function of population characteristics, not just sample characteristics.</p>
+<p>Our narrower sampling strategy reduces the <code>N</code> by two-thirds (from 240 to 80). But the results are now unbiased. Note that we did not change our original assignment strategy, in which units are assigned to treatment or to control with .5 probability. Rather, we changed the sampling strategy. Before, we kept whole groups and assigned no members or several members to treatment. We now select one member per group and assign them to treatment or to control. Because we only select one member per group, and spillovers only go within and not between groups, there is no way for our treatment or control units to receive spillovers.</p>
+<p>Here is a diagnosis of this sparser design:</p>
+<pre class="r"><code>diagnosis &lt;- diagnose_design(sparse_design, sims = sims)</code></pre>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="7%" />
+<col width="7%" />
+<col width="10%" />
+<col width="15%" />
+<col width="13%" />
+<col width="8%" />
+<col width="13%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Bias</th>
+<th align="left">RMSE</th>
+<th align="left">Power</th>
+<th align="left">Coverage</th>
+<th align="left">Mean Estimate</th>
+<th align="left">SD Estimate</th>
+<th align="left">Mean Se</th>
+<th align="left">Type S Rate</th>
+<th align="left">Mean Estimand</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">0.00</td>
+<td align="left">0.05</td>
+<td align="left">0.70</td>
+<td align="left">0.93</td>
+<td align="left">0.11</td>
+<td align="left">0.04</td>
+<td align="left">0.04</td>
+<td align="left">0.00</td>
+<td align="left">0.11</td>
+</tr>
+<tr class="even">
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.01)</td>
+<td align="left">(0.01)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+</tr>
+</tbody>
+</table>
+<p>We have an unbiased design. Here though getting an unbiased design depended on having a good understanding of the nature of spillovers. In this case, we made use of the fact there would be no spillovers between groups.</p>
+<p>However, how good this solution is also depends on what exactly the estimand is. What if the estimand were the average difference in outcomes between a world in which no unit is treated and one in which all units are treated?</p>
+<p>We answer this question by declaring a new design that adds in the new estimand and links it to the estimator.</p>
+<p>We first define the steps:</p>
+<pre class="r"><code>new_estimand  &lt;- declare_estimand(Treat_all = mean(
+                  sapply(I, function(i) dgp(i,ones,G,n) - dgp(i, zeros, G,n))
+                  ))
+
+new_estimator &lt;- declare_estimator(Y ~ Z, model = lm_robust,
+                                   estimand = list(&quot;Treat_one&quot;, &quot;Treat_all&quot;))</code></pre>
+<p>We then splice the steps in where we want them (estimand before the sampling, estimator after the sampling):</p>
+<pre class="r"><code>sparse_design &lt;- insert_step(sparse_design, after = &quot;Treat_one&quot;, new_estimand)
+sparse_design &lt;- replace_step(sparse_design, &quot;naive&quot;, new_estimator)</code></pre>
+<p>The diagnosis highlights how poorly the sampling solution works for this new estimand:</p>
+<pre class="r"><code>diagnose_design(sparse_design)</code></pre>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="8%" />
+<col width="13%" />
+<col width="11%" />
+<col width="7%" />
+<col width="11%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Estimand Label</th>
+<th align="left">Bias</th>
+<th align="left">RMSE</th>
+<th align="left">Power</th>
+<th align="left">Coverage</th>
+<th align="left">Mean Estimate</th>
+<th align="left">SD Estimate</th>
+<th align="left">Mean Se</th>
+<th align="left">Type S Rate</th>
+<th align="left">Mean Estimand</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Treat_all</td>
+<td align="left">-0.89</td>
+<td align="left">0.89</td>
+<td align="left">0.69</td>
+<td align="left">0.00</td>
+<td align="left">0.11</td>
+<td align="left">0.05</td>
+<td align="left">0.04</td>
+<td align="left">0.00</td>
+<td align="left">1.00</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.01)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+</tr>
+<tr class="odd">
+<td align="left">Treat_one</td>
+<td align="left">0.00</td>
+<td align="left">0.05</td>
+<td align="left">0.69</td>
+<td align="left">0.93</td>
+<td align="left">0.11</td>
+<td align="left">0.05</td>
+<td align="left">0.04</td>
+<td align="left">0.00</td>
+<td align="left">0.11</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.01)</td>
+<td align="left">(0.01)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+</tr>
+</tbody>
+</table>
+<p>The sparser design fails because the treatment density is insufficient to reveal the potential outcomes required by the estimand: <em>you cannot figure out the effects of saturation if you do not saturate</em>.</p>
+<p>A future post will describe approaches to addressing spillovers that work through estimation strategies, rather than through sampling and assignment strategies.</p>
+<hr />
+<p><em>Post edited to reflect name change to <code>spillover_designer()</code> on 11/12/2018.</em></p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-bowers2018models">
+<p>Bowers, Jake, Bruce A. Desmarais, Mark Frederickson, Nahomi Ichino, Hsuan-Wei Lee, and Simi Wang. 2018. “Models, Methods and Network Topology: Experimental Design for the Study of Interference.” <em>Social Networks</em> 54: 196–208.</p>
+</div>
+<div id="ref-savje2017average">
+<p>Sävje, Fredrik, Peter M. Aronow, and Michael G. Hudgens. 2017. “Average Treatment Effects in the Presence of Unknown Interference.” <a href="https://arxiv.org/abs/1711.06399">https://arxiv.org/abs/1711.06399</a>.</p>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>In fact, here we just made some minor edits to the code pulled from the <code>DesignLibrary</code> package using <code>get_design_code(spillover_designer())</code>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about.html">About</a></li>
+                  <li><a href="/r/designlibrary">Library</a></li>
+                  <li><a href="/blog.html">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign</a></li>
+                  <li><a href="/r/estimatr/">estimatr</a></li>
+                  <li><a href="/r/randomizr/">randomizr</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr</a></li>
+                  <li><a href="/r/designlibrary/">DesignLibrary</a></li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">&copy; 2021 Graeme Blair, Jasper Cooper, Alexander Coppock, and Macartan Humphreys</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/DeclareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+

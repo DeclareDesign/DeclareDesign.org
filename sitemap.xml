@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>/blog.html</loc>
+    <lastmod>2020-01-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2020-01-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/now-there-is-a-web-interface-for-declaring-and-diagnosing-research-designs.html</loc>
+    <lastmod>2020-01-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019-02-05-instrumental-variables.html</loc>
+    <lastmod>2019-02-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/some-designs-have-badly-posed-questions-and-design-diagnosis-can-alert-you-to-the-problem.html</loc>
+    <lastmod>2019-02-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/estimating-average-treatment-effects-with-ordered-probit-is-it-worth-it.html</loc>
+    <lastmod>2019-02-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019-01-30-process-tracing.html</loc>
+    <lastmod>2019-01-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019-01-23-pilot-studies.html</loc>
+    <lastmod>2019-01-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/use-change-scores-or-control-for-pre-treatment-outcomes-depends-on-the-true-data-generating-process.html</loc>
+    <lastmod>2019-01-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/a-journal-of-null-results-is-a-flawed-fix-for-a-significance-filter.html</loc>
+    <lastmod>2019-01-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/declaredesign-holiday-hiatus.html</loc>
+    <lastmod>2018-12-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/sometimes-you-need-to-cluster-standard-errors-above-the-level-of-treatment.html</loc>
+    <lastmod>2018-12-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/meta-analysis-can-be-used-not-just-to-guess-about-effects-out-of-sample-but-also-to-re-evaluate-effects-in-sample.html</loc>
+    <lastmod>2018-12-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/get-me-a-random-assignment-yesterday.html</loc>
+    <lastmod>2018-12-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/randomization-does-not-justify-t-tests.-how-worried-should-i-be.html</loc>
+    <lastmod>2018-11-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/modelling_spillovers.html</loc>
+    <lastmod>2018-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2018-11-13-learning-from-p.html</loc>
+    <lastmod>2018-11-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/neyman-sate-pate.html</loc>
+    <lastmod>2018-11-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/bias-cluster-randomized-trials.html</loc>
+    <lastmod>2018-10-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/with-great-power-comes-great-responsibility.html</loc>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/how-misleading-are-clustered-ses-in-designs-with-few-clusters.html</loc>
+    <lastmod>2018-10-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/biased-fixed-effects.html</loc>
+    <lastmod>2018-10-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/improve-power-using-your-answer-strategy-not-just-your-data-strategy.html</loc>
+    <lastmod>2018-10-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/sometimes-blocking-can-reduce-your-precision.html</loc>
+    <lastmod>2018-09-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/you-cant-speak-meaningfully-about-spillovers-without-specifying-an-estimand.html</loc>
+    <lastmod>2018-09-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/how-controlling-for-pretreatment-covariates-can-introduce-bias.html</loc>
+    <lastmod>2018-09-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/declaredesign-blog.html</loc>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/about.html</loc>
+  </url>
+  
+  <url>
+    <loc>/categories.html</loc>
+  </url>
+  
+  <url>
+    <loc>/conduct.html</loc>
+  </url>
+  
+  <url>
+    <loc>/getting-started.html</loc>
+  </url>
+  
+  <url>
+    <loc>/pap.html</loc>
+  </url>
+  
+  <url>
+    <loc>/tags.html</loc>
+  </url>
+  
+</urlset>

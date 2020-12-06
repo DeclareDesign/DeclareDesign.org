@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+  <title>Improve power using your answer strategy, not just your data strategy - DeclareDesign</title>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'>
+
+
+
+<script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js" integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Improve power using your answer strategy, not just your data strategy">
+  <meta name="twitter:description" content='Most power calculators take a small number of inputs: sample size, effect size, and variance. Some also allow for number of blocks or cluster size as well as the overall sample size. All of these inputs relate to your data strategy. Unless you can control the effect size and the noise, you are left with sample size and data structure (blocks and clusters) as the only levers to play with to try to improve your power.
+
+'>
+
+
+
+
+
+
+<script src="/js/dropdown_menu.js"></script>
+<link rel="stylesheet" href="/css/custom.css">
+
+  </head>
+  <body>
+    <div class="wrapper">
+      
+        
+<header>
+  <div class="navbar-wrap fixed-top bg-white">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid"> <a class="navbar-brand" href="/"><img src="/images/brand.svg" alt=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/getting-started.html">Getting Started</a></li>
+            <li class="nav-item"><a class="nav-link" href="/r/designlibrary">Library</a></li>
+            <li class="nav-item dropdown">
+              
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="/r/declaredesign/">DeclareDesign</a></li>
+                <li><a class="dropdown-item" href="/r/randomizr/">randomizr</a></li>
+                <li><a class="dropdown-item" href="/r/fabricatr/">fabricatr</a></li>
+                <li><a class="dropdown-item" href="/r/estimatr/">estimatr</a></li>
+                <li><a class="dropdown-item" href="/r/designlibrary/">DesignLibrary</a></li>
+              </ul>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="/blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/about.html">About</a></li>
+            <li class="nav-item"><a target="_blank" class="nav-link" href="http://discuss.declaredesign.org/">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+ 
+
+      
+
+
+<main class="container">
+  <div class="row justify-content-between">
+    <div class="col-lg-12" id="content_column">
+      <article class="article">
+
+        <a class="h1 d-block mb-3" href="/blog">DeclareDesign Blog</a>
+        <h2 class="article-title">Improve power using your answer strategy, not just your data strategy</h2>
+
+        
+        <span class="article-date">2018/10/02</span>
+        
+
+        <div class="article-content">
+          
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>Most power calculators take a small number of inputs: sample size, effect size, and variance. Some also allow for number of blocks or cluster size as well as the overall sample size. All of these inputs relate to your data strategy. Unless you can control the effect size and the noise, you are left with sample size and data structure (blocks and clusters) as the only levers to play with to try to improve your power.</p>
+<p>In fact, though, power depends on your answer strategy and not just your data strategy and so you might do better putting resources into improving what you do with your data rather than the amount of data you have.</p>
+<div id="power-from-the-answer-strategy" class="section level1">
+<h1>Power from the answer strategy</h1>
+<p>Random assignment generally means that you do not have to include control variables in an analysis in order to achieve unbiasedness. But including controls can improve precision and increase power. If you are trying to improve your power but adding observations is expensive, perhaps you should first explore whether you can improve power by adjusting the estimation approach.</p>
+<p>Here is an illustration of a two-arm trial with 40 units in which 20 units are assigned to treatment, blocking on a binary pre-treatment covariate <span class="math inline">\(W\)</span>. We’ll let the treatment effects vary according to <span class="math inline">\(W\)</span>, but the true average treatment effect (our estimand in this case) is equal to 1.</p>
+<pre class="r"><code>N = 40
+
+# Model
+population &lt;- declare_population(N, W = rep(0:1, N / 2), u = rnorm(N))  
+potentials &lt;- declare_potential_outcomes(Y ~ 2 * Z * W + u)
+
+# Inquiry
+estimand   &lt;- declare_estimand(ate = 1)  
+
+# Data strategy
+assignment &lt;- declare_assignment(assignment_variable = &quot;Z&quot;, blocks = W)
+reveal     &lt;- declare_reveal(Y, Z)
+
+# Answer strategy
+estimator  &lt;- declare_estimator(Y ~ Z, estimand = &quot;ate&quot;, label = &quot;Simple D-I-M&quot;)
+
+# Declare the design
+design &lt;- population + potentials + estimand + assignment + reveal + estimator</code></pre>
+<p>Under this data generating process, the treatment interacts quite strongly with <span class="math inline">\(W\)</span>. The average effect of treatment is 1, but the <strong>conditional</strong> average treatment effects are 0 and 2 for the two levels of <span class="math inline">\(W\)</span>. The difference-in-means analysis strategy for this design is equivalent to an OLS regression of the outcome on the treatment with no control variables included. Because of random assignment, this procedure is of course unbiased, but it leaves money on the table in the sense that we could achieve higher statistical power if we included information about <span class="math inline">\(W\)</span> in some way. Here is the power of the difference-in-means answer strategy:</p>
+<pre class="r"><code>diagnose_design(design)</code></pre>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="4%" />
+<col width="5%" />
+<col width="8%" />
+<col width="13%" />
+<col width="11%" />
+<col width="7%" />
+<col width="11%" />
+<col width="13%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Estimand Label</th>
+<th align="left">RMSE</th>
+<th align="left">Power</th>
+<th align="left">Coverage</th>
+<th align="left">Mean Estimate</th>
+<th align="left">SD Estimate</th>
+<th align="left">Mean Se</th>
+<th align="left">Type S Rate</th>
+<th align="left">Mean Estimand</th>
+<th align="right">N Sims</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ate</td>
+<td align="left">0.31</td>
+<td align="left">0.74</td>
+<td align="left">0.98</td>
+<td align="left">1.00</td>
+<td align="left">0.31</td>
+<td align="left">0.39</td>
+<td align="left">0.00</td>
+<td align="left">1.00</td>
+<td align="right">10000</td>
+</tr>
+</tbody>
+</table>
+<p>So power is good though short of conventional standards. Based on this diagnosis the probability of getting a statistically significant result is only 0.74 even though the true effect is reasonably large.</p>
+<p>Let’s consider two additional estimation strategies. The first controls for the pre-treatment covariate <span class="math inline">\(W\)</span> in an OLS regression of the outcome on treatment plus the covariate. This strategy is the standard approach to the inclusion of covariates in experimental analysis. An alternative is the “Lin estimator,” so named by us because of the lovely description of this approach given in <span class="citation">Lin (2013)</span>. This estimator interacts treatment with the de-meaned covariates. The <code>lm_lin()</code> function in the <code>estimatr</code> package implements the Lin estimator for easy use.</p>
+<p>Here is the expanded design and the diagnosis:</p>
+<pre class="r"><code>new_design &lt;- design +
+              declare_estimator(Y ~ Z + W,  model = lm_robust,
+                                estimand = &quot;ate&quot;, label = &quot;OLS: Control for W&quot;) +
+              declare_estimator(Y ~ Z, covariates = ~ W, model = lm_lin,
+                                estimand = &quot;ate&quot;, label = &quot;Lin: Control + Interaction&quot;)</code></pre>
+<table>
+<colgroup>
+<col width="22%" />
+<col width="5%" />
+<col width="4%" />
+<col width="5%" />
+<col width="7%" />
+<col width="11%" />
+<col width="10%" />
+<col width="6%" />
+<col width="10%" />
+<col width="11%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Estimator Label</th>
+<th align="left">Bias</th>
+<th align="left">RMSE</th>
+<th align="left">Power</th>
+<th align="left">Coverage</th>
+<th align="left">Mean Estimate</th>
+<th align="left">SD Estimate</th>
+<th align="left">Mean Se</th>
+<th align="left">Type S Rate</th>
+<th align="left">Mean Estimand</th>
+<th align="right">N Sims</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Lin: Control + Interaction</td>
+<td align="left">-0.00</td>
+<td align="left">0.32</td>
+<td align="left">0.86</td>
+<td align="left">0.95</td>
+<td align="left">1.00</td>
+<td align="left">0.32</td>
+<td align="left">0.31</td>
+<td align="left">0.00</td>
+<td align="left">1.00</td>
+<td align="right">10000</td>
+</tr>
+<tr class="even">
+<td align="left">OLS: Control for W</td>
+<td align="left">-0.00</td>
+<td align="left">0.32</td>
+<td align="left">0.80</td>
+<td align="left">0.97</td>
+<td align="left">1.00</td>
+<td align="left">0.32</td>
+<td align="left">0.35</td>
+<td align="left">0.00</td>
+<td align="left">1.00</td>
+<td align="right">10000</td>
+</tr>
+<tr class="odd">
+<td align="left">Simple D-I-M</td>
+<td align="left">-0.00</td>
+<td align="left">0.32</td>
+<td align="left">0.73</td>
+<td align="left">0.98</td>
+<td align="left">1.00</td>
+<td align="left">0.32</td>
+<td align="left">0.39</td>
+<td align="left">0.00</td>
+<td align="left">1.00</td>
+<td align="right">10000</td>
+</tr>
+</tbody>
+</table>
+<p>We see here a clear ranking of the three estimation strategies in terms of power. You will notice that the coverage also varies across designs: the simple difference in means approach is actually overly conservative in part because it does not take account of the blocked randomization. The OLS model that in some sense “controls for blocks” does better, but is still above the nominal coverage of 95%. In this case, the coverage of the Lin model is excellent.</p>
+</div>
+<div id="tradeoffs" class="section level1">
+<h1>Tradeoffs</h1>
+<p>To figure out how these gains in power from switching up estimation strategies compare with gains from increasing <span class="math inline">\(N\)</span> we declare a sequence of designs, differing only in values for <span class="math inline">\(N\)</span>. We do that in two steps:</p>
+<pre class="r"><code>designs   &lt;- redesign(new_design, N = seq(30, 80, 10))
+diagnoses &lt;- diagnose_design(designs)</code></pre>
+<p>The diagnoses object now contains full diagnoses for a whole sequence of designs that assume different <span class="math inline">\(N\)</span>s and that each contain multiple estimation strategies. Here is a graph of the output showing trade-offs between design size and estimation strategy.</p>
+<pre class="r"><code>diagnoses$diagnosands_df %&gt;%
+  ggplot(aes(N, power)) +
+  geom_line(aes(color = estimator_label))</code></pre>
+<p><img src="/blog/2018-10-02-power-strategies_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We see here that if you had 45 units and wanted to use simple differences in means your power would be around 80%. You could up your power to just over 90% by increasing the size of the experiment to about 60 units. Or, conditional on speculations about the heterogeneous effects of treatment, you could do the same thing by staying at 45 but switching over to the Lin estimator.</p>
+</div>
+<div id="a-puzzle" class="section level1">
+<h1>A puzzle</h1>
+<p>Sometimes researchers coarsen control variables, for example turning a 10 point democracy scale into a binary variable, because they believe the finer scale is noisier. Can you declare a design to assess whether dichotomizing an outcome variable increases or decreases power?</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-lin2013agnostic">
+<p>Lin, Winston. 2013. “Agnostic Notes on Regression Adjustments to Experimental Data: Reexamining Freedman’s Critique.” <em>The Annals of Applied Statistics</em> 7 (1): 295–318.</p>
+</div>
+</div>
+</div>
+
+        </div>
+      </article>
+      
+
+
+
+    </div>
+  </div>
+</main>
+
+    </div>
+
+    
+
+<footer>
+    <div class="footer-top">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-7 col-md-12">
+            <div class="row">
+              <div class="col-md-3 col-12">
+                <div class="footer-brand"><a href=""><img src="/images/brand-footer.svg" alt=""></a></div>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>DeclareDesign</p>
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/about.html">About</a></li>
+                  <li><a href="/r/designlibrary">Library</a></li>
+                  <li><a href="/blog.html">Blog</a></li>
+                  <li><a href="http://discuss.declaredesign.org/">Help</a></li>
+                </ul>
+              </div>
+              <div class="col-md-3 col-4">
+                <p>Software</p>
+                <ul class="list-unstyled">
+                  <li><a href="/r/declaredesign/">DeclareDesign</a></li>
+                  <li><a href="/r/estimatr/">estimatr</a></li>
+                  <li><a href="/r/randomizr/">randomizr</a></li>
+                  <li><a href="/r/fabricatr/">fabricatr</a></li>
+                  <li><a href="/r/designlibrary/">DesignLibrary</a></li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
+          <div class="col-lg-5 col-md-12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-meta-block">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-7">
+              <p class="mb-0">&copy; 2021 Graeme Blair, Jasper Cooper, Alexander Coppock, and Macartan Humphreys</p>
+            </div>
+            <div class="col-sm-5">
+              <div class="fbl-link-wrap">
+                <ul class="list-inline mb-0">
+                  <li class="list-inline-item"> <a target="_blank" href="http://github.com/DeclareDesign/"><img src="images/icon-git.svg" alt=""></a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+   
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+
+<script>
+    jQuery(function ()
+    {
+        const library_list = jQuery("#design_library_list");
+        library_list.addClass("table table-striped table-bordered");
+        library_list.DataTable(
+            {
+                "autoWidth": false,
+                "columns":
+                    [
+                        {"width": "30%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "10%"}, 
+                        {"width": "15%"}, 
+                        {"width": "25%"}, 
+                    ],
+                "drawCallback": initialize_tooltips
+            }
+        );
+
+        library_list.css("width", "");
+    });
+
+    function initialize_tooltips()
+    {
+        const tooltip_elements = jQuery('[data-toggle="tooltip"]');
+        tooltip_elements.tooltip();
+        tooltip_elements.click(function ()
+        {
+            jQuery(this).tooltip("hide");
+        });
+    }
+</script>
+
+    
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>
+jQuery(function ()
+{
+  $('pre').each(function (index)
+  {
+    hljs.highlightBlock(this);
+  });
+});
+</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+
+
+
+    
+  </body>
+</html>
+
