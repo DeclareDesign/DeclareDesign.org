@@ -164,9 +164,9 @@
 <span class="co"># Create matched-pairs dataset using fabricatr</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://declaredesign.org/r/fabricatr">fabricatr</a></span><span class="op">)</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fabricatr/man/fabricate.html">fabricate</a></span><span class="op">(</span>
-  blocks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/fabricatr/man/fabricate.html">add_level</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">300</span><span class="op">)</span>,
-  indiv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/fabricatr/man/fabricate.html">add_level</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2</span>, z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span> <span class="op">+</span> <span class="va">z</span><span class="op">)</span>
+<span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/fabricatr/reference/fabricate.html">fabricate</a></span><span class="op">(</span>
+  blocks <span class="op">=</span> <span class="fu"><a href="https://declaredesign.org/r/fabricatr/reference/fabricate.html">add_level</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">300</span><span class="op">)</span>,
+  indiv <span class="op">=</span> <span class="fu"><a href="https://declaredesign.org/r/fabricatr/reference/fabricate.html">add_level</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">2</span>, z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span> <span class="op">+</span> <span class="va">z</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></code></pre></div>
 <pre><code>##   blocks indiv z          y
@@ -189,9 +189,9 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr       min        lq      mean    median        uq       max
-##  base + sandwich 171.79657 176.93463 190.11685 179.77778 185.46889 302.22334
-##        lm_robust  78.15557  80.50347  83.52372  82.97579  86.16638  94.26386
-##  lm_robust + fes  49.28418  50.64625  55.78986  52.05651  54.36678 181.66133
+##  base + sandwich 168.46399 174.14468 188.08016 177.00306 180.72194 289.17958
+##        lm_robust  74.87153  79.36619  81.55462  81.42172  84.08303  88.92689
+##  lm_robust + fes  48.64369  50.02133  56.09301  51.54930  53.70433 207.77587
 ##  neval cld
 ##     50   c
 ##     50  b 
@@ -219,9 +219,9 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr        min         lq      mean     median        uq       max
-##  base + sandwich 171.858518 175.945192 189.47157 179.270668 187.59963 304.71272
-##        lm_robust  61.796777  65.558507  68.27566  67.822542  69.92101  80.22799
-##  lm_robust + fes   7.618685   8.007446  11.77702   8.674577  10.65406 130.69605
+##  base + sandwich 168.693526 174.608229 184.72610 176.252178 179.53044 300.87749
+##        lm_robust  60.313542  63.479277  67.82723  65.098976  67.61542  97.56298
+##  lm_robust + fes   7.422955   7.797295  11.92754   8.247727  11.08859 131.31476
 ##  neval cld
 ##     50   c
 ##     50  b 
