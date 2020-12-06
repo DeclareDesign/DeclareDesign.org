@@ -102,14 +102,10 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="randomizr-easy-to-use-tools-for-common-forms-of-random-assignment-and-sampling" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#randomizr-easy-to-use-tools-for-common-forms-of-random-assignment-and-sampling" class="anchor"></a>randomizr: Easy to use tools for common forms of random assignment and sampling</h1></div>
 
-<p><strong>randomizr</strong> is designed to make conducting field, lab, survey, or online experiments easier by automating the random assignment process. Social and lab scientists conducting experiments need a process to assign individuals or units of observation to treatment or control wings. Common designs include simple random assignment, complete randomization, block randomization, cluster randomization, and blocked cluster randomization. <strong>randomizr</strong> automates all of these processes and assists scientists in doing transparent, replicable science. We offer <strong>randomizr</strong> for both <code>R</code> and <code>Stata</code>.</p>
-<div id="randomizr-for-r" class="section level2">
-<h2 class="hasAnchor">
-<a href="#randomizr-for-r" class="anchor"></a>randomizr for R</h2>
+<p>randomizr: Easy to use tools for common forms of random assignment and sampling ================</p>
+<p><a href="https://cran.r-project.org/package=randomizr"><img src="https://www.r-pkg.org/badges/version/randomizr" alt="CRAN Status"></a> <a href="https://travis-ci.org/DeclareDesign/randomizr"><img src="https://travis-ci.org/DeclareDesign/randomizr.svg?branch=master" alt="Travis-CI Build Status"></a> <a href="https://ci.appveyor.com/project/DeclareDesign/randomizr"><img src="https://ci.appveyor.com/api/projects/status/github/DeclareDesign/randomizr?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://coveralls.io/github/DeclareDesign/randomizr?branch=master"><img src="https://coveralls.io/repos/github/DeclareDesign/randomizr/badge.svg?branch=master" alt="Coverage Status"></a> <img src="https://cranlogs.r-pkg.org/badges/grand-total/randomizr" alt="CRAN downloads"></p>
+<p><strong>randomizr</strong> is designed to make conducting field, lab, survey, or online experiments easier by automating the random assignment process. Social and lab scientists conducting experiments need a process to assign individuals or units of observation to treatment or control wings. Common designs include simple random assignment, complete randomization, block randomization, cluster randomization, and blocked cluster randomization. <strong>randomizr</strong> automates all of these processes and assists scientists in doing transparent, replicable science. We offer <strong>randomizr</strong> for both <a href="https://declaredesign.org/r/randomizr"><code>R</code></a> and <a href="https://declaredesign.org/stata/randomizr"><code>Stata</code></a>.</p>
 <div id="installing-randomizr-for-r" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installing-randomizr-for-r" class="anchor"></a>Installing randomizr for R</h3>
@@ -152,7 +148,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">Z</span>, <span class="va">clust_var</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="right">a</th>
 <th align="right">b</th>
 <th align="right">c</th>
@@ -171,45 +167,27 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>control</td>
+<td align="left">control</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">3</td>
+<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">7</td>
-<td align="right">8</td>
-<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">11</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">15</td>
 </tr>
 <tr class="even">
-<td>placebo</td>
+<td align="left">placebo</td>
 <td align="right">0</td>
 <td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">13</td>
-<td align="right">14</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td>treatment</td>
-<td align="right">1</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">4</td>
 <td align="right">0</td>
@@ -217,37 +195,45 @@
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">10</td>
-<td align="right">11</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">13</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">treatment</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">12</td>
 <td align="right">0</td>
+<td align="right">14</td>
 <td align="right">0</td>
-<td align="right">15</td>
 </tr>
 </tbody>
 </table>
-<p>For more information about all of <strong>randomizr</strong>’s functionality, please see our <a href="https://declaredesign.org/R/randomizr/articles/randomizr_vignette.html">online tutorial</a></p>
+<p>For more information about all of <strong>randomizr</strong>’s functionality, please see our <a href="https://declaredesign.org/r/randomizr/articles/randomizr_vignette.html">online tutorial</a></p>
 </div>
-</div>
-<div id="randomizr-for-stata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#randomizr-for-stata" class="anchor"></a>randomizr for Stata</h2>
+<div id="randomizr-for-stata" class="section level3">
+<h3 class="hasAnchor">
+<a href="#randomizr-for-stata" class="anchor"></a>randomizr for Stata</h3>
 <p>Installing the latest stable version of <strong>randomizr</strong> from ssc is easy:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>ssc install randomizr</span></code></pre></div>
 <p>If you would like to install the latest development release directly from GitHub, run the following code:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>net install randomizr, <span class="kw">from</span>(https<span class="op">:</span><span class="er">//</span>raw.githubusercontent.com<span class="op">/</span>DeclareDesign<span class="op">/</span>strandomizr<span class="op">/</span>master<span class="op">/</span>) replace</span></code></pre></div>
-</div>
-<div id="getting-started-with-randomizr-for-stata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#getting-started-with-randomizr-for-stata" class="anchor"></a>Getting started with randomizr for Stata</h2>
-<p><code>complete_ra</code> (complete randomization) is the workhorse function that will be most appropriate for a large number of experimental situations: it assigns m of N units to treatment:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>ssc install randomizr</span>
-<span id="cb7-2"><a href="#cb7-2"></a>set obs <span class="dv">100</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>complete_ra, <span class="kw">m</span>(<span class="dv">50</span>)</span></code></pre></div>
-<p>A Stata version of our <a href="https://declaredesign.org/R/randomizr/articles/srandomizr_vignette.html">online tutorial</a> is also available.</p>
 <p>Happy randomizing!</p>
 </div>
-</div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -278,16 +264,7 @@
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=randomizr"><img src="http://www.r-pkg.org/badges/version/randomizr" alt="CRAN Status"></a></li>
-<li><a href="https://travis-ci.org/DeclareDesign/randomizr"><img src="https://travis-ci.org/DeclareDesign/randomizr.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/DeclareDesign/randomizr"><img src="https://ci.appveyor.com/api/projects/status/github/DeclareDesign/randomizr?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://coveralls.io/github/DeclareDesign/randomizr?branch=master"><img src="https://coveralls.io/repos/github/DeclareDesign/randomizr/badge.svg?branch=master" alt="Coverage Status"></a></li>
-</ul>
-</div>
-</div>
+  </div>
 </div>
 
 
