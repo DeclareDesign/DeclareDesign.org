@@ -81,7 +81,7 @@ kable(estimates, digits = 2)
 
 The fully declared design contains the information needed to diagnose it. We report the bootstrapped standard errors of the diagnosands in parentheses.
 
-```{r, eval = FALSE}
+```{r}
 diagnosis <- diagnose_design(design, sims = 1000, bootstrap_sims = 500)
 ```
 
@@ -93,7 +93,6 @@ diagnosis %>% reshape_diagnosis %>% select(-c("Design Label","Estimand Label","E
 - We can also observe that under the current design, coverage is close to the nominal 95% rate.
 
 ----
-
 
 You can find a few different entry points into these ideas and the software tools:
 
