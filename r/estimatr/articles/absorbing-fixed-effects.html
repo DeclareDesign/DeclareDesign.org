@@ -63,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://declaredesign.org/r/estimatr/">estimatr home</a>
+  <a href="../articles/getting-started.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -76,19 +76,19 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/getting-started.html">Getting started using estimatr</a>
+    </li>
+    <li>
       <a href="../articles/absorbing-fixed-effects.html">Absorbing Fixed Effects with estimatr</a>
+    </li>
+    <li>
+      <a href="../articles/estimatr-in-the-tidyverse.html">estimatr in the Tidyverse</a>
     </li>
     <li>
       <a href="../articles/benchmarking-estimatr.html">Benchmarking estimatr</a>
     </li>
     <li>
       <a href="../articles/emmeans-examples.html">Examples with emmeans</a>
-    </li>
-    <li>
-      <a href="../articles/estimatr-in-the-tidyverse.html">estimatr in the Tidyverse</a>
-    </li>
-    <li>
-      <a href="../articles/getting-started.html">Getting started using estimatr</a>
     </li>
     <li>
       <a href="../articles/mathematical-notes.html">Mathematical notes for estimatr</a>
@@ -106,6 +106,9 @@
       <a href="../articles/stata-wls-hat.html">How Stata's hat matrix differs with weights</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="https://declaredesign.org/r/estimatr/">estimatr home</a>
 </li>
       </ul>
 </div>
@@ -188,14 +191,14 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 173.29465 184.32387 227.15972 194.62627 242.77117 624.3900
-##        lm_robust  77.13072  82.71500  93.39926  88.58946  96.98936 153.4980
-##  lm_robust + fes  49.61912  52.53333  70.97878  56.72965  72.48898 281.5144
+##             expr       min        lq      mean    median        uq       max
+##  base + sandwich 166.03548 171.71002 185.59114 174.59358 178.82582 319.35728
+##        lm_robust  74.86183  78.08099  80.95916  81.29978  83.71598  91.48259
+##  lm_robust + fes  47.11158  49.67257  54.41205  50.66144  52.37083 212.05347
 ##  neval cld
-##     50   b
-##     50  a 
-##     50  a</code></pre>
+##     50   c
+##     50  b 
+##     50 a</code></pre>
 <p>Speed gains are <em>considerably</em> greater with HC1 standard errors. This is because we need to get the hat matrix for HC2, HC3, and CR2 standard errors, which requires inverting that large matrix of dummies we previously avoided doing. HC0, HC1, CR0, and CRstata standard errors do not require this inversion.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># With HC1</span>
@@ -218,10 +221,10 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr        min         lq      mean     median        uq      max
-##  base + sandwich 175.946847 181.022900 197.14934 184.995698 198.40768 346.5734
-##        lm_robust  61.792322  65.871214  70.09641  68.740451  72.12292 108.7119
-##  lm_robust + fes   7.480003   8.126898  12.08275   8.615113  10.25363 135.8322
+##             expr        min         lq      mean     median         uq      max
+##  base + sandwich 170.911730 176.117727 208.30814 179.530935 191.410014 700.8945
+##        lm_robust  60.684721  64.030603  72.13409  66.093761  70.734707 231.3661
+##  lm_robust + fes   7.548724   8.004589  12.00928   8.693414   9.423695 138.9780
 ##  neval cld
 ##     50   c
 ##     50  b 
