@@ -247,7 +247,7 @@ Our very first blog post is not here but over at the World Bank Development Impa
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about.html</guid>
-      <description>The DeclareDesign project is directed by Graeme Blair (UCLA), Jasper Cooper (Columbia University), Alexander Coppock (Yale University), and Macartan Humphreys (Columbia University and WZB).
+      <description>The DeclareDesign project is directed by Graeme Blair (UCLA), Jasper Cooper (UCSD), Alexander Coppock (Yale University), and Macartan Humphreys (Columbia University and WZB).
 Project contributors DeclareDesign has benefited from the contributions of many researchers and coders. We recognize key contributors in addition to the principal investigators to each component:
 DeclareDesign for R: Neal Fultz
 estimatr for R: Luke Sonnet
