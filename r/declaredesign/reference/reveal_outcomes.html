@@ -233,18 +233,18 @@ Revelation requires that every named outcome variable is a function of every nam
 #&gt;          0      100 character
 #&gt; 
 #&gt; Added variable: noise 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -3.19   0.12 0.16 2.27 1.03         0      100
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.83   -0.2 -0.26 2.04 1.07         0      100
 #&gt; 
 #&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y_Z_0 = noise, Y_Z_1 = noise + rnorm(N,     mean = 2, sd = 2)) 
 #&gt; 
 #&gt; Added variable: Y_Z_0 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -3.19   0.12 0.16 2.27 1.03         0      100
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.83   -0.2 -0.26 2.04 1.07         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -4.04   2.61 2.43 6.76 2.47         0      100
+#&gt;    min median mean max   sd N_missing N_unique
+#&gt;  -4.23   1.44 1.53 7.1 2.18         0      100
 #&gt; 
 #&gt; Step 3 (assignment): declare_assignment(m = 50) --------------------------------
 #&gt; 
@@ -261,8 +261,8 @@ Revelation requires that every named outcome variable is a function of every nam
 #&gt; Step 4 (reveal): reveal_outcomes() ---------------------------------------------
 #&gt; 
 #&gt; Added variable: Y 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -3.19   0.91 1.39 6.71 2.28         0      100
+#&gt;    min median mean max  sd N_missing N_unique
+#&gt;  -4.23   0.32 0.65 7.1 2.2         0      100
 #&gt; </div><div class='input'>
 <span class='co'>#  Here the + operator results in the same design being</span>
 <span class='co'>#  created, because it automatically adds a reveal_outcomes step.</span>

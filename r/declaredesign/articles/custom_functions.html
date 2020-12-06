@@ -166,13 +166,8 @@
 ## 69 0.92  1.17  0.92 1 1 1.17</code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/run_design.html">run_design</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></code></pre></div>
-<pre><code>## $estimates_df
-##   estimator_label estimate estimand_label
-## 1       estimator   -0.069       medianTE
-## 
-## $estimands_df
-##   estimand_label estimand
-## 1       medianTE     0.25</code></pre>
+<pre><code>##   estimand_label estimand estimator_label estimate
+## 1       medianTE     0.25       estimator    -0.36</code></pre>
 <p>This example used very simple custom functions, but this framework is flexible enough to accommodate any design step that can be expressed as a function of data that returns data.</p>
   </div>
 

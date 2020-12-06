@@ -174,7 +174,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a function that accepts a data.frame as an argument and returns a data.frame containing the value of the estimand.</p>
+    <p>an estimand declaration, which is a function that accepts a data.frame as an argument and returns a data.frame containing the value of the estimand.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For the default diagnosands, the return value of the handler should have <code>estimand_label</code> and <code>estimand</code> columns.</p>
@@ -184,178 +184,166 @@ an additional dimension for use in diagnosis.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'># Set up a design stub for use in examples:</span>
+<span class='co'># Set up a design for use in examples:</span>
 
-<span class='va'>my_population</span>  <span class='op'>&lt;-</span> <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>my_potential_outcomes</span>  <span class='op'>&lt;-</span> <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span>
-  <span class='va'>Y</span> <span class='op'>~</span> <span class='op'>(</span><span class='fl'>.25</span> <span class='op'>+</span> <span class='va'>X</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>my_assignment</span>  <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
-<span class='va'>design_stub</span> <span class='op'>&lt;-</span> <span class='va'>my_population</span> <span class='op'>+</span> <span class='va'>my_potential_outcomes</span> <span class='op'>+</span> <span class='va'>my_assignment</span> <span class='op'>+</span> 
-  <span class='fu'><a href='reveal_outcomes.html'>reveal_outcomes</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>design</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='op'>(</span><span class='fl'>.25</span> <span class='op'>+</span> <span class='va'>X</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span> 
 
-<span class='co'># Get example data to compute estimands on</span>
-<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_data</a></span><span class='op'>(</span><span class='va'>design_stub</span><span class='op'>)</span>
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_estimand</span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, X = rnorm(N)) -----------------
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: X 
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.45  -0.13 -0.14 1.85 0.94         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ (0.25 + X) * Z + rnorm(N)) 
+#&gt; 
+#&gt; Formula: Y ~ (0.25 + X) * Z + rnorm(N) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;    min median mean max   sd N_missing N_unique
+#&gt;  -2.81   0.05 0.02 2.1 0.83         0      100
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -2.83   0.02 0.13 3.21 1.33         0      100
+#&gt; 
+#&gt; Step 3 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 4 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -2.83   0.15 0.16 3.21 1.19         0      100
+#&gt; 
+#&gt; Step 5 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label  estimand
+#&gt;             ATE 0.1159849
+#&gt; </div><div class='input'>
 
-<span class='co'># ----------</span>
-<span class='co'># 1. Single estimand</span>
-<span class='co'># ----------</span>
-
-<span class='co'># Declare an average treatment effect (ATE) estimand</span>
-
-<span class='va'>my_estimand_ATE</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimand</span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>my_estimand_ATE</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimand_label  estimand
-#&gt; 1            ATE 0.2574879</div><div class='input'>
-<span class='co'># or a conditional estimand</span>
-
-<span class='va'>my_estimand_ATT</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimand</span><span class='op'>(</span>ATT <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span>,
-                                    subset <span class='op'>=</span> <span class='op'>(</span><span class='va'>Z</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>my_estimand_ATT</span> <span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimand_label    estimand
-#&gt; 1            ATT -0.06993376</div><div class='input'>
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_estimand</span><span class='op'>(</span>ATT <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span>,
+                                   subset <span class='op'>=</span> <span class='op'>(</span><span class='va'>Z</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, X = rnorm(N)) -----------------
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: X 
+#&gt;    min median mean  max  sd N_missing N_unique
+#&gt;  -2.67   0.17 0.16 3.12 1.1         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ (0.25 + X) * Z + rnorm(N)) 
+#&gt; 
+#&gt; Formula: Y ~ (0.25 + X) * Z + rnorm(N) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.34  -0.01 -0.09 2.59 1.01         0      100
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -3.75   0.63 0.44 3.75 1.48         0      100
+#&gt; 
+#&gt; Step 3 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 4 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -2.34   0.04 0.05 2.59 1.14         0      100
+#&gt; 
+#&gt; Step 5 (estimand): declare_estimand(ATT = mean(Y_Z_1 - Y_Z_0), subset = (Z == 1)) 
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label  estimand
+#&gt;             ATT 0.2802348
+#&gt; </div><div class='input'>
 <span class='co'># Add estimands to a design along with estimators that reference them</span>
 
-<span class='va'>my_estimator</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, 
-  estimand <span class='op'>=</span> <span class='va'>my_estimand_ATE</span>, label <span class='op'>=</span> <span class='st'>"estimator"</span><span class='op'>)</span>
+<span class='va'>design_1</span> <span class='op'>&lt;-</span>
+  <span class='va'>design</span> <span class='op'>+</span>
+  <span class='fu'>declare_estimand</span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='st'>"ATE"</span><span class='op'>)</span>
 
-<span class='va'>design_one</span> <span class='op'>&lt;-</span> <span class='va'>design_stub</span> <span class='op'>+</span> <span class='va'>my_estimand_ATE</span> <span class='op'>+</span> <span class='va'>my_estimator</span>
+<span class='fu'><a href='run_design.html'>run_design</a></span><span class='op'>(</span><span class='va'>design_1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   estimand_label  estimand estimator_label term  estimate std.error statistic
+#&gt; 1            ATE 0.5302734       estimator    Z 0.1812491 0.2493754 0.7268124
+#&gt;     p.value   conf.low conf.high       df outcome
+#&gt; 1 0.4693531 -0.3146307  0.677129 84.35574       Y</div><div class='input'>
+<span class='co'># Two estimands, one estimator</span>
 
-<span class='fu'><a href='draw_functions.html'>draw_estimands</a></span><span class='op'>(</span><span class='va'>design_one</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimand_label  estimand
-#&gt; 1            ATE 0.2605102</div><div class='input'>
-<span class='co'># ----------</span>
-<span class='co'># 2. Multiple estimands</span>
-<span class='co'># ----------</span>
+<span class='va'>design_2</span> <span class='op'>&lt;-</span>
+  <span class='va'>design</span> <span class='op'>+</span>
+  <span class='fu'>declare_estimand</span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>declare_estimand</span><span class='op'>(</span>ATT <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span>, subset <span class='op'>=</span> <span class='op'>(</span><span class='va'>Z</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ATE"</span>, <span class='st'>"ATT"</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># You can also specify multiple estimands for a single estimator </span>
+<span class='fu'><a href='run_design.html'>run_design</a></span><span class='op'>(</span><span class='va'>design_2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   estimand_label  estimand estimator_label term  estimate std.error statistic
+#&gt; 1            ATE 0.4904039       estimator    Z 0.2133933 0.2372792 0.8993341
+#&gt; 2            ATT 0.4277441       estimator    Z 0.2133933 0.2372792 0.8993341
+#&gt;     p.value  conf.low conf.high       df outcome
+#&gt; 1 0.3709524 -0.258212 0.6849986 87.16732       Y
+#&gt; 2 0.3709524 -0.258212 0.6849986 87.16732       Y</div><div class='input'>
+<span class='co'># Two estimands, two coefficients from one estimator</span>
 
-<span class='co'># With multiple estimands, you can use one estimator for both...</span>
+<span class='va'>design_3</span> <span class='op'>&lt;-</span>
+  <span class='va'>design</span> <span class='op'>+</span>
+  <span class='fu'>declare_estimand</span><span class='op'>(</span>intercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_0</span><span class='op'>)</span>,
+                   slope <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span>
+    <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>,
+    model <span class='op'>=</span> <span class='va'>lm_robust</span>,
+    term <span class='op'>=</span> <span class='cn'>TRUE</span>,
+    estimand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"intercept"</span>, <span class='st'>"slope"</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
-<span class='va'>my_estimator_two</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>,
-  estimand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>my_estimand_ATE</span>, <span class='va'>my_estimand_ATT</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>design_two</span> <span class='op'>&lt;-</span> <span class='va'>design_stub</span> <span class='op'>+</span> <span class='va'>my_estimand_ATE</span> <span class='op'>+</span> 
-  <span class='va'>my_estimand_ATT</span> <span class='op'>+</span> <span class='va'>my_estimator_two</span>
-
-<span class='fu'><a href='draw_functions.html'>draw_estimands</a></span><span class='op'>(</span><span class='va'>design_two</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimand_label  estimand
-#&gt; 1            ATE 0.2109329
-#&gt; 2            ATT 0.4137306</div><div class='input'>
-<span class='co'># ----------</span>
-<span class='co'># 3. Paired estimands / estimators from a single model</span>
-<span class='co'># ----------</span>
-
-<span class='co'># For convenience you can also declare multiple estimands</span>
-<span class='co'># simultaneously and connect these to the corresponding </span>
-<span class='co'># terms for estimates used in the mode. </span>
-
-<span class='co'># Name your estimands the term name they get in your</span>
-<span class='co'># estimator, and set `term = TRUE`</span>
-
-<span class='va'>estimands_regression</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimand</span><span class='op'>(</span>
-  `(Intercept)` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_0</span><span class='op'>)</span>,
-  `Z` <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span>,
-  term <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  label<span class='op'>=</span><span class='st'>"Regression_Estimands"</span>
-<span class='op'>)</span>
-
-<span class='co'># For the model based estimator, specify the estimand as usual,</span>
-<span class='co'># but also set `term = TRUE`</span>
-<span class='va'>estimators_regression</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span>
-  <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>,
-  estimand <span class='op'>=</span> <span class='va'>estimands_regression</span>,
-  model <span class='op'>=</span> <span class='va'>lm</span>,
-  term <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-
-<span class='va'>design_regression</span> <span class='op'>&lt;-</span> <span class='va'>design_stub</span> <span class='op'>+</span> <span class='va'>estimands_regression</span> <span class='op'>+</span>
-  <span class='va'>estimators_regression</span>
-
-<span class='fu'><a href='run_design.html'>run_design</a></span><span class='op'>(</span><span class='va'>design_regression</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $estimates_df
-#&gt;   estimator_label        term    estimate std.error statistic   p.value
-#&gt; 1       estimator (Intercept) -0.04419098 0.1725583 -0.256093 0.7984158
-#&gt; 2       estimator           Z  0.36131122 0.2440343  1.480575 0.1419276
-#&gt;     conf.low conf.high       estimand_label
-#&gt; 1 -0.3866274 0.2982454 Regression_Estimands
-#&gt; 2 -0.1229669 0.8455894 Regression_Estimands
-#&gt; 
-#&gt; $estimands_df
-#&gt;         estimand_label        term   estimand
-#&gt; 1 Regression_Estimands (Intercept) -0.0191877
-#&gt; 2 Regression_Estimands           Z  0.3994951
-#&gt; </div><div class='input'>
-<span class='co'># ----------</span>
-<span class='co'># 4. Custom estimand function</span>
-<span class='co'># ----------</span>
-
-<span class='co'># You can declare more complex estimands by defining custom</span>
-<span class='co'># estimand functions:</span>
-
-<span class='va'>estimand_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>label</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>ret</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>estimand_label <span class='op'>=</span> <span class='va'>label</span>,
-             estimand <span class='op'>=</span> <span class='va'>ret</span>,
-             stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='va'>estimand_custom</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimand</span><span class='op'>(</span>handler <span class='op'>=</span> <span class='va'>estimand_function</span>,
-  label <span class='op'>=</span> <span class='st'>"medianTE"</span><span class='op'>)</span>
-
-<span class='fu'>estimand_custom</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimand_label   estimand
-#&gt; 1       medianTE 0.09056957</div><div class='input'>
-<span class='co'># Use with custom estimators</span>
-<span class='va'>estimator_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>estimate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
-<span class='va'>estimator_custom</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span>handler <span class='op'>=</span> <span class='fu'><a href='tidy_estimator.html'>tidy_estimator</a></span><span class='op'>(</span><span class='va'>estimator_function</span><span class='op'>)</span>,
-                    estimand <span class='op'>=</span> <span class='va'>estimand_custom</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: tidy_estimator() has been deprecated. Please use label_estimator() instead.</span></div><div class='input'>
-<span class='va'>design_custom</span> <span class='op'>&lt;-</span> <span class='va'>design_stub</span> <span class='op'>+</span> <span class='va'>estimand_custom</span> <span class='op'>+</span>
-  <span class='va'>estimator_custom</span>
-
-<span class='fu'><a href='run_design.html'>run_design</a></span><span class='op'>(</span><span class='va'>design_custom</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $estimates_df
-#&gt;   estimator_label  estimate estimand_label
-#&gt; 1       estimator 0.1894876       medianTE
-#&gt; 
-#&gt; $estimands_df
-#&gt;   estimand_label     estimand
-#&gt; 1       medianTE -0.008928403
-#&gt; </div><div class='input'>
-<span class='co'># ----------</span>
-<span class='co'># 5. Batch estimands and estimators</span>
-<span class='co'># ----------</span>
-
-<span class='co'># You can declare a group of estimands with distinct labels</span>
-<span class='co'># in one go and link them manually to a group of estimators.</span>
-<span class='co'># In this case you can add a \code{term} argument to the </span>
-<span class='co'># custom estimators to identify them.</span>
-
-<span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>estimand_label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"control"</span>, <span class='st'>"ate"</span><span class='op'>)</span>,
-             estimand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_0</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-             stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>}</span>
-<span class='va'>estimands</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimand</span><span class='op'>(</span>handler <span class='op'>=</span> <span class='va'>f1</span><span class='op'>)</span>
-
-<span class='va'>f2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>estimate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>data</span>,
-                            <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>[</span><span class='va'>Z</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>]</span><span class='op'>)</span>,
-                            <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>[</span><span class='va'>Z</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>[</span><span class='va'>Z</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
-                            term <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
-
-<span class='va'>estimators</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span>handler <span class='op'>=</span> <span class='fu'><a href='tidy_estimator.html'>tidy_estimator</a></span><span class='op'>(</span><span class='va'>f2</span><span class='op'>)</span>, 
-                            estimand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"control"</span>, <span class='st'>"ate"</span><span class='op'>)</span>, label <span class='op'>=</span> <span class='st'>"custom"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: tidy_estimator() has been deprecated. Please use label_estimator() instead.</span></div><div class='input'>                            
-<span class='va'>design</span>      <span class='op'>&lt;-</span> <span class='va'>design_stub</span> <span class='op'>+</span> <span class='va'>estimands</span> <span class='op'>+</span> <span class='va'>estimators</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>design</span>, sims <span class='op'>=</span> <span class='fl'>20</span>, bootstrap_sims <span class='op'>=</span> <span class='cn'>FALSE</span>,
-                diagnosands <span class='op'>=</span> <span class='fu'><a href='diagnosand_handler.html'>declare_diagnosands</a></span><span class='op'>(</span>
-                select <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>mean_estimate</span>, <span class='va'>mean_estimand</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='fu'><a href='run_design.html'>run_design</a></span><span class='op'>(</span><span class='va'>design_3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   estimand_label    estimand estimator_label        term     estimate std.error
+#&gt; 1      intercept -0.04009129       estimator (Intercept) -0.003307604 0.1582487
+#&gt; 2          slope  0.44873102       estimator           Z  0.447397643 0.2700112
+#&gt;     statistic   p.value    conf.low conf.high df outcome
+#&gt; 1 -0.02090131 0.9833669 -0.31734696 0.3107317 98       Y
+#&gt; 2  1.65695952 0.1007259 -0.08843081 0.9832261 98       Y</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -220,175 +220,579 @@ declare_estimator(handler = label_estimator(my_fun), estimand = "ATE")
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'># Declare estimand</span>
-<span class='va'>my_estimand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimand.html'>declare_estimand</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># base design</span>
+<span class='va'>design</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>,
+                     female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>N</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span>,
+                     U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span>
+    <span class='va'>Y</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>N</span>, <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='fl'>0.2</span> <span class='op'>*</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='fl'>0.2</span> <span class='op'>*</span> <span class='va'>female</span> <span class='op'>+</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>Z</span> <span class='op'>*</span> <span class='va'>female</span> <span class='op'>+</span> <span class='va'>U</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_estimand.html'>declare_estimand</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
 
-<span class='co'># Declare estimator using the default handler using `difference_in_means`</span>
-<span class='co'># estimator from `estimatr` package. Returns the first non-intercept term</span>
-<span class='co'># as estimate</span>
+<span class='co'># Most estimators are modeling functions like lm or glm.</span>
+  
+<span class='co'># Default statistical model is estimatr::difference_in_means</span>
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_estimator</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='st'>"ATE"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    47   53
+#&gt;  0.47 0.53
+#&gt; 
+#&gt; Added variable: U 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -3.63   0.03    0 2.43 1.09         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ rbinom(N, 1, prob = pnorm(0.2 *     Z + 0.2 * female + 0.1 * Z * female + U))) 
+#&gt; 
+#&gt; Formula: Y ~ rbinom(N, 1, prob = pnorm(0.2 * Z + 0.2 * female + 0.1 *      Z * female + U)) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;     0    1
+#&gt;    40   60
+#&gt;  0.40 0.60
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;     0    1
+#&gt;    40   60
+#&gt;  0.40 0.60
+#&gt; 
+#&gt; Step 3 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label estimand
+#&gt;             ATE        0
+#&gt; 
+#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 5 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;     0    1
+#&gt;    45   55
+#&gt;  0.45 0.55
+#&gt; 
+#&gt; Step 6 (estimator): declare_estimator(Y ~ Z, estimand = "ATE") -----------------
+#&gt; 
+#&gt; Formula: Y ~ Z 
+#&gt; 
+#&gt; A single draw of the estimator:
+#&gt;  estimator_label term estimate std.error statistic   p.value  conf.low
+#&gt;        estimator    Z     0.06  0.100326 0.5980504 0.5511862 -0.139094
+#&gt;  conf.high      df outcome estimand_label
+#&gt;   0.259094 97.9855       Y            ATE
+#&gt; </div><div class='input'>
+<span class='co'># lm from base R (classical standard errors assuming homoskedasticity)</span>
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_estimator</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, model <span class='op'>=</span> <span class='va'>lm</span>, estimand <span class='op'>=</span> <span class='st'>"ATE"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    49   51
+#&gt;  0.49 0.51
+#&gt; 
+#&gt; Added variable: U 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -2.65   0.15 0.18 2.37 1.02         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ rbinom(N, 1, prob = pnorm(0.2 *     Z + 0.2 * female + 0.1 * Z * female + U))) 
+#&gt; 
+#&gt; Formula: Y ~ rbinom(N, 1, prob = pnorm(0.2 * Z + 0.2 * female + 0.1 *      Z * female + U)) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;     0    1
+#&gt;    42   58
+#&gt;  0.42 0.58
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;     0    1
+#&gt;    34   66
+#&gt;  0.34 0.66
+#&gt; 
+#&gt; Step 3 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label estimand
+#&gt;             ATE     0.08
+#&gt; 
+#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 5 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;     0    1
+#&gt;    44   56
+#&gt;  0.44 0.56
+#&gt; 
+#&gt; Step 6 (estimator): declare_estimator(Y ~ Z, model = lm, estimand = "ATE") -----
+#&gt; 
+#&gt; Formula: Y ~ Z 
+#&gt; 
+#&gt; Model:	lm 
+#&gt; 
+#&gt; A single draw of the estimator:
+#&gt;  estimator_label term estimate  std.error statistic   p.value    conf.low
+#&gt;        estimator    Z     0.12 0.09955001  1.205424 0.2309421 -0.07755375
+#&gt;  conf.high estimand_label
+#&gt;  0.3175538            ATE
+#&gt; </div><div class='input'>
+<span class='co'># Use lm_robust (linear regression with heteroskedasticity-robust standard errors) </span>
+<span class='co'># from `estimatr` package</span>
 
-<span class='va'>my_estimator_dim</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='st'>"ATE"</span>, label <span class='op'>=</span> <span class='st'>"DIM"</span><span class='op'>)</span>
-
-<span class='co'># Use lm function from base R</span>
-<span class='va'>my_estimator_lm</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='st'>"ATE"</span>,
-  model <span class='op'>=</span> <span class='va'>lm</span>, label <span class='op'>=</span> <span class='st'>"LM"</span><span class='op'>)</span>
-<span class='co'># Use lm_robust (linear regression with robust standard errors) from</span>
-<span class='co'># `estimatr` package</span>
-
-<span class='va'>my_estimator_lm_rob</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>
-  <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>,
-  estimand <span class='op'>=</span> <span class='st'>"ATE"</span>,
-  model <span class='op'>=</span> <span class='va'>lm_robust</span>,
-  label <span class='op'>=</span> <span class='st'>"LM_Robust"</span>
-<span class='op'>)</span>
-
-<span class='co'># Set `term` if estimate of interest is not the first non-intercept variable</span>
-<span class='va'>my_estimator_lm_rob_x</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>
-  <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>X</span> <span class='op'>+</span> <span class='va'>Z</span>,
-  estimand <span class='op'>=</span> <span class='va'>my_estimand</span>,
-  term <span class='op'>=</span> <span class='st'>"Z"</span>,
-  model <span class='op'>=</span> <span class='va'>lm_robust</span>
-<span class='op'>)</span>
-
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_estimator</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, model <span class='op'>=</span> <span class='va'>lm_robust</span>, estimand <span class='op'>=</span> <span class='st'>"ATE"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    63   37
+#&gt;  0.63 0.37
+#&gt; 
+#&gt; Added variable: U 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -3.27   0.05    0 2.52 1.15         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ rbinom(N, 1, prob = pnorm(0.2 *     Z + 0.2 * female + 0.1 * Z * female + U))) 
+#&gt; 
+#&gt; Formula: Y ~ rbinom(N, 1, prob = pnorm(0.2 * Z + 0.2 * female + 0.1 *      Z * female + U)) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;     0    1
+#&gt;    46   54
+#&gt;  0.46 0.54
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;     0    1
+#&gt;    39   61
+#&gt;  0.39 0.61
+#&gt; 
+#&gt; Step 3 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label estimand
+#&gt;             ATE     0.07
+#&gt; 
+#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 5 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;     0    1
+#&gt;    40   60
+#&gt;  0.40 0.60
+#&gt; 
+#&gt; Step 6 (estimator): declare_estimator(Y ~ Z, model = lm_robust, estimand = "ATE") 
+#&gt; 
+#&gt; Formula: Y ~ Z 
+#&gt; 
+#&gt; Model:	lm_robust 
+#&gt; 
+#&gt; A single draw of the estimator:
+#&gt;  estimator_label term      estimate  std.error     statistic p.value   conf.low
+#&gt;        estimator    Z -8.881784e-17 0.09897433 -8.973826e-16       1 -0.1964113
+#&gt;  conf.high df outcome estimand_label
+#&gt;  0.1964113 98       Y            ATE
+#&gt; </div><div class='input'>
+<span class='co'># use `term` to select particular coefficients</span>
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_estimator</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span><span class='op'>*</span><span class='va'>female</span>, term <span class='op'>=</span> <span class='st'>"Z:female"</span>, model <span class='op'>=</span> <span class='va'>lm_robust</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    49   51
+#&gt;  0.49 0.51
+#&gt; 
+#&gt; Added variable: U 
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.47  -0.23 -0.13 2.31 0.94         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ rbinom(N, 1, prob = pnorm(0.2 *     Z + 0.2 * female + 0.1 * Z * female + U))) 
+#&gt; 
+#&gt; Formula: Y ~ rbinom(N, 1, prob = pnorm(0.2 * Z + 0.2 * female + 0.1 *      Z * female + U)) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;     0    1
+#&gt;    56   44
+#&gt;  0.56 0.44
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;     0    1
+#&gt;    35   65
+#&gt;  0.35 0.65
+#&gt; 
+#&gt; Step 3 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label estimand
+#&gt;             ATE     0.21
+#&gt; 
+#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 5 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;     0    1
+#&gt;    44   56
+#&gt;  0.44 0.56
+#&gt; 
+#&gt; Step 6 (estimator): declare_estimator(Y ~ Z * female, term = "Z:female", model = lm_robust) 
+#&gt; 
+#&gt; Formula: Y ~ Z * female 
+#&gt; 
+#&gt; Model:	lm_robust 
+#&gt; 
+#&gt; A single draw of the estimator:
+#&gt;  estimator_label     term   estimate std.error  statistic   p.value   conf.low
+#&gt;        estimator Z:female -0.1234615 0.1969713 -0.6267995 0.5322785 -0.5144466
+#&gt;  conf.high df outcome
+#&gt;  0.2675235 96       Y
+#&gt; </div><div class='input'>
 <span class='co'># Use glm from base R</span>
-<span class='va'>my_estimator_glm</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>
-  <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>X</span> <span class='op'>+</span> <span class='va'>Z</span>,
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>
+  <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='va'>female</span>,
   family <span class='op'>=</span> <span class='st'>"gaussian"</span>,
-  estimand <span class='op'>=</span> <span class='va'>my_estimand</span>,
-  term <span class='op'>=</span> <span class='st'>"Z"</span>,
+  estimand <span class='op'>=</span> <span class='st'>"ATE"</span>,
   model <span class='op'>=</span> <span class='va'>glm</span>
 <span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    54   46
+#&gt;  0.54 0.46
+#&gt; 
+#&gt; Added variable: U 
+#&gt;   min median  mean  max   sd N_missing N_unique
+#&gt;  -2.2  -0.06 -0.09 2.63 0.96         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ rbinom(N, 1, prob = pnorm(0.2 *     Z + 0.2 * female + 0.1 * Z * female + U))) 
+#&gt; 
+#&gt; Formula: Y ~ rbinom(N, 1, prob = pnorm(0.2 * Z + 0.2 * female + 0.1 *      Z * female + U)) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;     0    1
+#&gt;    60   40
+#&gt;  0.60 0.40
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;     0    1
+#&gt;    43   57
+#&gt;  0.43 0.57
+#&gt; 
+#&gt; Step 3 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label estimand
+#&gt;             ATE     0.17
+#&gt; 
+#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 5 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;     0    1
+#&gt;    52   48
+#&gt;  0.52 0.48
+#&gt; 
+#&gt; Step 6 (estimator): declare_estimator(Y ~ Z + female, family = "gaussian", estimand = "ATE",     model = glm) 
+#&gt; 
+#&gt; Formula: Y ~ Z + female 
+#&gt; 
+#&gt; Model:	glm 
+#&gt; 
+#&gt; A single draw of the estimator:
+#&gt;  estimator_label term  estimate std.error statistic   p.value    conf.low
+#&gt;        estimator    Z 0.1480392 0.1003722  1.474902 0.1434773 -0.04868674
+#&gt;  conf.high estimand_label
+#&gt;  0.3447652            ATE
+#&gt; </div><div class='input'>
+<span class='co'># If we use logit, we'll need to estimate the average marginal effect with </span>
+<span class='co'># margins::margins. We wrap this up in function we'll pass to model_summary</span>
 
-<span class='co'># A probit</span>
-<span class='va'>estimator_probit</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>
-  <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>,
-  model <span class='op'>=</span> <span class='va'>glm</span>,
-  family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link <span class='op'>=</span> <span class='st'>"probit"</span><span class='op'>)</span>,
-  term <span class='op'>=</span> <span class='st'>"Z"</span>
-<span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/leeper/margins'>margins</a></span><span class='op'>)</span> <span class='co'># for margins</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span> <span class='co'># for tidy</span>
 
+<span class='va'>tidy_margins</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/margins/man/margins.html'>margins</a></span><span class='op'>(</span><span class='va'>x</span>, data <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>, conf.int <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='va'>design</span> <span class='op'>+</span>
+  <span class='fu'>declare_estimator</span><span class='op'>(</span>
+    <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='va'>female</span>,
+    model <span class='op'>=</span> <span class='va'>glm</span>,
+    family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span><span class='st'>"logit"</span><span class='op'>)</span>,
+    model_summary <span class='op'>=</span> <span class='va'>tidy_margins</span>,
+    term <span class='op'>=</span> <span class='st'>"Z"</span>
+  <span class='op'>)</span> 
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    49   51
+#&gt;  0.49 0.51
+#&gt; 
+#&gt; Added variable: U 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -3.55  -0.04 0.02 2.51 1.08         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ rbinom(N, 1, prob = pnorm(0.2 *     Z + 0.2 * female + 0.1 * Z * female + U))) 
+#&gt; 
+#&gt; Formula: Y ~ rbinom(N, 1, prob = pnorm(0.2 * Z + 0.2 * female + 0.1 *      Z * female + U)) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;     0    1
+#&gt;    49   51
+#&gt;  0.49 0.51
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;     0    1
+#&gt;    37   63
+#&gt;  0.37 0.63
+#&gt; 
+#&gt; Step 3 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label estimand
+#&gt;             ATE     0.12
+#&gt; 
+#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 5 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;     0    1
+#&gt;    45   55
+#&gt;  0.45 0.55
+#&gt; 
+#&gt; Step 6 (estimator): declare_estimator(Y ~ Z + female, model = glm, family = binomial("logit"),     model_summary = tidy_margins, term = "Z") 
+#&gt; 
+#&gt; Formula: Y ~ Z + female 
+#&gt; 
+#&gt; Model:	glm 
+#&gt; 
+#&gt; A single draw of the estimator:
+#&gt;  estimator_label term  estimate  std.error statistic     p.value   conf.low
+#&gt;        estimator    Z 0.2235912 0.08243304  2.712398 0.006679832 0.06202543
+#&gt;  conf.high
+#&gt;   0.385157
+#&gt; </div><div class='input'>
+<span class='co'># Multiple estimators for one estimand</span>
+
+<span class='va'>two_estimators</span> <span class='op'>&lt;-</span>
+  <span class='va'>design</span> <span class='op'>+</span>
+  <span class='fu'>declare_estimator</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>,
+                    model <span class='op'>=</span> <span class='va'>lm_robust</span>,
+                    estimand <span class='op'>=</span> <span class='st'>"ATE"</span>,
+                    label <span class='op'>=</span> <span class='st'>"OLS"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>declare_estimator</span><span class='op'>(</span>
+    <span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='va'>female</span>,
+    model <span class='op'>=</span> <span class='va'>glm</span>,
+    family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span><span class='st'>"logit"</span><span class='op'>)</span>,
+    model_summary <span class='op'>=</span> <span class='va'>tidy_margins</span>,
+    estimand <span class='op'>=</span> <span class='st'>"ATE"</span>,
+    term <span class='op'>=</span> <span class='st'>"Z"</span>,
+    label <span class='op'>=</span> <span class='st'>"logit"</span>
+  <span class='op'>)</span>
+
+<span class='fu'><a href='run_design.html'>run_design</a></span><span class='op'>(</span><span class='va'>two_estimators</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   estimand_label estimand estimator_label term   estimate  std.error statistic
+#&gt; 1            ATE      0.1             OLS    Z 0.04000000 0.09889182 0.4044824
+#&gt; 2            ATE      0.1           logit    Z 0.06977544 0.09619629 0.7253444
+#&gt;     p.value   conf.low conf.high df outcome
+#&gt; 1 0.6867395 -0.1562476 0.2362476 98       Y
+#&gt; 2 0.4682408 -0.1187658 0.2583167 NA    &lt;NA&gt;</div><div class='input'>
 <span class='co'># Declare estimator using a custom handler</span>
 
 <span class='co'># Define your own estimator and use the `label_estimator` function for labeling</span>
 <span class='co'># Must have `data` argument that is a data.frame</span>
-<span class='va'>my_estimator_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>estimate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>my_dim_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>estimate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>[</span><span class='va'>Z</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>[</span><span class='va'>Z</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='va'>my_estimator_custom</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>
-  handler <span class='op'>=</span> <span class='fu'>label_estimator</span><span class='op'>(</span><span class='va'>my_estimator_function</span><span class='op'>)</span>,
-  estimand <span class='op'>=</span> <span class='va'>my_estimand</span>
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>
+  handler <span class='op'>=</span> <span class='fu'>label_estimator</span><span class='op'>(</span><span class='va'>my_dim_function</span><span class='op'>)</span>,
+  estimand <span class='op'>=</span> <span class='st'>"ATE"</span>
 <span class='op'>)</span>
-
-<span class='co'># Customize labeling</span>
-
-<span class='va'>my_estimator_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-    estimator_label <span class='op'>=</span> <span class='st'>"foo"</span>,
-    estimand_label <span class='op'>=</span> <span class='st'>"bar"</span>,
-    estimate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y</span><span class='op'>)</span><span class='op'>)</span>,
-    n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>,
-    stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span>
-  <span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='va'>my_estimator_custom2</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>handler <span class='op'>=</span> <span class='va'>my_estimator_function</span><span class='op'>)</span>
-
-
-<span class='co'># Examples</span>
-
-<span class='co'># First, set up the rest of a design</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>42</span><span class='op'>)</span>
-
-<span class='va'>design_def</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, X <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, W <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Exponential.html'>rexp</a></span><span class='op'>(</span><span class='va'>N</span>, <span class='fl'>1</span><span class='op'>)</span>, noise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='fl'>.25</span> <span class='op'>*</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='va'>noise</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='declare_estimand.html'>declare_estimand</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='reveal_outcomes.html'>reveal_outcomes</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='va'>my_estimator_dim</span>
-
-<span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design_def</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimator_label term estimate std.error statistic   p.value     conf.low
-#&gt; 1             DIM    Z 0.404084 0.2041834  1.979024 0.0506206 -0.001113517
-#&gt;   conf.high       df outcome estimand_label
-#&gt; 1 0.8092816 97.95838       Y            ATE</div><div class='input'>
-<span class='co'># Can also use declared estimator on a data.frame</span>
-<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_data</a></span><span class='op'>(</span><span class='va'>design_def</span><span class='op'>)</span>
-<span class='fu'>my_estimator_dim</span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimator_label term   estimate std.error statistic  p.value   conf.low
-#&gt; 1             DIM    Z 0.07526085 0.2027897 0.3711277 0.711344 -0.3271717
-#&gt;   conf.high       df outcome estimand_label
-#&gt; 1 0.4776934 97.93985       Y            ATE</div><div class='input'>
-<span class='co'># ----------</span>
-<span class='co'># 2. Using existing estimators</span>
-<span class='co'># ----------</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='modify_design.html'>replace_step</a></span><span class='op'>(</span><span class='va'>design_def</span>, <span class='va'>my_estimator_dim</span>, <span class='va'>my_estimator_lm_rob</span><span class='op'>)</span>
-<span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimator_label term    estimate std.error  statistic   p.value   conf.low
-#&gt; 1       LM_Robust    Z -0.04532556 0.1925646 -0.2353784 0.8144062 -0.4274638
-#&gt;   conf.high df outcome estimand_label
-#&gt; 1 0.3368127 98       Y            ATE</div><div class='input'>
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='modify_design.html'>replace_step</a></span><span class='op'>(</span><span class='va'>design_def</span>, <span class='va'>my_estimator_dim</span>, <span class='va'>my_estimator_lm</span><span class='op'>)</span>
-<span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimator_label term   estimate std.error  statistic  p.value  conf.low
-#&gt; 1              LM    Z -0.1204321 0.2203432 -0.5465663 0.585919 -0.557696
-#&gt;   conf.high estimand_label
-#&gt; 1 0.3168317            ATE</div><div class='input'>
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='modify_design.html'>replace_step</a></span><span class='op'>(</span><span class='va'>design_def</span>, <span class='va'>my_estimator_dim</span>, <span class='va'>my_estimator_glm</span><span class='op'>)</span>
-<span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimator_label term  estimate std.error statistic   p.value  conf.low
-#&gt; 1       estimator    Z 0.2783732 0.2012977  1.382893 0.1698728 -0.116163
-#&gt;   conf.high estimand_label
-#&gt; 1 0.6729095            ATE</div><div class='input'>
-<span class='co'># ----------</span>
-<span class='co'># 3. Using custom estimators</span>
-<span class='co'># ----------</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='modify_design.html'>replace_step</a></span><span class='op'>(</span><span class='va'>design_def</span>, <span class='va'>my_estimator_dim</span>, <span class='va'>my_estimator_custom</span><span class='op'>)</span>
-
-<span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimator_label  estimate estimand_label
-#&gt; 1       estimator 0.1658533            ATE</div><div class='input'>
-<span class='co'># The names in your custom estimator return should match with</span>
-<span class='co'># your diagnosands when diagnosing a design</span>
-<span class='va'>my_median</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>med <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>Y</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>my_estimator_median</span> <span class='op'>&lt;-</span> <span class='fu'>declare_estimator</span><span class='op'>(</span>
-  handler <span class='op'>=</span> <span class='fu'>label_estimator</span><span class='op'>(</span><span class='va'>my_median</span><span class='op'>)</span>,
-  estimand <span class='op'>=</span> <span class='va'>my_estimand</span>
-<span class='op'>)</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='modify_design.html'>replace_step</a></span><span class='op'>(</span><span class='va'>design_def</span>, <span class='va'>my_estimator_dim</span>, <span class='va'>my_estimator_median</span><span class='op'>)</span>
-
-<span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimator_label       med estimand_label
-#&gt; 1       estimator 0.1933848            ATE</div><div class='input'>
-<span class='va'>my_diagnosand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='diagnosand_handler.html'>declare_diagnosands</a></span><span class='op'>(</span>med_to_estimand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>med</span> <span class='op'>-</span> <span class='va'>estimand</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>design</span>, diagnosands <span class='op'>=</span> <span class='va'>my_diagnosand</span>, sims <span class='op'>=</span> <span class='fl'>5</span>,
-  bootstrap_sims <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># ----------</span>
-<span class='co'># 4. Multiple estimators per estimand</span>
-<span class='co'># ----------</span>
-
-<span class='va'>design_two</span> <span class='op'>&lt;-</span> <span class='fu'><a href='modify_design.html'>insert_step</a></span><span class='op'>(</span><span class='va'>design_def</span>,  <span class='va'>my_estimator_lm</span>,
-  after <span class='op'>=</span> <span class='va'>my_estimator_dim</span><span class='op'>)</span>
-
-<span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design_two</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   estimator_label term  estimate std.error statistic    p.value   conf.low
-#&gt; 1             DIM    Z 0.5016346 0.2104809  2.383279 0.01911112 0.08387755
-#&gt; 2              LM    Z 0.5016346 0.2104809  2.383279 0.01908682 0.08394223
-#&gt;   conf.high       df outcome estimand_label
-#&gt; 1 0.9193918 96.80092       Y            ATE
-#&gt; 2 0.9193271       NA    &lt;NA&gt;            ATE</div><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>design_two</span>, sims <span class='op'>=</span> <span class='fl'>5</span>, bootstrap_sims <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>}</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    45   55
+#&gt;  0.45 0.55
+#&gt; 
+#&gt; Added variable: U 
+#&gt;    min median  mean  max sd N_missing N_unique
+#&gt;  -3.65  -0.07 -0.08 2.06  1         0      100
+#&gt; 
+#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ rbinom(N, 1, prob = pnorm(0.2 *     Z + 0.2 * female + 0.1 * Z * female + U))) 
+#&gt; 
+#&gt; Formula: Y ~ rbinom(N, 1, prob = pnorm(0.2 * Z + 0.2 * female + 0.1 *      Z * female + U)) 
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;     0    1
+#&gt;    44   56
+#&gt;  0.44 0.56
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;     0    1
+#&gt;    34   66
+#&gt;  0.34 0.66
+#&gt; 
+#&gt; Step 3 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
+#&gt; 
+#&gt; A single draw of the estimand:
+#&gt;  estimand_label estimand
+#&gt;             ATE      0.1
+#&gt; 
+#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z_cond_prob 
+#&gt;   0.5
+#&gt;   100
+#&gt;  1.00
+#&gt; 
+#&gt; Step 5 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;     0    1
+#&gt;    40   60
+#&gt;  0.40 0.60
+#&gt; 
+#&gt; Step 6 (estimator): declare_estimator(estimand = "ATE", handler = label_estimator(my_dim_function)) 
+#&gt; 
+#&gt; A single draw of the estimator:
+#&gt;  estimator_label estimate estimand_label
+#&gt;        estimator     0.04            ATE
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

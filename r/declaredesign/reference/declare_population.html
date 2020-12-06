@@ -158,112 +158,58 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A function that returns a data.frame.</p>
+    <p>A potential outcomes declaration, which is a function that returns a data.frame.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'># Default handler is fabricatr::fabricate</span>
-
 <span class='co'># Declare a single-level population with no covariates</span>
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'>declare_population</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'>declare_population</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_population(N = 100)</div><div class='input'>
+<span class='co'># declare_population returns a function:</span>
 
-<span class='co'># Declare a population from existing data</span>
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'>declare_population</span><span class='op'>(</span><span class='va'>sleep</span><span class='op'>)</span>
+<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'>declare_population</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+<span class='co'>#' my_population()</span>
 
 <span class='co'># Declare a single-level population with a covariate</span>
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'>declare_population</span><span class='op'>(</span>
+<span class='fu'>declare_population</span><span class='op'>(</span>
   N <span class='op'>=</span> <span class='fl'>6</span>,
-  gender <span class='op'>=</span> <span class='fu'>draw_binary</span><span class='op'>(</span><span class='va'>N</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>,
-  height_ft <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>5</span> <span class='op'>+</span> <span class='fl'>4</span><span class='op'>/</span><span class='fl'>12</span> <span class='op'>+</span> <span class='fl'>4</span><span class='op'>/</span><span class='fl'>12</span> <span class='op'>*</span> <span class='va'>gender</span>, sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>/</span><span class='fl'>12</span><span class='op'>)</span>
+  female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>N</span>, <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>,
+  height_ft <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>5.67</span> <span class='op'>-</span> <span class='fl'>0.33</span> <span class='op'>*</span> <span class='va'>female</span>, sd <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span>
 <span class='op'>)</span>
-<span class='fu'>my_population</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   ID gender height_ft
-#&gt; 1  1      1  5.740307
-#&gt; 2  2      1  5.703609
-#&gt; 3  3      0  5.362321
-#&gt; 4  4      1  5.585834
-#&gt; 5  5      0  5.048242
-#&gt; 6  6      0  6.048663</div><div class='input'>
+</div><div class='output co'>#&gt; declare_population(N = 6, female = rbinom(n = N, 1, prob = 0.5), 
+#&gt;     height_ft = rnorm(N, mean = 5.67 - 0.33 * female, sd = 0.25))</div><div class='input'>
+
+<span class='co'># Declare a population from existing data</span>
+
+<span class='fu'>declare_population</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_population(mtcars)</div><div class='input'>
+<span class='co'># Resample from existing data</span>
+
+<span class='fu'>declare_population</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, handler <span class='op'>=</span> <span class='va'>resample_data</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_population(N = 100, data = mtcars, handler = resample_data)</div><div class='input'>
+
 <span class='co'># Declare a two-level hierarchical population</span>
 <span class='co'># containing cities within regions and a</span>
 <span class='co'># pollution variable defined at the city level</span>
 
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'>declare_population</span><span class='op'>(</span>
+<span class='fu'>declare_population</span><span class='op'>(</span>
   regions <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>,
   cities <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>10</span>, pollution <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span>
-<span class='fu'>my_population</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    regions cities pollution
-#&gt; 1        1     01  3.548613
-#&gt; 2        1     02  5.983744
-#&gt; 3        1     03  3.892159
-#&gt; 4        1     04  3.001107
-#&gt; 5        1     05  5.150722
-#&gt; 6        1     06  7.108968
-#&gt; 7        1     07  5.629191
-#&gt; 8        1     08  3.362354
-#&gt; 9        1     09  4.341524
-#&gt; 10       1     10  4.249692
-#&gt; 11       2     11  3.854868
-#&gt; 12       2     12  6.027613
-#&gt; 13       2     13  7.478040
-#&gt; 14       2     14  3.546684
-#&gt; 15       2     15  5.822264
-#&gt; 16       2     16  3.933552
-#&gt; 17       2     17  6.094307
-#&gt; 18       2     18  5.220596
-#&gt; 19       2     19  4.716760
-#&gt; 20       2     20  5.710051
-#&gt; 21       3     21  7.210477
-#&gt; 22       3     22  6.412067
-#&gt; 23       3     23  4.803402
-#&gt; 24       3     24  5.755385
-#&gt; 25       3     25  3.905899
-#&gt; 26       3     26  5.430180
-#&gt; 27       3     27  5.960550
-#&gt; 28       3     28  5.459060
-#&gt; 29       3     29  4.403545
-#&gt; 30       3     30  4.954914
-#&gt; 31       4     31  4.418481
-#&gt; 32       4     32  5.442863
-#&gt; 33       4     33  4.689769
-#&gt; 34       4     34  4.777170
-#&gt; 35       4     35  4.367413
-#&gt; 36       4     36  6.067190
-#&gt; 37       4     37  5.337396
-#&gt; 38       4     38  4.046354
-#&gt; 39       4     39  5.251174
-#&gt; 40       4     40  4.451851
-#&gt; 41       5     41  5.103236
-#&gt; 42       5     42  6.866017
-#&gt; 43       5     43  3.959006
-#&gt; 44       5     44  5.219984
-#&gt; 45       5     45  3.576205
-#&gt; 46       5     46  5.616017
-#&gt; 47       5     47  3.558437
-#&gt; 48       5     48  3.298235
-#&gt; 49       5     49  5.557213
-#&gt; 50       5     50  4.249489</div><div class='input'>
+</div><div class='output co'>#&gt; declare_population(regions = add_level(N = 5), cities = add_level(N = 10, 
+#&gt;     pollution = rnorm(N, mean = 5)))</div><div class='input'>
 <span class='co'># Declare a population using a custom function</span>
+
+<span class='co'># the default handler is fabricatr::fabricate, </span>
+<span class='co'># but you can supply any function that returns a data.frame</span>
 
 <span class='va'>my_population_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>u <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='va'>my_population_custom</span> <span class='op'>&lt;-</span> <span class='fu'>declare_population</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>10</span>, handler <span class='op'>=</span> <span class='va'>my_population_function</span><span class='op'>)</span>
-
-<span class='fu'>my_population_custom</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              u
-#&gt; 1  -1.97093295
-#&gt; 2  -1.32446345
-#&gt; 3   1.07553289
-#&gt; 4   0.17583509
-#&gt; 5   0.20792480
-#&gt; 6   0.89320277
-#&gt; 7   0.19860992
-#&gt; 8  -3.18128256
-#&gt; 9   0.01968319
-#&gt; 10 -1.39417140</div></pre>
+<span class='fu'>declare_population</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>10</span>, handler <span class='op'>=</span> <span class='va'>my_population_function</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_population(N = 10, handler = my_population_function)</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
