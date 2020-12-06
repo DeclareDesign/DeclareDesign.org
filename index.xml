@@ -266,20 +266,11 @@ randomizr for Stata: John Ternovski</description>
     </item>
     
     <item>
-      <title>Getting Started with DeclareDesign</title>
+      <title>Model-Inquiry-Data Strategy-Answer Strategy (MIDA)</title>
       <link>/getting-started.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/getting-started.html</guid>
-      <description>Installing R Where we are going Building a step of a research design Declaring each step of a research design Combining steps to form a design Simulating a research design Diagnosing a research design Comparing designs   DeclareDesign is a system for describing research designs in code and simulating them in order to understand their properties. Because DeclareDesign employs a consistent grammar of designs, you can focus on the intellectually challenging part – designing good research studies – without having to code up simulations from scratch.</description>
-    </item>
-    
-    <item>
-      <title>Model-Inquiry-Data Strategy-Answer Strategy (MIDA)</title>
-      <link>/mida.html</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/mida.html</guid>
       <description>The idea motivating DeclareDesign is that the core analytic features of research designs can be declared in a complete manner and saved as an object. Once properly declared, a design can easily be shared, modified, improved, and used. A design contains the information needed to implement key parts of data generation and subsequent analysis. It also contains enough information to allow researchers or third parties to query it and determine whether it can support the claims it makes.</description>
     </item>
     
