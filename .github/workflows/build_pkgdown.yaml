@@ -9,7 +9,7 @@ on:
     branches:
       - main
 
-name: R-CMD-check
+name: Build Pkgdown
 
 jobs:
   R-CMD-check:
