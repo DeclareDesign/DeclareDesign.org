@@ -77,7 +77,7 @@ jobs:
 
       - name: Pkgdown
         run: | 
-          Rscript -e 'pkgdown::build_site("pkg", build_rmd = TRUE)'
+          Rscript -e 'pkgdown::build_site("pkg")'
 
       - name: Push to gh-pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
