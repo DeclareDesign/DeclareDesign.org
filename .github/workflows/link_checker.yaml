@@ -1,8 +1,6 @@
 on:
   schedule:
     - cron: 0 0 * * 6 # run weekly
-  repository_dispatch: # run manually
-    types: [check-link]
   push:
     branches:
       - gh-pages
