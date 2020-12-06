@@ -70,34 +70,6 @@ jobs:
         run: | 
           Rscript -e 'blogdown::build_site(build_rmd = TRUE)'
         
-      - name: Clone all DD packages
-        run: | 
-          git clone --branch newwebsite https://github.com/DeclareDesign/DeclareDesign DeclareDesign
-          git clone --branch newwebsite https://github.com/DeclareDesign/fabricatr fabricatr
-          git clone --branch newwebsite https://github.com/DeclareDesign/randomizr randomizr
-          git clone --branch newwebsite https://github.com/DeclareDesign/estimatr estimatr
-          git clone --branch newwebsite https://github.com/DeclareDesign/DesignLibrary DesignLibrary
-
-      - name: Search for dependences in docs
-        run: Rscript -e 'library(checkpoint); found_packages <- scanForPackages(".", use.knitr = TRUE)$pkgs; if(length(found_packages[!found_packages%in% installed.packages()[, 1]]) > 0) install.packages(found_packages[!found_packages%in% installed.packages()[,1]], repos = "https://cran.r-project.org")'
-
-      - name: Pkgdown
-        run: | 
-          Rscript -e 'pkgdown::build_site("DeclareDesign")'
-          Rscript -e 'pkgdown::build_site("fabricatr")'
-          Rscript -e 'pkgdown::build_site("randomizr")'
-          Rscript -e 'pkgdown::build_site("estimatr")'
-          Rscript -e 'pkgdown::build_site("DesignLibrary")'
-
-      - name: Web site directory structure
-        run: |
-          mkdir public/r 
-          cp -R DeclareDesign/docs public/r/declaredesign
-          cp -R fabricatr/docs public/r/fabricatr
-          cp -R randomizr/docs public/r/randomizr
-          cp -R estimatr/docs public/r/estimatr
-          cp -R DesignLibrary/docs public/r/designlibrary
-
       - name: Push to gh-pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: JamesIves/github-pages-deploy-action@3.7.1
@@ -105,5 +77,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: 'public'
-          CLEAN: true
+          CLEAN: false
           
