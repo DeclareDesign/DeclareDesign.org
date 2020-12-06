@@ -165,8 +165,8 @@
 <span class="co"># tidy dataframes on command!</span>
 <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">res_rob</span><span class="op">)</span>
 <span class="co">#&gt;          term estimate std.error statistic p.value conf.low conf.high df</span>
-<span class="co">#&gt; 1 (Intercept)     0.27      0.16       1.7   0.089   -0.041     0.580 98</span>
-<span class="co">#&gt; 2           z    -0.42      0.21      -2.0   0.044   -0.833    -0.012 98</span>
+<span class="co">#&gt; 1 (Intercept)    0.065      0.14      0.46    0.64    -0.21      0.34 98</span>
+<span class="co">#&gt; 2           z   -0.067      0.21     -0.32    0.75    -0.48      0.35 98</span>
 <span class="co">#&gt;   outcome</span>
 <span class="co">#&gt; 1       y</span>
 <span class="co">#&gt; 2       y</span>
@@ -183,16 +183,16 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Coefficients:</span>
 <span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|) CI Lower CI Upper   DF</span>
-<span class="co">#&gt; (Intercept)    0.269      0.164    1.64     0.20   -0.255    0.793 2.99</span>
-<span class="co">#&gt; z             -0.422      0.250   -1.69     0.14   -1.027    0.182 6.30</span>
+<span class="co">#&gt; (Intercept)   0.0653      0.145   0.452    0.678   -0.358    0.489 3.53</span>
+<span class="co">#&gt; z            -0.0670      0.202  -0.331    0.750   -0.544    0.410 7.05</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Multiple R-squared:  0.041 , Adjusted R-squared:  0.0312 </span>
-<span class="co">#&gt; F-statistic: 2.86 on 1 and 9 DF,  p-value: 0.125</span>
+<span class="co">#&gt; Multiple R-squared:  0.00105 ,   Adjusted R-squared:  -0.00915 </span>
+<span class="co">#&gt; F-statistic: 0.11 on 1 and 9 DF,  p-value: 0.748</span>
 
 <span class="co"># matched-pair design learned from blocks argument</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleep</span><span class="op">)</span>
 <span class="va">res_dim</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/difference_in_means.html">difference_in_means</a></span><span class="op">(</span><span class="va">extra</span> <span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="va">sleep</span>, blocks <span class="op">=</span> <span class="va">ID</span><span class="op">)</span></code></pre></div>
-<p>The <a href="https://declaredesign.org/r/estimatr/articles/getting-started.html">Getting Started Guide</a> has more examples and uses, as do the reference pages. The <a href="https://declaredesign.org/r/estimatr/articles/mathematical-notes.html">Mathematical Notes</a> provide more information about what each estimator is doing under the hood.</p>
+<p>The <a href="/r/estimatr/articles/getting-started.html">Getting Started Guide</a> has more examples and uses, as do the reference pages. The <a href="/r/estimatr/articles/mathematical-notes.html">Mathematical Notes</a> provide more information about what each estimator is doing under the hood.</p>
 </div>
 <div id="fast-to-use" class="section level2">
 <h2 class="hasAnchor">
@@ -219,11 +219,11 @@
 <tbody>
 <tr class="odd">
 <td align="left">estimatr</td>
-<td align="right">22</td>
+<td align="right">19</td>
 </tr>
 <tr class="even">
 <td align="left">lm + sandwich</td>
-<td align="right">43</td>
+<td align="right">40</td>
 </tr>
 </tbody>
 </table>
