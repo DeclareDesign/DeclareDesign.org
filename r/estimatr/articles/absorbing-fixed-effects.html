@@ -123,8 +123,7 @@
 
       
 
-      </header><script src="absorbing-fixed-effects_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="absorbing-fixed-effects_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="absorbing-fixed-effects_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="absorbing-fixed-effects_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Absorbing Fixed Effects with estimatr</h1>
@@ -192,9 +191,9 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 169.28117 175.00043 187.45987 178.51399 180.82881 311.5533
-##        lm_robust  75.30814  79.32877  83.78256  83.17418  86.51619 101.0492
-##  lm_robust + fes  48.50507  50.77690  56.04921  53.04045  54.29036 193.8316
+##  base + sandwich 169.01830 176.83921 196.92658 180.26453 200.10469 308.1806
+##        lm_robust  76.63583  79.96703  83.03307  81.97988  84.42526 121.7720
+##  lm_robust + fes  47.58788  49.93963  55.03923  51.12801  52.73119 180.5852
 ##  neval cld
 ##     50   c
 ##     50  b 
@@ -221,14 +220,14 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr        min         lq      mean     median         uq
-##  base + sandwich 166.678659 175.294782 188.39919 178.443258 183.373627
-##        lm_robust  58.824924  64.426114  66.31613  65.178952  68.728127
-##  lm_robust + fes   7.257118   7.871554  11.41548   8.327631   8.986658
-##        max neval cld
-##  301.49091    50   c
-##   73.20781    50  b 
-##  130.63895    50 a</code></pre>
+##             expr       min        lq      mean     median        uq       max
+##  base + sandwich 169.51416 175.54744 195.29761 178.728744 193.03110 351.96841
+##        lm_robust  61.47389  65.03430  68.88229  66.693386  69.35885 101.94535
+##  lm_robust + fes   7.50157   8.18837  10.12713   8.878599  11.10058  28.47584
+##  neval cld
+##     50   c
+##     50  b 
+##     50 a</code></pre>
 </div>
   </div>
 
