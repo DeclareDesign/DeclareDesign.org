@@ -70,7 +70,7 @@ jobs:
         
       - name: Clone all DD packages
         run: | 
-          git clone --branch newwebsite https://github.com/DeclareDesign/${{ matrix.config.package }} pkg
+          git clone https://github.com/DeclareDesign/${{ matrix.config.package }} pkg
 
       - name: Search for dependences in docs
         run: Rscript -e 'library(checkpoint); found_packages <- scanForPackages(".", use.knitr = TRUE)$pkgs; if(length(found_packages[!found_packages%in% installed.packages()[, 1]]) > 0) install.packages(found_packages[!found_packages%in% installed.packages()[,1]], repos = "https://cran.r-project.org")'
