@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.0" />
+<meta name="generator" content="Hugo 0.79.1" />
 
 
   <title>An instrument does not have to be exogenous to be consistent - DeclareDesign</title>
@@ -105,8 +105,6 @@
 
         <div class="article-content">
           
-<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
 
 
 <p>We often think of an instrumental variable (<span class="math inline">\(Z\)</span>) as a random shock that generates exogenous variation in a treatment of interest <span class="math inline">\(X\)</span>. The randomness of <span class="math inline">\(Z\)</span> lets us identify the effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>, at least for units for which <span class="math inline">\(Z\)</span> perturbs <span class="math inline">\(X\)</span> in a way that’s not possible by just looking at the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. But surprisingly, we think, if effects are constant the instrumental variables estimator can be consistent for the effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> even when the relationship between the instrument (<span class="math inline">\(Z\)</span>) and the endogenous variable (<span class="math inline">\(X\)</span>) is confounded (for example, <span class="citation">Hernán and Robins (2006)</span>). That’s the good news. Less good news is that when there is effect heterogeneity you can get good estimates for some units but it can be hard to know <em>which</em> units those are <span class="citation">(Swanson and Hernán 2017)</span>. We use a declaration and diagnosis to illustrate these insights.

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.0" />
+<meta name="generator" content="Hugo 0.79.1" />
 
 
   <title>The trouble with &amp;lsquo;controlling for blocks&amp;rsquo; - DeclareDesign</title>
@@ -106,8 +106,6 @@
 
         <div class="article-content">
           
-<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
 
 
 <p>In many experiments, different groups of units get assigned to treatment with different probabilities. This can give rise to misleading results unless you properly take account of possible differences between the groups. How best to do this? The go-to approach is to “control” for groups by introducing “fixed-effects” in a regression set-up. The bad news is that this procedure is prone to bias. The good news is that there’s an even simpler and more intuitive approach that gets it right: estimate the difference-in-means within each group, then average over these group-level estimates weighting according to the size of the group. We’ll use design declaration to show the problem and to compare the performance of this and an array of other proposed solutions.</p>

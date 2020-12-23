@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.0" />
+<meta name="generator" content="Hugo 0.79.1" />
 
 
   <title>Estimating Average Treatment Effects with Ordered Probit: Is it worth it? - DeclareDesign</title>
@@ -106,8 +106,6 @@
 
         <div class="article-content">
           
-<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
 
 
 <p>We sometimes worry about whether we need to model data generating processes correctly. For example you have ordinal outcome variables, on a five-point Likert scale. How should you model the data generation process? Do you need to model it at all? Go-to approaches include ordered probit and ordered logit models which are designed for this kind of outcome variable. But maybe you don’t need them. After all, the argument that the difference-in-means procedure estimates the treatment effect doesn’t depend on any assumptions about the type of data (as long as expectations are defined)—ordered, count, censored, etc. We diagnose a design that hedges by using both differences in means and an ordered probit model. We do so assuming that the ordered probit model correctly describes data generation. Which does better?</p>

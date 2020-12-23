@@ -70,7 +70,7 @@ Pilot studies are often used to get a guess of the average effect size, which is
       <pubDate>Tue, 15 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>/blog/use-change-scores-or-control-for-pre-treatment-outcomes-depends-on-the-true-data-generating-process.html</guid>
-      <description>We’re in an observational study setting in which treatment assignment was not controlled by the researcher. We have pre-treatment data on baseline outcomes and we’d like to incorporate them, mainly to decrease bias due to confounding and but also, ideally, to increase precision. One approach is to use the difference between pre and post outcomes as the outcome variable; another is to use the baseline data as a control.</description>
+      <description>We’re in an observational study setting in which treatment assignment was not controlled by the researcher. We have pre-treatment data on baseline outcomes and we’d like to incorporate them, mainly to decrease bias due to confounding and but also, ideally, to increase precision. One approach is to use the difference between pre and post outcomes as the outcome variable; another is to use the baseline data as a control. Which is better?</description>
     </item>
     
     <item>
@@ -88,7 +88,7 @@ Pilot studies are often used to get a guess of the average effect size, which is
       <pubDate>Thu, 20 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/declaredesign-holiday-hiatus.html</guid>
-      <description>  We’ll be back on January 7 – Happy New Year!
+      <description> We’ll be back on January 7 – Happy New Year!
 library(DeclareDesign) library(ggplot2) pop &amp;lt;- declare_population( N = 14, X = c(&amp;quot;H&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;P&amp;quot;, &amp;quot;P&amp;quot;, &amp;quot;Y&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;H&amp;quot;, &amp;quot;O&amp;quot;, &amp;quot;L&amp;quot;, &amp;quot;I&amp;quot;, &amp;quot;D&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;Y&amp;quot;, &amp;quot;S&amp;quot;), position = N:1, index = match(X, LETTERS) ) ggplot(data = pop(), aes(index, position, color = X)) + geom_text(aes(label = X)) + theme_bw() + theme(legend.position = &amp;quot;none&amp;quot;, axis.title = element_blank()) </description>
     </item>
     
@@ -134,7 +134,8 @@ library(DeclareDesign) library(ggplot2) pop &amp;lt;- declare_population( N = 14
       <pubDate>Tue, 20 Nov 2018 00:00:00 +0000</pubDate>
       
       <guid>/blog/modelling_spillovers.html</guid>
-      <description>Spillovers are often seen as a nuisance that lead researchers into error when estimating effects of interest. In a previous post, we discussed sampling strategies to reduce these risks. A more substantively satisfying approach is to try to study spillovers directly. If we do it right we can remove errors in our estimation of primary quantities of interest and learn about how spillovers work at the same time.</description>
+      <description>Spillovers are often seen as a nuisance that lead researchers into error when estimating effects of interest. In a previous post, we discussed sampling strategies to reduce these risks. A more substantively satisfying approach is to try to study spillovers directly. If we do it right we can remove errors in our estimation of primary quantities of interest and learn about how spillovers work at the same time.
+This is important because spillovers are part of the overall effects of an intervention.</description>
     </item>
     
     <item>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.0" />
+<meta name="generator" content="Hugo 0.79.1" />
 
 
   <title>Common estimators of uncertainty overestimate uncertainty - DeclareDesign</title>
@@ -106,8 +106,6 @@
 
         <div class="article-content">
           
-<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
-<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
 
 
 <p>Random assignment provides a justification not just for estimates of effects but also for estimates of uncertainty about effects. The basic approach, due to Neyman, is to estimate the variance in estimates of the difference between outcomes in treatment and in control outcomes using the variability that can be observed among units in control and units in treatment. It’s an ingenious approach and dispenses with the need to make any assumptions about the shape of statistical distributions or about asymptotics. The problem though is that it can sometimes be <strong>upwardly biased</strong>, meaning that it might lead you to maintain null hypotheses when you should be rejecting them. We use design diagnosis to get a handle on how great this problem is and how it matters for different estimands.</p>
