@@ -192,24 +192,58 @@ creates count data (poisson-distributed). <code>draw_likert</code> is an alias t
 appropriate for a likert survey question.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>draw_binomial</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>, trials <span class='op'>=</span> <span class='fl'>1</span>, N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>prob</span><span class='op'>)</span>,
-  latent <span class='op'>=</span> <span class='cn'>NULL</span>, link <span class='op'>=</span> <span class='st'>"identity"</span>, quantile_y <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>draw_binomial</span><span class='op'>(</span>
+  prob <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>,
+  trials <span class='op'>=</span> <span class='fl'>1</span>,
+  N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>prob</span><span class='op'>)</span>,
+  latent <span class='op'>=</span> <span class='cn'>NULL</span>,
+  link <span class='op'>=</span> <span class='st'>"identity"</span>,
+  quantile_y <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>draw_categorical</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>, N <span class='op'>=</span> <span class='cn'>NULL</span>, latent <span class='op'>=</span> <span class='cn'>NULL</span>,
-  link <span class='op'>=</span> <span class='st'>"identity"</span>, category_labels <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>draw_categorical</span><span class='op'>(</span>
+  prob <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>,
+  N <span class='op'>=</span> <span class='cn'>NULL</span>,
+  latent <span class='op'>=</span> <span class='cn'>NULL</span>,
+  link <span class='op'>=</span> <span class='st'>"identity"</span>,
+  category_labels <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>draw_ordered</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>, breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>,
-  break_labels <span class='op'>=</span> <span class='cn'>NULL</span>, N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, latent <span class='op'>=</span> <span class='cn'>NULL</span>,
-  strict <span class='op'>=</span> <span class='cn'>FALSE</span>, link <span class='op'>=</span> <span class='st'>"identity"</span><span class='op'>)</span>
+<span class='fu'>draw_ordered</span><span class='op'>(</span>
+  x <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>,
+  breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  break_labels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  latent <span class='op'>=</span> <span class='cn'>NULL</span>,
+  strict <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  link <span class='op'>=</span> <span class='st'>"identity"</span>
+<span class='op'>)</span>
 
-<span class='fu'>draw_count</span><span class='op'>(</span>mean <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>, N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span>, latent <span class='op'>=</span> <span class='cn'>NULL</span>,
-  link <span class='op'>=</span> <span class='st'>"identity"</span>, quantile_y <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>draw_count</span><span class='op'>(</span>
+  mean <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>,
+  N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span>,
+  latent <span class='op'>=</span> <span class='cn'>NULL</span>,
+  link <span class='op'>=</span> <span class='st'>"identity"</span>,
+  quantile_y <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>draw_binary</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>, N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>prob</span><span class='op'>)</span>, link <span class='op'>=</span> <span class='st'>"identity"</span>,
-  latent <span class='op'>=</span> <span class='cn'>NULL</span>, quantile_y <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+<span class='fu'>draw_binary</span><span class='op'>(</span>
+  prob <span class='op'>=</span> <span class='fu'>link</span><span class='op'>(</span><span class='va'>latent</span><span class='op'>)</span>,
+  N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>prob</span><span class='op'>)</span>,
+  link <span class='op'>=</span> <span class='st'>"identity"</span>,
+  latent <span class='op'>=</span> <span class='cn'>NULL</span>,
+  quantile_y <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>draw_likert</span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='fl'>7</span>, breaks <span class='op'>=</span> <span class='cn'>NULL</span>, N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
-  latent <span class='op'>=</span> <span class='cn'>NULL</span>, link <span class='op'>=</span> <span class='st'>"identity"</span>, strict <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>breaks</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>draw_likert</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  type <span class='op'>=</span> <span class='fl'>7</span>,
+  breaks <span class='op'>=</span> <span class='cn'>NULL</span>,
+  N <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  latent <span class='op'>=</span> <span class='cn'>NULL</span>,
+  link <span class='op'>=</span> <span class='st'>"identity"</span>,
+  strict <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>breaks</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='fu'>draw_quantile</span><span class='op'>(</span><span class='va'>type</span>, <span class='va'>N</span><span class='op'>)</span></pre>
 

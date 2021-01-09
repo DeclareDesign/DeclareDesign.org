@@ -179,8 +179,15 @@ used in this function is specified at the following URL:
 <a href='https://stats.stackexchange.com/questions/263451/create-synthetic-data-with-a-given-intraclass-correlation-coefficient-icc'>https://stats.stackexchange.com/questions/263451/create-synthetic-data-with-a-given-intraclass-correlation-coefficient-icc</a></p>
     </div>
 
-    <pre class="usage"><span class='fu'>draw_normal_icc</span><span class='op'>(</span>mean <span class='op'>=</span> <span class='fl'>0</span>, N <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>clusters</span>, sd <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sd_between <span class='op'>=</span> <span class='cn'>NULL</span>, total_sd <span class='op'>=</span> <span class='cn'>NULL</span>, ICC <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>draw_normal_icc</span><span class='op'>(</span>
+  mean <span class='op'>=</span> <span class='fl'>0</span>,
+  N <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>clusters</span>,
+  sd <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sd_between <span class='op'>=</span> <span class='cn'>NULL</span>,
+  total_sd <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ICC <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -245,36 +252,38 @@ deviations for generating the data.</p>
 
 <span class='co'># Default: unit variance within each cluster</span>
 <span class='fu'>draw_normal_icc</span><span class='op'>(</span>clusters <span class='op'>=</span> <span class='va'>clusters</span>, ICC <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] -1.91895050 -2.32972918 -1.04108334 -0.05564077  0.87693614  1.11799259
-#&gt;  [7] -0.99141140 -0.88805475 -0.71326911 -0.21932045 -1.22261697 -3.05425246
-#&gt; [13] -1.94498592  0.32406580 -0.38223353  1.02693684 -1.52146891 -2.12281385
-#&gt; [19] -0.78642284  0.45302176 -0.73581061 -0.91270615 -1.00380565 -1.39700264
-#&gt; [25]  3.22000964  0.65148723 -0.03478417 -3.02644937 -0.79626285  0.52635874
-#&gt; [31]  0.84369638 -0.74923767 -2.21426708 -1.81894923 -0.43155686  1.00400689
-#&gt; [37] -1.12518640 -1.85884918  0.12255121 -0.28577768 -1.01415162 -1.48412826
-#&gt; [43] -3.67599455 -1.37105138  0.72496291 -0.68962721 -0.31864645 -2.27866549
-#&gt; [49] -1.06514811  0.31793276</div><div class='input'>
+</div><div class='output co'>#&gt;  [1] -0.923714135  0.435003908  0.106210040 -1.735893566 -1.958475895
+#&gt;  [6]  2.275082144  1.191685202 -1.402936631 -0.758941747 -0.309205013
+#&gt; [11]  2.034923338 -0.098451338 -0.649870816  1.620310335 -1.032563890
+#&gt; [16]  0.245438505  0.355238609 -2.489406298  0.562725031 -0.211194617
+#&gt; [21]  2.132610494  1.146514642 -0.955026236 -0.418745937  0.676513100
+#&gt; [26] -0.007119184  1.800087592  0.610384029 -1.475951551 -1.022859022
+#&gt; [31] -0.326315343 -0.673093572 -1.482609679  1.387075232 -0.340385257
+#&gt; [36]  0.672914897 -1.040765876 -2.594453263  1.325106851 -1.131589571
+#&gt; [41] -0.040799758 -0.769328670  0.281551529  0.725096126  0.585886481
+#&gt; [46]  0.991110980 -0.466526406 -1.332348508 -0.342500791  1.039042307</div><div class='input'>
 <span class='co'># Alternatively, you can specify characteristics:</span>
 <span class='fu'>draw_normal_icc</span><span class='op'>(</span>mean <span class='op'>=</span> <span class='fl'>10</span>, clusters <span class='op'>=</span> <span class='va'>clusters</span>, sd <span class='op'>=</span> <span class='fl'>3</span>, ICC <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  2.980361  5.059323 11.220492 12.834811 12.036792  2.311390  6.813053
-#&gt;  [8] 21.045831  4.879437  6.892657  5.155492 11.773461 11.567804 12.027526
-#&gt; [15]  9.251026  3.861271 11.507811 11.776464 10.176906 15.019595  5.579890
-#&gt; [22] 10.263847 11.652612  5.595671 13.200408  3.579218 13.534341  9.284284
-#&gt; [29] 13.473204 11.052864  6.018959 10.516244 11.932237  8.787241 14.952115
-#&gt; [36]  2.895813  7.866673 12.485727  7.493867 10.279353  5.963135  4.932639
-#&gt; [43] 13.080236 10.711291  5.099772  2.513929  6.138051 11.786126  8.023712
-#&gt; [50]  8.156668</div><div class='input'>
+</div><div class='output co'>#&gt;  [1] 13.299697 10.288054 10.834659  8.264146 10.468560  8.960213 13.866706
+#&gt;  [8] 10.866341 11.284395 10.557844 11.514721  9.743246 10.086395 11.471200
+#&gt; [15]  7.540914 14.385755  7.809013 14.704079 13.189902 10.686461 12.484905
+#&gt; [22]  4.847580  7.899183  9.321026  4.744979 10.600605  9.600604  3.659792
+#&gt; [29] 10.752976 12.335599 10.519998  8.468204  9.554093 14.985876 11.051240
+#&gt; [36]  5.531273  9.300151  9.328708 13.251965 10.169315 12.695408 14.727348
+#&gt; [43]  9.737692 12.680528  5.722861 11.638553  8.730733  9.549608  9.360396
+#&gt; [50] 16.971088</div><div class='input'>
 <span class='co'># Can specify between-cluster standard deviation instead:</span>
 <span class='fu'>draw_normal_icc</span><span class='op'>(</span>clusters <span class='op'>=</span> <span class='va'>clusters</span>, sd_between <span class='op'>=</span> <span class='fl'>4</span>, ICC <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1]  -7.9882450  19.1681798 -17.8117587  -5.1334636 -21.9023901  -6.4990373
-#&gt;  [7] -11.6548116  -9.0053030  -2.5826652 -12.2276641   5.4512710   2.8243694
-#&gt; [13] -17.9118919  -8.0512295 -20.5450364  -4.1655727 -10.5949451  -2.6768807
-#&gt; [19]   1.1514062 -11.1928974   1.1884742  -1.9987958  -5.6795444   7.1289345
-#&gt; [25]   1.9346844  -9.1734515  10.6353696   6.7102672  -3.3426178 -15.0474155
-#&gt; [31]   2.8221672  -4.7640555   1.4392404   5.6333692  -5.4478836  -2.1267284
-#&gt; [37]  -4.5118486   0.1530110  10.2640661  -1.2393195  -3.9640117  -8.9105903
-#&gt; [43]   1.9340071  11.9791366  -5.0312457  11.1539108   6.4744885  -0.3893474
-#&gt; [49]  -9.5299046 -12.6852342</div><div class='input'>
+</div><div class='output co'>#&gt;  [1]  -8.76142121  -0.03689812  -2.60114537  -9.80672990  17.66701314
+#&gt;  [6]  13.79742258   8.11359821   8.56748350   3.40382099   1.52221825
+#&gt; [11]   4.67326587  -1.56065241   0.37950131  -4.08098747  18.29684916
+#&gt; [16]  12.51647731   1.93788573  17.19810471 -18.58384830   6.60416788
+#&gt; [21]  11.31721723  -7.78151737  -9.02524773   8.85107331  20.11367405
+#&gt; [26]  -3.40752889   3.48662191  15.37626552  -4.40897647  10.23191138
+#&gt; [31]  -3.87786335   2.40783467  16.86369154  -1.15043095   4.55570329
+#&gt; [36]  11.82314240  -6.02287110   4.10399538  -0.38437187  14.86931108
+#&gt; [41]  26.55104398  -0.66631572  -0.65478131   5.33664238  17.90950753
+#&gt; [46]  20.99272636  -2.42232922  -2.56794318  -4.93321541   6.83487610</div><div class='input'>
 <span class='co'># Can specify total SD instead:</span>
 <span class='va'>total_sd_draw</span> <span class='op'>=</span> <span class='fu'>draw_normal_icc</span><span class='op'>(</span>clusters <span class='op'>=</span> <span class='va'>clusters</span>, ICC <span class='op'>=</span> <span class='fl'>0.5</span>, total_sd <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/sd.html'>sd</a></span><span class='op'>(</span><span class='va'>total_sd_draw</span><span class='op'>)</span>
@@ -282,7 +291,7 @@ deviations for generating the data.</p>
 <span class='co'># Verify that ICC generated is accurate</span>
 <span class='va'>corr_draw</span> <span class='op'>=</span> <span class='fu'>draw_normal_icc</span><span class='op'>(</span>clusters <span class='op'>=</span> <span class='va'>clusters</span>, ICC <span class='op'>=</span> <span class='fl'>0.4</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>corr_draw</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>clusters</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>r.squared</span>
-</div><div class='output co'>#&gt; [1] 0.2983103</div><div class='input'>
+</div><div class='output co'>#&gt; [1] 0.1641184</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
