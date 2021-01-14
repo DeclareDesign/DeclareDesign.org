@@ -190,14 +190,14 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr      min       lq     mean   median       uq      max neval
-##  base + sandwich 523.9532 560.7781 602.2007 584.7363 623.6148 913.7273    50
-##        lm_robust 245.4749 258.9925 296.2125 269.9092 299.0439 777.6004    50
-##  lm_robust + fes 149.9952 161.1427 193.4723 170.7417 201.6295 472.5889    50
-##  cld
-##    c
-##   b 
-##  a</code></pre>
+##             expr       min        lq      mean    median        uq      max
+##  base + sandwich 170.76549 174.81754 186.39584 177.14988 181.68758 297.1494
+##        lm_robust  77.31992  80.57013  85.80510  81.99891  84.59438 211.7543
+##  lm_robust + fes  48.83585  50.44723  56.90737  51.19297  53.17806 183.5784
+##  neval cld
+##     50   c
+##     50  b 
+##     50 a</code></pre>
 <p>Speed gains are <em>considerably</em> greater with HC1 standard errors. This is because we need to get the hat matrix for HC2, HC3, and CR2 standard errors, which requires inverting that large matrix of dummies we previously avoided doing. HC0, HC1, CR0, and CRstata standard errors do not require this inversion.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># With HC1</span>
@@ -220,10 +220,10 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 509.36989 525.13075 571.43681 542.17185 571.81129 929.0247
-##        lm_robust 183.92148 192.53123 207.44747 198.08516 204.07646 338.6527
-##  lm_robust + fes  22.13877  23.46434  31.75105  24.91362  30.50635 270.9839
+##             expr        min        lq      mean     median         uq       max
+##  base + sandwich 171.249979 174.46250 183.53116 176.895930 179.092274 298.60400
+##        lm_robust  61.391403  64.00264  65.98334  65.654396  67.984969  74.25632
+##  lm_robust + fes   7.515233   8.08476  11.93974   8.662523   9.819555 139.99482
 ##  neval cld
 ##     50   c
 ##     50  b 
