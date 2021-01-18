@@ -271,72 +271,72 @@
 <tr class="odd">
 <td align="left">1</td>
 <td align="left">(Intercept)</td>
-<td align="right">59.6824759</td>
-<td align="right">4.8751964</td>
-<td align="right">12.2420660</td>
+<td align="right">63.2178708</td>
+<td align="right">5.1048385</td>
+<td align="right">12.3839120</td>
 <td align="right">0.0000000</td>
-<td align="right">49.8571632</td>
-<td align="right">69.5077886</td>
+<td align="right">52.9297447</td>
+<td align="right">73.5059968</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">1</td>
 <td align="left">Catholic</td>
-<td align="right">0.1026694</td>
-<td align="right">0.0308928</td>
-<td align="right">3.3234103</td>
-<td align="right">0.0017980</td>
-<td align="right">0.0404091</td>
-<td align="right">0.1649296</td>
+<td align="right">0.0600405</td>
+<td align="right">0.0658169</td>
+<td align="right">0.9122356</td>
+<td align="right">0.3666160</td>
+<td align="right">-0.0726047</td>
+<td align="right">0.1926857</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="odd">
 <td align="left">1</td>
 <td align="left">Agriculture</td>
-<td align="right">0.1149296</td>
-<td align="right">0.0854316</td>
-<td align="right">1.3452819</td>
-<td align="right">0.1854269</td>
-<td align="right">-0.0572465</td>
-<td align="right">0.2871057</td>
+<td align="right">0.0655433</td>
+<td align="right">0.0938988</td>
+<td align="right">0.6980203</td>
+<td align="right">0.4888371</td>
+<td align="right">-0.1236973</td>
+<td align="right">0.2547838</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
 <td align="left">(Intercept)</td>
-<td align="right">60.0948674</td>
-<td align="right">4.7915568</td>
-<td align="right">12.5418250</td>
+<td align="right">51.8850737</td>
+<td align="right">6.1329128</td>
+<td align="right">8.4601029</td>
 <td align="right">0.0000000</td>
-<td align="right">50.4381191</td>
-<td align="right">69.7516157</td>
+<td align="right">39.5250000</td>
+<td align="right">64.2451474</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="odd">
 <td align="left">2</td>
 <td align="left">Catholic</td>
-<td align="right">0.1433854</td>
-<td align="right">0.0374162</td>
-<td align="right">3.8321791</td>
-<td align="right">0.0003999</td>
-<td align="right">0.0679781</td>
-<td align="right">0.2187927</td>
+<td align="right">0.1086218</td>
+<td align="right">0.0341978</td>
+<td align="right">3.1762796</td>
+<td align="right">0.0027260</td>
+<td align="right">0.0397006</td>
+<td align="right">0.1775429</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
 <td align="left">Agriculture</td>
-<td align="right">0.0811728</td>
-<td align="right">0.0953774</td>
-<td align="right">0.8510696</td>
-<td align="right">0.3993388</td>
-<td align="right">-0.1110477</td>
-<td align="right">0.2733932</td>
+<td align="right">0.2532634</td>
+<td align="right">0.1006331</td>
+<td align="right">2.5167001</td>
+<td align="right">0.0155654</td>
+<td align="right">0.0504507</td>
+<td align="right">0.4560761</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
@@ -349,10 +349,10 @@
   <span class="fu">summarise</span><span class="op">(</span>boot_se <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   term        boot_se
-##   &lt;chr&gt;         &lt;dbl&gt;
-## 1 (Intercept)  4.90  
-## 2 Agriculture  0.0920
-## 3 Catholic     0.0394</code></pre>
+## * &lt;chr&gt;         &lt;dbl&gt;
+## 1 (Intercept)  5.25  
+## 2 Agriculture  0.0997
+## 3 Catholic     0.0370</code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># To visualize the sampling distribution</span>
 
