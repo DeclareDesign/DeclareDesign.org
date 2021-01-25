@@ -234,6 +234,7 @@
                                  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="va">diagnoses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html">diagnose_designs</a></span><span class="op">(</span><span class="va">binary_iv_design</span>, <span class="va">iv_nonrelevant</span>, <span class="va">iv_nonrandom</span>, 
                               <span class="va">iv_nonexcl</span>, <span class="va">iv_defiers</span>, <span class="va">iv_het</span>, sims <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></code></pre></div>
+<pre><code>## 1 coefficient  not defined because the design matrix is rank deficient</code></pre>
 <p>We highlight a few takeaways. Firstly, our estimates are unbiased when all assumption hold. We show that violating any of the first three assumptions yields biased estimates.</p>
 <table class="table">
 <thead><tr class="header">
@@ -252,7 +253,7 @@
 <td align="left">ate</td>
 <td align="left">iv_robust</td>
 <td align="left">-0.04</td>
-<td align="left">0.64</td>
+<td align="left">0.60</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="even">
@@ -261,7 +262,7 @@
 <td align="left">ate</td>
 <td align="left">lm_robust</td>
 <td align="left">-0.04</td>
-<td align="left">0.64</td>
+<td align="left">0.60</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="odd">
@@ -270,7 +271,7 @@
 <td align="left">late</td>
 <td align="left">iv_robust</td>
 <td align="left">-0.04</td>
-<td align="left">0.64</td>
+<td align="left">0.60</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="even">
@@ -279,7 +280,7 @@
 <td align="left">late</td>
 <td align="left">lm_robust</td>
 <td align="left">-0.04</td>
-<td align="left">0.64</td>
+<td align="left">0.60</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="odd">
@@ -287,8 +288,8 @@
 <td align="left">iv_nonrelevant</td>
 <td align="left">ate</td>
 <td align="left">iv_robust</td>
-<td align="left">-0.94</td>
-<td align="left">0.04</td>
+<td align="left">-1.02</td>
+<td align="left">0.16</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="even">
@@ -305,8 +306,8 @@
 <td align="left">iv_nonrelevant</td>
 <td align="left">late</td>
 <td align="left">iv_robust</td>
-<td align="left">-0.94</td>
-<td align="left">0.04</td>
+<td align="left">-1.02</td>
+<td align="left">0.16</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="even">
@@ -323,8 +324,8 @@
 <td align="left">iv_nonrandom</td>
 <td align="left">ate</td>
 <td align="left">iv_robust</td>
-<td align="left">8.82</td>
-<td align="left">0.04</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="even">
@@ -332,7 +333,7 @@
 <td align="left">iv_nonrandom</td>
 <td align="left">ate</td>
 <td align="left">lm_robust</td>
-<td align="left">0.97</td>
+<td align="left">1.00</td>
 <td align="left">1.00</td>
 <td align="left">0.50</td>
 </tr>
@@ -342,7 +343,7 @@
 <td align="left">late</td>
 <td align="left">iv_robust</td>
 <td align="left">NA</td>
-<td align="left">0.04</td>
+<td align="left">NA</td>
 <td align="left">NA</td>
 </tr>
 <tr class="even">
@@ -359,8 +360,8 @@
 <td align="left">iv_nonexcl</td>
 <td align="left">ate</td>
 <td align="left">iv_robust</td>
-<td align="left">0.43</td>
-<td align="left">0.12</td>
+<td align="left">0.18</td>
+<td align="left">0.00</td>
 <td align="left">0.00</td>
 </tr>
 <tr class="even">
@@ -368,8 +369,8 @@
 <td align="left">iv_nonexcl</td>
 <td align="left">ate</td>
 <td align="left">lm_robust</td>
-<td align="left">0.69</td>
-<td align="left">0.92</td>
+<td align="left">0.64</td>
+<td align="left">0.88</td>
 <td align="left">0.00</td>
 </tr>
 <tr class="odd">
@@ -377,8 +378,8 @@
 <td align="left">iv_nonexcl</td>
 <td align="left">late</td>
 <td align="left">iv_robust</td>
-<td align="left">0.43</td>
-<td align="left">0.12</td>
+<td align="left">0.18</td>
+<td align="left">0.00</td>
 <td align="left">0.00</td>
 </tr>
 <tr class="even">
@@ -386,8 +387,8 @@
 <td align="left">iv_nonexcl</td>
 <td align="left">late</td>
 <td align="left">lm_robust</td>
-<td align="left">0.69</td>
-<td align="left">0.92</td>
+<td align="left">0.64</td>
+<td align="left">0.88</td>
 <td align="left">0.00</td>
 </tr>
 </tbody>
@@ -409,8 +410,8 @@
 <td align="left">iv_defiers</td>
 <td align="left">ate</td>
 <td align="left">iv_robust</td>
-<td align="left">0.02</td>
-<td align="left">0.04</td>
+<td align="left">-0.01</td>
+<td align="left">0.00</td>
 <td align="left">0.00</td>
 </tr>
 <tr class="even">
@@ -418,7 +419,7 @@
 <td align="left">iv_defiers</td>
 <td align="left">ate</td>
 <td align="left">lm_robust</td>
-<td align="left">-0.00</td>
+<td align="left">0.00</td>
 <td align="left">0.04</td>
 <td align="left">0.00</td>
 </tr>
@@ -427,8 +428,8 @@
 <td align="left">iv_defiers</td>
 <td align="left">late</td>
 <td align="left">iv_robust</td>
-<td align="left">0.02</td>
-<td align="left">0.04</td>
+<td align="left">-0.01</td>
+<td align="left">0.00</td>
 <td align="left">0.00</td>
 </tr>
 <tr class="even">
@@ -436,7 +437,7 @@
 <td align="left">iv_defiers</td>
 <td align="left">late</td>
 <td align="left">lm_robust</td>
-<td align="left">-0.00</td>
+<td align="left">0.00</td>
 <td align="left">0.04</td>
 <td align="left">0.00</td>
 </tr>
@@ -445,8 +446,8 @@
 <td align="left">iv_defiers</td>
 <td align="left">late_het</td>
 <td align="left">iv_robust</td>
-<td align="left">0.02</td>
-<td align="left">0.04</td>
+<td align="left">-0.01</td>
+<td align="left">0.00</td>
 <td align="left">0.00</td>
 </tr>
 <tr class="even">
@@ -454,7 +455,7 @@
 <td align="left">iv_defiers</td>
 <td align="left">late_het</td>
 <td align="left">lm_robust</td>
-<td align="left">-0.00</td>
+<td align="left">0.00</td>
 <td align="left">0.04</td>
 <td align="left">0.00</td>
 </tr>
@@ -464,25 +465,25 @@
 <td align="left">ate</td>
 <td align="left">iv_robust</td>
 <td align="left">0.23</td>
-<td align="left">0.44</td>
 <td align="left">0.40</td>
+<td align="left">0.41</td>
 </tr>
 <tr class="even">
 <td align="left">73</td>
 <td align="left">iv_het</td>
 <td align="left">ate</td>
 <td align="left">lm_robust</td>
-<td align="left">-0.07</td>
-<td align="left">0.36</td>
-<td align="left">0.40</td>
+<td align="left">-0.04</td>
+<td align="left">0.48</td>
+<td align="left">0.41</td>
 </tr>
 <tr class="odd">
 <td align="left">77</td>
 <td align="left">iv_het</td>
 <td align="left">late</td>
 <td align="left">iv_robust</td>
-<td align="left">0.14</td>
-<td align="left">0.44</td>
+<td align="left">0.13</td>
+<td align="left">0.40</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="even">
@@ -490,8 +491,8 @@
 <td align="left">iv_het</td>
 <td align="left">late</td>
 <td align="left">lm_robust</td>
-<td align="left">-0.17</td>
-<td align="left">0.36</td>
+<td align="left">-0.13</td>
+<td align="left">0.48</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="odd">
@@ -500,17 +501,17 @@
 <td align="left">late_het</td>
 <td align="left">iv_robust</td>
 <td align="left">-0.03</td>
-<td align="left">0.44</td>
-<td align="left">0.67</td>
+<td align="left">0.40</td>
+<td align="left">0.66</td>
 </tr>
 <tr class="even">
 <td align="left">83</td>
 <td align="left">iv_het</td>
 <td align="left">late_het</td>
 <td align="left">lm_robust</td>
-<td align="left">-0.34</td>
-<td align="left">0.36</td>
-<td align="left">0.67</td>
+<td align="left">-0.29</td>
+<td align="left">0.48</td>
+<td align="left">0.66</td>
 </tr>
 </tbody>
 </table>
