@@ -190,14 +190,14 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 170.78388 174.65157 191.45651 176.83800 187.66994 314.0666
-##        lm_robust  77.66430  80.07367  84.65060  82.27827  86.28260 120.1134
-##  lm_robust + fes  48.82508  49.72151  55.52504  50.90175  52.78203 232.4603
-##  neval cld
-##     50   c
-##     50  b 
-##     50 a</code></pre>
+##             expr       min        lq     mean   median       uq      max neval
+##  base + sandwich 173.91594 215.42425 469.7420 547.5061 590.2190 977.5824    50
+##        lm_robust  79.92487  87.85236 210.9047 252.2383 280.5041 436.1400    50
+##  lm_robust + fes  50.03680  56.04030 131.6846 155.8409 171.0473 427.2454    50
+##  cld
+##    c
+##   b 
+##  a</code></pre>
 <p>Speed gains are <em>considerably</em> greater with HC1 standard errors. This is because we need to get the hat matrix for HC2, HC3, and CR2 standard errors, which requires inverting that large matrix of dummies we previously avoided doing. HC0, HC1, CR0, and CRstata standard errors do not require this inversion.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># With HC1</span>
@@ -220,10 +220,10 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr       min         lq       mean     median        uq       max
-##  base + sandwich 171.04281 174.881685 193.453053 177.251691 195.77447 319.45973
-##        lm_robust  60.46861  63.268914  68.042026  65.804421  69.10284  93.20753
-##  lm_robust + fes   7.38225   7.775325   9.491716   8.431476  11.86044  15.83793
+##             expr        min         lq      mean    median        uq       max
+##  base + sandwich 174.000242 204.051473 463.74991 543.31915 600.50133 887.93096
+##        lm_robust  62.350250  74.077941 172.53080 199.93929 226.11429 348.13648
+##  lm_robust + fes   8.105464   8.933599  19.28466  18.10445  25.87388  47.92862
 ##  neval cld
 ##     50   c
 ##     50  b 
