@@ -757,10 +757,8 @@ To demonstrate how <code><a href="../reference/complete_ra.html">complete_ra()</
 <span class="co"># Conducting the actual blocking: let's make trios</span>
 <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/blockTools/man/block.html">block</a></span><span class="op">(</span><span class="va">df_forBT</span>, n.tr <span class="op">=</span> <span class="fl">3</span>, id.vars <span class="op">=</span> <span class="st">"id_var"</span>, 
              block.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">df_forBT</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; Warning: `is.tibble()` is deprecated as of tibble 2.0.0.</span>
+<span class="co">#&gt; Warning: `is.tibble()` was deprecated in tibble 2.0.0.</span>
 <span class="co">#&gt; Please use `is_tibble()` instead.</span>
-<span class="co">#&gt; This warning is displayed once every 8 hours.</span>
-<span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span>
 
 <span class="co"># Extact the block_ids</span>
 <span class="va">hec</span><span class="op">$</span><span class="va">block_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/blockTools/man/createBlockIDs.html">createBlockIDs</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">df_forBT</span>, id.var <span class="op">=</span> <span class="st">"id_var"</span><span class="op">)</span>
