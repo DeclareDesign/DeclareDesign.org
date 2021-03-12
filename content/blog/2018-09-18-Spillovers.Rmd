@@ -66,19 +66,18 @@ model <- declare_model(G = add_level(N = N_groups,
 
 dgp <- function(i, Z, G, n) (sum(Z[G == G[i]])/n[i])^gamma + rnorm(1,0,sd_i)
 
-estimand <- declare_inquiry(Treat_one = mean(
+inquiry <- declare_inquiry(Treat_one = mean(
                  sapply(I, function(i) dgp(i, I==i, G, n) - dgp(i, zeros, G, n))
                  ))
 
 assign    <- declare_assignment(prob = .5)
 
-reveal_Y  <- declare_reveal(Y = sapply(1:N, function(i) dgp(i, Z, G, n)),
-                           handler = fabricate)
+measurement  <- declare_measurement(Y = sapply(1:N, function(i) dgp(i, Z, G, n)))
 
 estimator <- declare_estimator(Y ~ Z,  model = lm_robust,
-                               label = "naive", estimand = "Treat_one")
+                               label = "naive", inquiry = "Treat_one")
 
-spillover_design <- population + estimand + assign + reveal_Y + estimator
+spillover_design <- model + inquiry + assign + measurement + estimator
 ```
 
 The most complex part of this design declaration involves the specification of the estimand. We define a helper function, `dgp`, which reports an individual's outcome given the full treatment assignment vector. We then apply that function to each unit separately and take the average.

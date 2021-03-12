@@ -42,16 +42,16 @@ N <- 40
 
 # Declaration
 model <- declare_model(N = N, U_1 = rnorm(N), U_2 = rnorm(N),
-                                 X = U_1 + U_2, Z  = 1 * (U_2 > 0))
-potentials <- declare_potential_outcomes(Y ~ b * Z + U_1)
-estimand   <- declare_inquiry(ate = mean(Y_Z_1 - Y_Z_0))
-reveal_Y   <- declare_reveal()
-answer_1   <- declare_estimator(Y ~ Z, estimand = "ate",
-                                model = lm_robust, label = "No control")
-answer_2   <- declare_estimator(Y ~ Z + X, estimand = "ate",
-                                model = lm_robust, label = "With control")
+                       X = U_1 + U_2, Z  = 1 * (U_2 > 0),
+                       potential_outcomes(Y ~ b * Z + U_1))
+inquiry     <- declare_inquiry(ate = mean(Y_Z_1 - Y_Z_0))
+measurement <- declare_measurement(Y = reveal_outcomes(Y ~ Z))
+answer_1    <- declare_estimator(Y ~ Z, inquiry = "ate",
+                                 model = lm_robust, label = "No control")
+answer_2    <- declare_estimator(Y ~ Z + X, inquiry = "ate",
+                                 model = lm_robust, label = "With control")
 
-design <- population + potentials + estimand + reveal_Y + answer_1 + answer_2
+design <- model + inquiry + measurement + answer_1 + answer_2
 ```
 
 

@@ -43,11 +43,9 @@ big_data_design <-
     N = N,                # sample size -- we will allow this to grow
     u = rnorm(N),         # unobserved heterogeneity affects outcome and assignment
     e = rnorm(N, sd = 4), # idiosyncratic error
-    Z = rbinom(N, size = 1, prob = pnorm(u)) # treatment assignment depends on u
-    ) +
-  
-  # outcomes depend on U and e (but not Z!)
-  declare_potential_outcomes(Y ~ u + e) +
+    Z = rbinom(N, size = 1, prob = pnorm(u)), # treatment assignment depends on u
+    potential_outcomes(Y ~ u + e) # outcomes depend on U and e (but not Z!)
+  ) +
   
   # reveal outcomes on the basis of realized treatment
   declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
@@ -56,10 +54,11 @@ big_data_design <-
   declare_inquiry(ATE = 0) +
   
   # use difference-in-means to estimate effect
-  declare_estimator(Y ~ Z, model = difference_in_means, estimand = "ATE")
+  declare_estimator(Y ~ Z, model = difference_in_means, inquiry = "ATE")
 
 # we want to know about bias and power
-diags <- declare_diagnosands(select = c("bias", "power"))
+diags <- declare_diagnosands(bias = mean(estimate - estimand),
+                             power = mean(p.value <= 0.05))
 
 ```
 
@@ -77,7 +76,7 @@ diagnosis <- diagnose_design(designs, diagnosands = diags)
 
 ```{r, eval = do_diagnosis, echo = FALSE, warning = FALSE}
 diagnosis <- diagnose_design(designs, diagnosands = diags, sims = sims, bootstrap_sims = FALSE)
-write_rds(diagnosis, path = "rfiles/7_bias_sample_size.rds")
+write_rds(diagnosis, file = "rfiles/7_bias_sample_size.rds")
 ```
 
 ```{r, echo = FALSE, eval = TRUE}

@@ -39,9 +39,9 @@ Here is an illustration. Unlike most other designs we have looked at, in this de
 ```{r}
 N <- 50
 design <- 
-  declare_model(N = N, b = runif(1, min = 0, max = 1), u = runif(N, min = 0, max = 1)) +
-  declare_assignment(prob = .5) +
-  declare_potential_outcomes(Y ~ (u < b)*Z + (u > (1 + b)/2)) + 
+  declare_model(N = N, b = runif(1, min = 0, max = 1), u = runif(N, min = 0, max = 1),
+                potential_outcomes(Y ~ (u < b)*Z + (u > (1 + b)/2))) +
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) +
   declare_inquiry(ATE = b[1]) +
   declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   declare_estimator(Y ~ Z)

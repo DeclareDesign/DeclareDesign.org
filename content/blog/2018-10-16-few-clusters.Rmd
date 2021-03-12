@@ -57,29 +57,31 @@ cluster_design <-
   
     declare_model(
       clusters = add_level(N = N_clusters,   u_c = rnorm(N, sd = .707)),
-      units    = add_level(N = cluster_size, u_i = rnorm(N, sd = .707))) +
-      
-    declare_potential_outcomes(Y ~ u_i + u_c) +
+      units    = add_level(
+        N = cluster_size, 
+        u_i = rnorm(N, sd = .707),
+        potential_outcomes(Y ~ u_i + u_c))
+    ) +
       
     declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0)) +
       
     # cluster assignment
-    declare_assignment(clusters = clusters, prob = 0.5) +
+    declare_assignment(Z = cluster_ra(clusters = clusters), legacy = FALSE) +
       
     declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
       
     # analysis, with different approaches to clustering
     declare_estimator(Y ~ Z, model = lm_robust,  
-                        estimand = "ATE", label = "1: Naive") + 
+                        inquiry = "ATE", label = "1: Naive") + 
 
     declare_estimator(Y ~ Z, model = lm_robust, clusters = clusters, 
-                        se_type = "stata", estimand = "ATE", label = "2: stata") +
+                        se_type = "stata", inquiry = "ATE", label = "2: stata") +
       
     declare_estimator(Y ~ Z, model = lm_robust, clusters = clusters, 
-                        se_type = "CR0", estimand = "ATE", label = "3: CR0") +
+                        se_type = "CR0", inquiry = "ATE", label = "3: CR0") +
 
     declare_estimator(Y ~ Z, model = lm_robust, clusters = clusters, 
-                        se_type = "CR2", estimand = "ATE", label = "4: CR2")
+                        se_type = "CR2", inquiry = "ATE", label = "4: CR2")
 
 ```
 

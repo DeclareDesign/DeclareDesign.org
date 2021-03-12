@@ -34,21 +34,20 @@ Here is an illustration of a two-arm trial with 40 units in which 20 units are a
 N = 40
 
 # Model
-model <- declare_model(N, W = rep(0:1, N / 2), u = rnorm(N))  
-potentials <- declare_potential_outcomes(Y ~ 2 * Z * W + u)
+model <- declare_model(N, W = rep(0:1, N / 2), u = rnorm(N), potential_outcomes(Y ~ 2 * Z * W + u))  
 
 # Inquiry
-estimand   <- declare_inquiry(ate = 1)  
+inquiry     <- declare_inquiry(ate = 1)  
 
 # Data strategy
-assignment <- declare_assignment(assignment_variable = "Z", blocks = W)
-reveal     <- declare_measurement(Y = reveal_outcomes(Y ~ Z))
+assignment   <- declare_assignment(assignment_variable = "Z", blocks = W)
+measurement  <- declare_measurement(Y = reveal_outcomes(Y ~ Z))
 
 # Answer strategy
 estimator  <- declare_estimator(Y ~ Z, estimand = "ate", label = "Simple D-I-M")
 
 # Declare the design
-design <- population + potentials + estimand + assignment + reveal + estimator
+design <- model + inquiry + assignment + measurement + estimator
 ```
 
 Under this data generating process, the treatment interacts quite strongly with $W$. The average effect of treatment is 1, but the **conditional** average treatment effects are 0 and 2 for the two levels of $W$. The difference-in-means analysis strategy for this design is equivalent to an OLS regression of the outcome on the treatment with no control variables included. Because of random assignment, this procedure is of course unbiased, but it leaves money on the table in the sense that we could achieve higher statistical power if we included information about $W$ in some way. Here is the power of the difference-in-means answer strategy:
@@ -77,9 +76,9 @@ Here is the expanded design and the diagnosis:
 ```{r}
 new_design <- design +
               declare_estimator(Y ~ Z + W,  model = lm_robust,
-                                estimand = "ate", label = "OLS: Control for W") +
+                                inquiry = "ate", label = "OLS: Control for W") +
               declare_estimator(Y ~ Z, covariates = ~ W, model = lm_lin,
-                                estimand = "ate", label = "Lin: Control + Interaction")
+                                inquiry = "ate", label = "Lin: Control + Interaction")
 ```
 
 
