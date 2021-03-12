@@ -147,13 +147,13 @@
     <span class="op">(</span><span class="va">outcome_means</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">+</span> <span class="va">u_3</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">Z</span> <span class="op">==</span> <span class="st">"3"</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">outcome_means</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">+</span> 
     <span class="va">u_4</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">Z</span> <span class="op">==</span> <span class="st">"4"</span><span class="op">)</span> <span class="op">+</span> <span class="va">u</span>, conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span><span class="op">)</span>, 
     assignment_variables <span class="op">=</span> <span class="va">Z</span><span class="op">)</span>
-<span class="va">estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimand.html">declare_estimands</a></span><span class="op">(</span>ate_Y_2_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_2</span> <span class="op">-</span> <span class="va">Y_Z_1</span><span class="op">)</span>, ate_Y_3_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_3</span> <span class="op">-</span> 
+<span class="va">estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiries</a></span><span class="op">(</span>ate_Y_2_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_2</span> <span class="op">-</span> <span class="va">Y_Z_1</span><span class="op">)</span>, ate_Y_3_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_3</span> <span class="op">-</span> 
     <span class="va">Y_Z_1</span><span class="op">)</span>, ate_Y_4_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_4</span> <span class="op">-</span> <span class="va">Y_Z_1</span><span class="op">)</span>, ate_Y_3_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_3</span> <span class="op">-</span> 
     <span class="va">Y_Z_2</span><span class="op">)</span>, ate_Y_4_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_4</span> <span class="op">-</span> <span class="va">Y_Z_2</span><span class="op">)</span>, ate_Y_4_3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_4</span> <span class="op">-</span> 
     <span class="va">Y_Z_3</span><span class="op">)</span><span class="op">)</span>
 <span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>num_arms <span class="op">=</span> <span class="fl">4</span>, conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, 
 <span class="st">"4"</span><span class="op">)</span>, assignment_variable <span class="op">=</span> <span class="va">Z</span><span class="op">)</span>
-<span class="va">reveal_Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reveal_outcomes.html">declare_reveal</a></span><span class="op">(</span>assignment_variables <span class="op">=</span> <span class="va">Z</span><span class="op">)</span>
+<span class="va">reveal_Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span>assignment_variables <span class="op">=</span> <span class="va">Z</span><span class="op">)</span>
 <span class="va">estimator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">estimates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind.data.frame</a></span><span class="op">(</span>ate_Y_2_1 <span class="op">=</span> <span class="fu">difference_in_means</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> 
         <span class="va">Z</span>, data <span class="op">=</span> <span class="va">data</span>, condition1 <span class="op">=</span> <span class="st">"1"</span>, condition2 <span class="op">=</span> <span class="st">"2"</span><span class="op">)</span>, 
@@ -169,7 +169,7 @@
     <span class="va">estimates</span><span class="op">$</span><span class="va">estimator_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"DIM (Z_2 - Z_1)"</span>, <span class="st">"DIM (Z_3 - Z_1)"</span>, 
     <span class="st">"DIM (Z_4 - Z_1)"</span>, <span class="st">"DIM (Z_3 - Z_2)"</span>, <span class="st">"DIM (Z_4 - Z_2)"</span>, 
     <span class="st">"DIM (Z_4 - Z_3)"</span><span class="op">)</span>
-    <span class="va">estimates</span><span class="op">$</span><span class="va">estimand_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">estimates</span><span class="op">)</span>
+    <span class="va">estimates</span><span class="op">$</span><span class="va">inquiry_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">estimates</span><span class="op">)</span>
     <span class="va">estimates</span><span class="op">$</span><span class="va">estimate</span> <span class="op">&lt;-</span> <span class="va">estimates</span><span class="op">$</span><span class="va">coefficients</span>
     <span class="va">estimates</span><span class="op">$</span><span class="va">term</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">estimates</span><span class="op">)</span>
@@ -190,91 +190,91 @@
 <th align="left">Power</th>
 <th align="left">Coverage</th>
 <th align="left">Mean Estimate</th>
-<th align="left">Mean Estimand</th>
+<th align="left">Mean Inquiry</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">0.14</td>
-<td align="left">0.28</td>
-<td align="left">0.92</td>
-<td align="left">0.64</td>
+<td align="left">-0.07</td>
+<td align="left">0.12</td>
+<td align="left">1.00</td>
+<td align="left">0.43</td>
 <td align="left">0.50</td>
 </tr>
 <tr class="even">
-<td align="left">(0.10)</td>
 <td align="left">(0.08)</td>
-<td align="left">(0.05)</td>
+<td align="left">(0.06)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.08)</td>
+<td align="left">(0.00)</td>
+</tr>
+<tr class="odd">
+<td align="left">-0.07</td>
+<td align="left">0.64</td>
+<td align="left">0.96</td>
+<td align="left">1.43</td>
+<td align="left">1.50</td>
+</tr>
+<tr class="even">
+<td align="left">(0.10)</td>
+<td align="left">(0.10)</td>
+<td align="left">(0.04)</td>
 <td align="left">(0.10)</td>
 <td align="left">(0.00)</td>
 </tr>
 <tr class="odd">
 <td align="left">-0.00</td>
-<td align="left">0.68</td>
-<td align="left">0.96</td>
-<td align="left">1.50</td>
-<td align="left">1.50</td>
-</tr>
-<tr class="even">
-<td align="left">(0.10)</td>
-<td align="left">(0.09)</td>
-<td align="left">(0.04)</td>
-<td align="left">(0.10)</td>
-<td align="left">(0.00)</td>
-</tr>
-<tr class="odd">
-<td align="left">-0.14</td>
-<td align="left">0.32</td>
+<td align="left">0.36</td>
 <td align="left">1.00</td>
-<td align="left">0.86</td>
+<td align="left">1.00</td>
 <td align="left">1.00</td>
 </tr>
 <tr class="even">
 <td align="left">(0.07)</td>
-<td align="left">(0.09)</td>
+<td align="left">(0.10)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.07)</td>
 <td align="left">(0.00)</td>
 </tr>
 <tr class="odd">
-<td align="left">0.11</td>
-<td align="left">0.04</td>
-<td align="left">0.96</td>
-<td align="left">0.11</td>
+<td align="left">-0.07</td>
+<td align="left">0.00</td>
+<td align="left">1.00</td>
+<td align="left">-0.07</td>
 <td align="left">0.00</td>
 </tr>
 <tr class="even">
-<td align="left">(0.10)</td>
-<td align="left">(0.04)</td>
-<td align="left">(0.04)</td>
-<td align="left">(0.10)</td>
+<td align="left">(0.08)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.08)</td>
 <td align="left">(0.00)</td>
 </tr>
 <tr class="odd">
-<td align="left">-0.03</td>
-<td align="left">0.20</td>
+<td align="left">-0.00</td>
+<td align="left">0.08</td>
 <td align="left">1.00</td>
-<td align="left">-0.53</td>
+<td align="left">-0.50</td>
 <td align="left">-0.50</td>
 </tr>
 <tr class="even">
 <td align="left">(0.09)</td>
-<td align="left">(0.09)</td>
+<td align="left">(0.06)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.09)</td>
 <td align="left">(0.00)</td>
 </tr>
 <tr class="odd">
-<td align="left">0.11</td>
-<td align="left">0.68</td>
+<td align="left">0.00</td>
+<td align="left">0.64</td>
 <td align="left">1.00</td>
-<td align="left">-1.39</td>
+<td align="left">-1.50</td>
 <td align="left">-1.50</td>
 </tr>
 <tr class="even">
-<td align="left">(0.06)</td>
-<td align="left">(0.09)</td>
+<td align="left">(0.11)</td>
+<td align="left">(0.10)</td>
 <td align="left">(0.00)</td>
-<td align="left">(0.06)</td>
+<td align="left">(0.11)</td>
 <td align="left">(0.00)</td>
 </tr>
 </tbody>

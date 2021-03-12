@@ -170,7 +170,7 @@
                <span class="va">fit</span>, 
                df <span class="op">=</span> <span class="cn">NA</span>, 
                outcome <span class="op">=</span> <span class="st">"YA"</span>,
-               estimand_label <span class="op">=</span> <span class="st">"ate_YA"</span><span class="op">)</span>
+               inquiry_label <span class="op">=</span> <span class="st">"ate_YA"</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
   <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">term</span> <span class="op">==</span> <span class="st">"eq1_ZA"</span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
@@ -187,15 +187,15 @@
   <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span><span class="va">YB</span> <span class="op">~</span> <span class="va">YB_0</span> <span class="op">+</span> <span class="va">ZB</span> <span class="op">*</span> <span class="va">tau_B</span>,
                              assignment_variable <span class="op">=</span> <span class="st">"ZB"</span><span class="op">)</span> <span class="op">+</span>
   <span class="co"># Inquiry</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimand.html">declare_estimand</a></span><span class="op">(</span>ate_YA <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">YA_ZA_1</span> <span class="op">-</span> <span class="va">YA_ZA_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>ate_YA <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">YA_ZA_1</span> <span class="op">-</span> <span class="va">YA_ZA_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="co"># Data Strategy</span>
   <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>m <span class="op">=</span> <span class="fl">50</span>, assignment_variable <span class="op">=</span> <span class="st">"ZA"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>m <span class="op">=</span> <span class="fl">50</span>, assignment_variable <span class="op">=</span> <span class="st">"ZB"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reveal_outcomes.html">declare_reveal</a></span><span class="op">(</span><span class="va">YA</span>,<span class="va">ZA</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reveal_outcomes.html">declare_reveal</a></span><span class="op">(</span><span class="va">YB</span>,<span class="va">ZB</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span><span class="va">YA</span>,<span class="va">ZA</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span><span class="va">YB</span>,<span class="va">ZB</span><span class="op">)</span> <span class="op">+</span>
   <span class="co"># Answer Strategy</span>
   <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">YA</span> <span class="op">~</span> <span class="va">ZA</span>, model <span class="op">=</span> <span class="va">lm_robust</span>, 
-                    estimand <span class="op">=</span> <span class="st">"ate_YA"</span>, label <span class="op">=</span> <span class="st">"lm_robust"</span><span class="op">)</span> <span class="op">+</span>
+                    inquiry <span class="op">=</span> <span class="st">"ate_YA"</span>, label <span class="op">=</span> <span class="st">"lm_robust"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>handler <span class="op">=</span> <span class="va">sur</span><span class="op">)</span> </code></pre></div>
 </div>
 <div id="design-diagnosis" class="section level2">

@@ -170,28 +170,28 @@
 <span class="va">POs_Y_nat_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span>Y_nat1_Z_0 <span class="op">=</span> <span class="va">b</span> <span class="op">*</span> 
     <span class="va">M_Z_1</span> <span class="op">+</span> <span class="va">e2</span>, Y_nat1_Z_1 <span class="op">=</span> <span class="va">d</span> <span class="op">+</span> <span class="va">b</span> <span class="op">*</span> <span class="va">M_Z_1</span> <span class="op">+</span> <span class="va">c</span> <span class="op">*</span> <span class="va">M_Z_1</span> <span class="op">+</span> 
     <span class="va">e2</span><span class="op">)</span>
-<span class="va">estimands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimand.html">declare_estimands</a></span><span class="op">(</span>FirstStage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">M_Z_1</span> <span class="op">-</span> 
+<span class="va">estimands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiries</a></span><span class="op">(</span>FirstStage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">M_Z_1</span> <span class="op">-</span> 
     <span class="va">M_Z_0</span><span class="op">)</span>, Indirect_0 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_M_1_Z_0</span> <span class="op">-</span> <span class="va">Y_M_0_Z_0</span><span class="op">)</span>, Indirect_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_M_1_Z_1</span> <span class="op">-</span> 
     <span class="va">Y_M_0_Z_1</span><span class="op">)</span>, Controlled_Direct_0 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_M_0_Z_1</span> <span class="op">-</span> <span class="va">Y_M_0_Z_0</span><span class="op">)</span>, 
     Controlled_Direct_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_M_1_Z_1</span> <span class="op">-</span> <span class="va">Y_M_1_Z_0</span><span class="op">)</span>, Natural_Direct_0 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_nat0_Z_1</span> <span class="op">-</span> 
         <span class="va">Y_nat0_Z_0</span><span class="op">)</span>, Natural_Direct_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_nat1_Z_1</span> <span class="op">-</span> 
         <span class="va">Y_nat1_Z_0</span><span class="op">)</span><span class="op">)</span>
-<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">reveal_M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reveal_outcomes.html">declare_reveal</a></span><span class="op">(</span><span class="va">M</span>, <span class="va">Z</span><span class="op">)</span>
-<span class="va">reveal_Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reveal_outcomes.html">declare_reveal</a></span><span class="op">(</span><span class="va">Y</span>, assignment_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, 
+<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">reveal_M</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span><span class="va">M</span>, <span class="va">Z</span><span class="op">)</span>
+<span class="va">reveal_Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span><span class="va">Y</span>, assignment_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, 
     <span class="st">"Z"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">reveal_nat0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reveal_outcomes.html">declare_reveal</a></span><span class="op">(</span><span class="va">Y_nat0</span><span class="op">)</span>
-<span class="va">reveal_nat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reveal_outcomes.html">declare_reveal</a></span><span class="op">(</span><span class="va">Y_nat1</span><span class="op">)</span>
+<span class="va">reveal_nat0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span><span class="va">Y_nat0</span><span class="op">)</span>
+<span class="va">reveal_nat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span><span class="va">Y_nat1</span><span class="op">)</span>
 <span class="va">manipulation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_step.html">declare_step</a></span><span class="op">(</span>Not_M <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">M</span>, handler <span class="op">=</span> <span class="va">fabricate</span><span class="op">)</span>
 <span class="va">mediator_regression</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">M</span> <span class="op">~</span> <span class="va">Z</span>, model <span class="op">=</span> <span class="va">lm_robust</span>, 
-    estimand <span class="op">=</span> <span class="st">"FirstStage"</span>, label <span class="op">=</span> <span class="st">"Stage 1"</span><span class="op">)</span>
+    inquiry <span class="op">=</span> <span class="st">"FirstStage"</span>, label <span class="op">=</span> <span class="st">"Stage 1"</span><span class="op">)</span>
 <span class="va">stage2_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span> <span class="op">*</span> <span class="va">M</span>, model <span class="op">=</span> <span class="va">lm_robust</span>, 
-    term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span><span class="op">)</span>, estimand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Indirect_0"</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"Stage 2"</span><span class="op">)</span>
+    term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span><span class="op">)</span>, inquiry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Indirect_0"</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"Stage 2"</span><span class="op">)</span>
 <span class="va">stage2_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span> <span class="op">*</span> <span class="va">M</span>, model <span class="op">=</span> <span class="va">lm_robust</span>, 
-    term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Z"</span><span class="op">)</span>, estimand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Controlled_Direct_0"</span>, <span class="st">"Natural_Direct_0"</span><span class="op">)</span>, 
+    term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Z"</span><span class="op">)</span>, inquiry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Controlled_Direct_0"</span>, <span class="st">"Natural_Direct_0"</span><span class="op">)</span>, 
     label <span class="op">=</span> <span class="st">"Direct_0"</span><span class="op">)</span>
 <span class="va">stage2_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span> <span class="op">*</span> <span class="va">Not_M</span>, model <span class="op">=</span> <span class="va">lm_robust</span>, 
-    term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Z"</span><span class="op">)</span>, estimand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Controlled_Direct_1"</span>, <span class="st">"Natural_Direct_1"</span><span class="op">)</span>, 
+    term <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Z"</span><span class="op">)</span>, inquiry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Controlled_Direct_1"</span>, <span class="st">"Natural_Direct_1"</span><span class="op">)</span>, 
     label <span class="op">=</span> <span class="st">"Direct_1"</span><span class="op">)</span>
 <span class="va">mediation_analysis_design</span> <span class="op">&lt;-</span> <span class="va">population</span> <span class="op">+</span> <span class="va">POs_M</span> <span class="op">+</span> <span class="va">POs_Y</span> <span class="op">+</span> 
     <span class="va">POs_Y_nat_0</span> <span class="op">+</span> <span class="va">POs_Y_nat_1</span> <span class="op">+</span> <span class="va">estimands</span> <span class="op">+</span> <span class="va">assignment</span> <span class="op">+</span> 
@@ -229,7 +229,7 @@
 </colgroup>
 <thead><tr class="header">
 <th align="left">rho</th>
-<th align="left">Estimand Label</th>
+<th align="left">Inquiry Label</th>
 <th align="left">Estimator Label</th>
 <th align="left">Term</th>
 <th align="left">N Sims</th>
@@ -241,7 +241,7 @@
 <th align="left">SD Estimate</th>
 <th align="left">Mean Se</th>
 <th align="left">Type S Rate</th>
-<th align="left">Mean Estimand</th>
+<th align="left">Mean Inquiry</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -251,12 +251,12 @@
 <td align="left">Z</td>
 <td align="left">25</td>
 <td align="left">0.03</td>
-<td align="left">0.30</td>
-<td align="left">0.48</td>
-<td align="left">0.92</td>
+<td align="left">0.23</td>
+<td align="left">0.44</td>
+<td align="left">0.96</td>
 <td align="left">0.53</td>
-<td align="left">0.30</td>
-<td align="left">0.29</td>
+<td align="left">0.23</td>
+<td align="left">0.28</td>
 <td align="left">0.00</td>
 <td align="left">0.50</td>
 </tr>
@@ -266,12 +266,12 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left">(0.05)</td>
 <td align="left">(0.04)</td>
+<td align="left">(0.03)</td>
 <td align="left">(0.10)</td>
-<td align="left">(0.05)</td>
-<td align="left">(0.05)</td>
 <td align="left">(0.04)</td>
+<td align="left">(0.04)</td>
+<td align="left">(0.03)</td>
 <td align="left">(0.01)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
@@ -282,12 +282,12 @@
 <td align="left">Direct_1</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.04</td>
-<td align="left">0.16</td>
+<td align="left">-0.02</td>
+<td align="left">0.18</td>
 <td align="left">0.72</td>
-<td align="left">1.00</td>
-<td align="left">0.46</td>
-<td align="left">0.16</td>
+<td align="left">0.96</td>
+<td align="left">0.48</td>
+<td align="left">0.18</td>
 <td align="left">0.18</td>
 <td align="left">0.00</td>
 <td align="left">0.50</td>
@@ -298,11 +298,11 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
+<td align="left">(0.04)</td>
 <td align="left">(0.02)</td>
-<td align="left">(0.02)</td>
-<td align="left">(0.08)</td>
-<td align="left">(0.00)</td>
-<td align="left">(0.02)</td>
+<td align="left">(0.10)</td>
+<td align="left">(0.04)</td>
+<td align="left">(0.04)</td>
 <td align="left">(0.02)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
@@ -314,15 +314,15 @@
 <td align="left">Stage 1</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">0.02</td>
-<td align="left">0.06</td>
+<td align="left">0.01</td>
+<td align="left">0.04</td>
 <td align="left">1.00</td>
-<td align="left">0.92</td>
-<td align="left">0.37</td>
-<td align="left">0.06</td>
+<td align="left">1.00</td>
+<td align="left">0.33</td>
+<td align="left">0.05</td>
 <td align="left">0.06</td>
 <td align="left">0.00</td>
-<td align="left">0.35</td>
+<td align="left">0.32</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -331,9 +331,9 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.01)</td>
-<td align="left">(0.01)</td>
 <td align="left">(0.00)</td>
-<td align="left">(0.05)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
 <td align="left">(0.01)</td>
 <td align="left">(0.01)</td>
 <td align="left">(0.00)</td>
@@ -346,13 +346,13 @@
 <td align="left">Stage 2</td>
 <td align="left">M</td>
 <td align="left">25</td>
-<td align="left">0.03</td>
-<td align="left">0.19</td>
-<td align="left">0.56</td>
-<td align="left">0.92</td>
-<td align="left">0.43</td>
-<td align="left">0.19</td>
-<td align="left">0.20</td>
+<td align="left">0.02</td>
+<td align="left">0.21</td>
+<td align="left">0.48</td>
+<td align="left">0.96</td>
+<td align="left">0.42</td>
+<td align="left">0.21</td>
+<td align="left">0.21</td>
 <td align="left">0.00</td>
 <td align="left">0.40</td>
 </tr>
@@ -363,9 +363,9 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.04)</td>
+<td align="left">(0.02)</td>
+<td align="left">(0.11)</td>
 <td align="left">(0.03)</td>
-<td align="left">(0.09)</td>
-<td align="left">(0.05)</td>
 <td align="left">(0.04)</td>
 <td align="left">(0.03)</td>
 <td align="left">(0.00)</td>
@@ -411,12 +411,12 @@
 <td align="left">Z</td>
 <td align="left">25</td>
 <td align="left">0.03</td>
-<td align="left">0.30</td>
-<td align="left">0.48</td>
-<td align="left">0.92</td>
+<td align="left">0.23</td>
+<td align="left">0.44</td>
+<td align="left">0.96</td>
 <td align="left">0.53</td>
-<td align="left">0.30</td>
-<td align="left">0.29</td>
+<td align="left">0.23</td>
+<td align="left">0.28</td>
 <td align="left">0.00</td>
 <td align="left">0.50</td>
 </tr>
@@ -426,12 +426,12 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left">(0.05)</td>
 <td align="left">(0.04)</td>
+<td align="left">(0.03)</td>
 <td align="left">(0.10)</td>
-<td align="left">(0.05)</td>
-<td align="left">(0.05)</td>
 <td align="left">(0.04)</td>
+<td align="left">(0.04)</td>
+<td align="left">(0.03)</td>
 <td align="left">(0.01)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
@@ -442,12 +442,12 @@
 <td align="left">Direct_1</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.04</td>
-<td align="left">0.16</td>
+<td align="left">-0.02</td>
+<td align="left">0.18</td>
 <td align="left">0.72</td>
-<td align="left">1.00</td>
-<td align="left">0.46</td>
-<td align="left">0.16</td>
+<td align="left">0.96</td>
+<td align="left">0.48</td>
+<td align="left">0.18</td>
 <td align="left">0.18</td>
 <td align="left">0.00</td>
 <td align="left">0.50</td>
@@ -458,11 +458,11 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
+<td align="left">(0.04)</td>
 <td align="left">(0.02)</td>
-<td align="left">(0.02)</td>
-<td align="left">(0.08)</td>
-<td align="left">(0.00)</td>
-<td align="left">(0.02)</td>
+<td align="left">(0.10)</td>
+<td align="left">(0.04)</td>
+<td align="left">(0.04)</td>
 <td align="left">(0.02)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
@@ -474,13 +474,13 @@
 <td align="left">Direct_0</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.33</td>
-<td align="left">0.41</td>
-<td align="left">0.12</td>
+<td align="left">-0.36</td>
+<td align="left">0.42</td>
+<td align="left">0.08</td>
 <td align="left">0.72</td>
-<td align="left">0.17</td>
-<td align="left">0.25</td>
-<td align="left">0.25</td>
+<td align="left">0.14</td>
+<td align="left">0.22</td>
+<td align="left">0.26</td>
 <td align="left">0.00</td>
 <td align="left">0.50</td>
 </tr>
@@ -491,11 +491,11 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.04)</td>
-<td align="left">(0.04)</td>
-<td align="left">(0.06)</td>
+<td align="left">(0.03)</td>
+<td align="left">(0.05)</td>
 <td align="left">(0.08)</td>
 <td align="left">(0.04)</td>
-<td align="left">(0.03)</td>
+<td align="left">(0.02)</td>
 <td align="left">(0.01)</td>
 <td align="left">NA</td>
 <td align="left">(0.00)</td>
@@ -506,12 +506,12 @@
 <td align="left">Direct_1</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.27</td>
+<td align="left">-0.26</td>
 <td align="left">0.31</td>
+<td align="left">0.32</td>
+<td align="left">0.64</td>
 <td align="left">0.24</td>
-<td align="left">0.60</td>
-<td align="left">0.23</td>
-<td align="left">0.14</td>
+<td align="left">0.17</td>
 <td align="left">0.17</td>
 <td align="left">0.00</td>
 <td align="left">0.50</td>
@@ -522,11 +522,11 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left">(0.02)</td>
-<td align="left">(0.02)</td>
-<td align="left">(0.07)</td>
+<td align="left">(0.03)</td>
+<td align="left">(0.03)</td>
 <td align="left">(0.09)</td>
-<td align="left">(0.02)</td>
+<td align="left">(0.10)</td>
+<td align="left">(0.03)</td>
 <td align="left">(0.02)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
@@ -538,15 +538,15 @@
 <td align="left">Stage 1</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">0.02</td>
-<td align="left">0.06</td>
+<td align="left">0.01</td>
+<td align="left">0.04</td>
 <td align="left">1.00</td>
-<td align="left">0.88</td>
-<td align="left">0.37</td>
-<td align="left">0.06</td>
+<td align="left">1.00</td>
+<td align="left">0.33</td>
+<td align="left">0.05</td>
 <td align="left">0.06</td>
 <td align="left">0.00</td>
-<td align="left">0.35</td>
+<td align="left">0.32</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -555,9 +555,9 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.01)</td>
-<td align="left">(0.01)</td>
 <td align="left">(0.00)</td>
-<td align="left">(0.06)</td>
+<td align="left">(0.00)</td>
+<td align="left">(0.00)</td>
 <td align="left">(0.01)</td>
 <td align="left">(0.01)</td>
 <td align="left">(0.00)</td>
@@ -573,10 +573,10 @@
 <td align="left">0.82</td>
 <td align="left">0.84</td>
 <td align="left">1.00</td>
-<td align="left">0.04</td>
+<td align="left">0.00</td>
 <td align="left">1.22</td>
 <td align="left">0.18</td>
-<td align="left">0.18</td>
+<td align="left">0.19</td>
 <td align="left">0.00</td>
 <td align="left">0.40</td>
 </tr>
@@ -586,12 +586,12 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left">(0.03)</td>
-<td align="left">(0.03)</td>
+<td align="left">(0.04)</td>
+<td align="left">(0.04)</td>
+<td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.04)</td>
-<td align="left">(0.03)</td>
-<td align="left">(0.04)</td>
+<td align="left">(0.02)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
@@ -634,13 +634,13 @@
 <td align="left">Direct_0</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.33</td>
-<td align="left">0.41</td>
-<td align="left">0.12</td>
+<td align="left">-0.36</td>
+<td align="left">0.42</td>
+<td align="left">0.08</td>
 <td align="left">0.72</td>
-<td align="left">0.17</td>
-<td align="left">0.25</td>
-<td align="left">0.25</td>
+<td align="left">0.14</td>
+<td align="left">0.22</td>
+<td align="left">0.26</td>
 <td align="left">0.00</td>
 <td align="left">0.50</td>
 </tr>
@@ -651,11 +651,11 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.04)</td>
-<td align="left">(0.04)</td>
-<td align="left">(0.06)</td>
+<td align="left">(0.03)</td>
+<td align="left">(0.05)</td>
 <td align="left">(0.08)</td>
 <td align="left">(0.04)</td>
-<td align="left">(0.03)</td>
+<td align="left">(0.02)</td>
 <td align="left">(0.01)</td>
 <td align="left">NA</td>
 <td align="left">(0.00)</td>
@@ -666,12 +666,12 @@
 <td align="left">Direct_1</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.27</td>
+<td align="left">-0.26</td>
 <td align="left">0.31</td>
+<td align="left">0.32</td>
+<td align="left">0.64</td>
 <td align="left">0.24</td>
-<td align="left">0.60</td>
-<td align="left">0.23</td>
-<td align="left">0.14</td>
+<td align="left">0.17</td>
 <td align="left">0.17</td>
 <td align="left">0.00</td>
 <td align="left">0.50</td>
@@ -682,11 +682,11 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left">(0.02)</td>
-<td align="left">(0.02)</td>
-<td align="left">(0.07)</td>
+<td align="left">(0.03)</td>
+<td align="left">(0.03)</td>
 <td align="left">(0.09)</td>
-<td align="left">(0.02)</td>
+<td align="left">(0.10)</td>
+<td align="left">(0.03)</td>
 <td align="left">(0.02)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>

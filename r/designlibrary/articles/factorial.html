@@ -147,7 +147,7 @@
     <span class="fl">0</span>, <span class="va">outcome_sds</span><span class="op">[</span><span class="fl">6L</span><span class="op">]</span><span class="op">)</span>, Y_0_1_1 <span class="op">=</span> <span class="va">outcome_means</span><span class="op">[</span><span class="fl">7L</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span>, 
     <span class="fl">0</span>, <span class="va">outcome_sds</span><span class="op">[</span><span class="fl">7L</span><span class="op">]</span><span class="op">)</span>, Y_1_1_1 <span class="op">=</span> <span class="va">outcome_means</span><span class="op">[</span><span class="fl">8L</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span>, 
     <span class="fl">0</span>, <span class="va">outcome_sds</span><span class="op">[</span><span class="fl">8L</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="va">reveal_Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reveal_outcomes.html">declare_reveal</a></span><span class="op">(</span>handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
+<span class="va">reveal_Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span>handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">potential_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html">mapply</a></span><span class="op">(</span><span class="va">paste</span>, <span class="va">data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"T1"</span>, <span class="st">"T2"</span>, <span class="st">"T3"</span>
     <span class="op">)</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, sep <span class="op">=</span> <span class="st">"_"</span>, SIMPLIFY <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
     <span class="va">potential_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">paste</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y"</span>, <span class="va">potential_cols</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span>
@@ -158,7 +158,7 @@
     <span class="va">data</span><span class="op">[</span>, <span class="st">"Y"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">R</span>, <span class="va">C</span><span class="op">)</span><span class="op">]</span>
     <span class="va">data</span>
 <span class="op">}</span><span class="op">)</span>
-<span class="va">estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimand.html">declare_estimand</a></span><span class="op">(</span>Overall_average <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fl">0.125</span> <span class="op">*</span> <span class="va">Y_0_0_0</span> <span class="op">+</span> <span class="fl">0.125</span> <span class="op">*</span> 
+<span class="va">estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>Overall_average <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fl">0.125</span> <span class="op">*</span> <span class="va">Y_0_0_0</span> <span class="op">+</span> <span class="fl">0.125</span> <span class="op">*</span> 
     <span class="va">Y_0_0_1</span> <span class="op">+</span> <span class="fl">0.125</span> <span class="op">*</span> <span class="va">Y_0_1_0</span> <span class="op">+</span> <span class="fl">0.125</span> <span class="op">*</span> <span class="va">Y_0_1_1</span> <span class="op">+</span> <span class="fl">0.125</span> <span class="op">*</span> <span class="va">Y_1_0_0</span> <span class="op">+</span> 
     <span class="fl">0.125</span> <span class="op">*</span> <span class="va">Y_1_0_1</span> <span class="op">+</span> <span class="fl">0.125</span> <span class="op">*</span> <span class="va">Y_1_1_0</span> <span class="op">+</span> <span class="fl">0.125</span> <span class="op">*</span> <span class="va">Y_1_1_1</span><span class="op">)</span>, te_T3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.25</span> <span class="op">*</span> 
     <span class="va">Y_0_0_0</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Y_0_0_1</span> <span class="op">+</span> <span class="op">-</span><span class="fl">0.25</span> <span class="op">*</span> <span class="va">Y_0_1_0</span> <span class="op">+</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Y_0_1_1</span> <span class="op">+</span> 
@@ -190,9 +190,8 @@
     <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">lm_robust</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Y</span> <span class="op">~</span> <span class="va">T1</span> <span class="op">*</span> <span class="va">T2</span> <span class="op">*</span> <span class="va">T3</span>, data <span class="op">=</span> <span class="va">data</span>, 
         weights <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">Z_cond_prob</span><span class="op">)</span>
     <span class="va">estimate_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span>
-    <span class="va">estimate_df</span><span class="op">$</span><span class="va">estimand_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"te_"</span>, <span class="va">estimate_df</span><span class="op">$</span><span class="va">term</span><span class="op">)</span>
-    <span class="va">estimate_df</span><span class="op">$</span><span class="va">estimand_label</span><span class="op">[</span><span class="va">estimate_df</span><span class="op">$</span><span class="va">estimand_label</span> <span class="op">==</span> 
-        <span class="st">"te_(Intercept)"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Overall_average"</span>
+    <span class="va">estimate_df</span><span class="op">$</span><span class="va">inquiry_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"te_"</span>, <span class="va">estimate_df</span><span class="op">$</span><span class="va">term</span><span class="op">)</span>
+    <span class="va">estimate_df</span><span class="op">$</span><span class="va">inquiry_label</span><span class="op">[</span><span class="va">estimate_df</span><span class="op">$</span><span class="va">inquiry_label</span> <span class="op">==</span> <span class="st">"te_(Intercept)"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Overall_average"</span>
     <span class="va">estimate_df</span>
 <span class="op">}</span><span class="op">)</span><span class="op">)</span>
 <span class="va">factorial_design</span> <span class="op">&lt;-</span> <span class="va">population</span> <span class="op">+</span> <span class="va">potential_outcomes</span> <span class="op">+</span> <span class="va">assignment_factors</span> <span class="op">+</span> 
@@ -224,7 +223,7 @@
 </colgroup>
 <thead><tr class="header">
 <th align="left">Design Label</th>
-<th align="left">Estimand Label</th>
+<th align="left">Inquiry Label</th>
 <th align="left">Estimator Label</th>
 <th align="left">Term</th>
 <th align="left">N Sims</th>
@@ -236,7 +235,7 @@
 <th align="left">SD Estimate</th>
 <th align="left">Mean Se</th>
 <th align="left">Type S Rate</th>
-<th align="left">Mean Estimand</th>
+<th align="left">Mean Inquiry</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
