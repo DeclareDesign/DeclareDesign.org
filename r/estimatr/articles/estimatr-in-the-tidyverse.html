@@ -248,7 +248,7 @@
 <col width="11%">
 <col width="10%">
 <col width="9%">
-<col width="9%">
+<col width="10%">
 <col width="9%">
 <col width="10%">
 <col width="10%">
@@ -271,72 +271,72 @@
 <tr class="odd">
 <td align="left">1</td>
 <td align="left">(Intercept)</td>
-<td align="right">54.5247836</td>
-<td align="right">6.2479210</td>
-<td align="right">8.726868</td>
+<td align="right">57.2925935</td>
+<td align="right">4.6394148</td>
+<td align="right">12.3490992</td>
 <td align="right">0.0000000</td>
-<td align="right">41.9329263</td>
-<td align="right">67.1166409</td>
+<td align="right">47.9424673</td>
+<td align="right">66.6427196</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">1</td>
 <td align="left">Catholic</td>
-<td align="right">0.1075978</td>
-<td align="right">0.0377069</td>
-<td align="right">2.853530</td>
-<td align="right">0.0065672</td>
-<td align="right">0.0316045</td>
-<td align="right">0.1835910</td>
+<td align="right">0.1022672</td>
+<td align="right">0.0436542</td>
+<td align="right">2.3426690</td>
+<td align="right">0.0237333</td>
+<td align="right">0.0142881</td>
+<td align="right">0.1902464</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="odd">
 <td align="left">1</td>
 <td align="left">Agriculture</td>
-<td align="right">0.1862099</td>
-<td align="right">0.1150944</td>
-<td align="right">1.617888</td>
-<td align="right">0.1128343</td>
-<td align="right">-0.0457477</td>
-<td align="right">0.4181674</td>
+<td align="right">0.1228516</td>
+<td align="right">0.0839065</td>
+<td align="right">1.4641497</td>
+<td align="right">0.1502616</td>
+<td align="right">-0.0462507</td>
+<td align="right">0.2919540</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
 <td align="left">(Intercept)</td>
-<td align="right">55.5091353</td>
-<td align="right">7.0104492</td>
-<td align="right">7.918057</td>
+<td align="right">61.3048351</td>
+<td align="right">5.9562967</td>
+<td align="right">10.2924415</td>
 <td align="right">0.0000000</td>
-<td align="right">41.3805034</td>
-<td align="right">69.6377672</td>
+<td align="right">49.3007079</td>
+<td align="right">73.3089623</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="odd">
 <td align="left">2</td>
 <td align="left">Catholic</td>
-<td align="right">0.0917396</td>
-<td align="right">0.0438604</td>
-<td align="right">2.091626</td>
-<td align="right">0.0422771</td>
-<td align="right">0.0033447</td>
-<td align="right">0.1801346</td>
+<td align="right">0.1535022</td>
+<td align="right">0.0278530</td>
+<td align="right">5.5111580</td>
+<td align="right">0.0000018</td>
+<td align="right">0.0973682</td>
+<td align="right">0.2096361</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
 <td align="left">Agriculture</td>
-<td align="right">0.2081088</td>
-<td align="right">0.1279946</td>
-<td align="right">1.625919</td>
-<td align="right">0.1111090</td>
-<td align="right">-0.0498473</td>
-<td align="right">0.4660650</td>
+<td align="right">0.0652340</td>
+<td align="right">0.1069434</td>
+<td align="right">0.6099862</td>
+<td align="right">0.5450086</td>
+<td align="right">-0.1502962</td>
+<td align="right">0.2807642</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
@@ -349,10 +349,10 @@
   <span class="fu">summarise</span><span class="op">(</span>boot_se <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   term        boot_se
-## * &lt;chr&gt;         &lt;dbl&gt;
-## 1 (Intercept)  5.06  
-## 2 Agriculture  0.0980
-## 3 Catholic     0.0390</code></pre>
+##   &lt;chr&gt;         &lt;dbl&gt;
+## 1 (Intercept)  5.25  
+## 2 Agriculture  0.0985
+## 3 Catholic     0.0399</code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># To visualize the sampling distribution</span>
 

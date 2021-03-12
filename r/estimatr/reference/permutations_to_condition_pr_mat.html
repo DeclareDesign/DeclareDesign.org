@@ -231,8 +231,8 @@ of</p>
 <span class='va'>z</span> <span class='op'>&lt;-</span> <span class='va'>possible_treats</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>possible_treats</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>]</span>
 <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>possible_treats</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='horvitz_thompson.html'>horvitz_thompson</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>z</span>, condition_pr_mat <span class='op'>=</span> <span class='va'>arb_pr_mat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Estimate Std. Error   t value  Pr(&gt;|t|)   CI Lower  CI Upper DF
-#&gt; z -0.3520341  0.3066356 -1.148054 0.2509464 -0.9530287 0.2489606 NA</div><div class='input'>
+</div><div class='output co'>#&gt;    Estimate Std. Error   t value  Pr(&gt;|t|) CI Lower CI Upper DF
+#&gt; z 0.2434772  0.6767714 0.3597629 0.7190245 -1.08297 1.569925 NA</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

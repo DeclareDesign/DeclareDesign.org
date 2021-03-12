@@ -351,7 +351,8 @@ observations into the estimation that have no missingness on any outcome.</p>
 .</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://declaredesign.org/r/fabricatr'>fabricatr</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://declaredesign.org/r/fabricatr'>fabricatr</a></span><span class='op'>)</span>
 <span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://declaredesign.org/r/fabricatr/reference/fabricate.html'>fabricate</a></span><span class='op'>(</span>
   N <span class='op'>=</span> <span class='fl'>40</span>,
   y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Poisson.html'>rpois</a></span><span class='op'>(</span><span class='va'>N</span>, lambda <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,
@@ -364,10 +365,10 @@ observations into the estimation that have no missingness on any outcome.</p>
 
 <span class='co'># Can tidy() the data in to a data.frame</span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>lmro</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          term   estimate std.error  statistic      p.value  conf.low conf.high
-#&gt; 1 (Intercept)  3.9737898 0.4485498  8.8591939 1.118544e-10  3.064942 4.8826380
-#&gt; 2           x -0.5307197 0.4882497 -1.0869841 2.840745e-01 -1.520008 0.4585682
-#&gt; 3           z  0.2195192 0.9326624  0.2353683 8.152208e-01 -1.670234 2.1092726
+</div><div class='output co'>#&gt;          term   estimate std.error  statistic      p.value   conf.low conf.high
+#&gt; 1 (Intercept)  4.5970879 0.4386909 10.4791036 1.261673e-12  3.7082156 5.4859602
+#&gt; 2           x  0.1735281 0.3813973  0.4549799 6.517822e-01 -0.5992562 0.9463125
+#&gt; 3           z -0.9016607 0.5423749 -1.6624308 1.048766e-01 -2.0006166 0.1972952
 #&gt;   df outcome
 #&gt; 1 37       y
 #&gt; 2 37       y
@@ -381,32 +382,32 @@ observations into the estimation that have no missingness on any outcome.</p>
 #&gt; 
 #&gt; Coefficients:
 #&gt;             Estimate Std. Error t value  Pr(&gt;|t|) CI Lower CI Upper DF
-#&gt; (Intercept)   3.9738     0.4485  8.8592 1.119e-10    3.065   4.8826 37
-#&gt; x            -0.5307     0.4882 -1.0870 2.841e-01   -1.520   0.4586 37
-#&gt; z             0.2195     0.9327  0.2354 8.152e-01   -1.670   2.1093 37
+#&gt; (Intercept)   4.5971     0.4387  10.479 1.262e-12   3.7082   5.4860 37
+#&gt; x             0.1735     0.3814   0.455 6.518e-01  -0.5993   0.9463 37
+#&gt; z            -0.9017     0.5424  -1.662 1.049e-01  -2.0006   0.1973 37
 #&gt; 
-#&gt; Multiple R-squared:  0.04158 ,	Adjusted R-squared:  -0.01022 
-#&gt; F-statistic: 0.654 on 2 and 37 DF,  p-value: 0.5259</div><div class='input'><span class='co'># Can also get coefficients three ways</span>
+#&gt; Multiple R-squared:  0.05748 ,	Adjusted R-squared:  0.00653 
+#&gt; F-statistic: 1.453 on 2 and 37 DF,  p-value: 0.2468</div><div class='input'><span class='co'># Can also get coefficients three ways</span>
 <span class='va'>lmro</span><span class='op'>$</span><span class='va'>coefficients</span>
 </div><div class='output co'>#&gt; (Intercept)           x           z 
-#&gt;   3.9737898  -0.5307197   0.2195192 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>lmro</span><span class='op'>)</span>
+#&gt;   4.5970879   0.1735281  -0.9016607 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>lmro</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; (Intercept)           x           z 
-#&gt;   3.9737898  -0.5307197   0.2195192 </div><div class='input'><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>lmro</span><span class='op'>)</span><span class='op'>$</span><span class='va'>estimate</span>
-</div><div class='output co'>#&gt; [1]  3.9737898 -0.5307197  0.2195192</div><div class='input'><span class='co'># Can also get confidence intervals from object or with new 1 - `alpha`</span>
+#&gt;   4.5970879   0.1735281  -0.9016607 </div><div class='input'><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>lmro</span><span class='op'>)</span><span class='op'>$</span><span class='va'>estimate</span>
+</div><div class='output co'>#&gt; [1]  4.5970879  0.1735281 -0.9016607</div><div class='input'><span class='co'># Can also get confidence intervals from object or with new 1 - `alpha`</span>
 <span class='va'>lmro</span><span class='op'>$</span><span class='va'>conf.low</span>
 </div><div class='output co'>#&gt; (Intercept)           x           z 
-#&gt;    3.064942   -1.520008   -1.670234 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>lmro</span>, level <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                   10 %      90 %
-#&gt; (Intercept)  3.3884976 4.5590820
-#&gt; x           -1.1678144 0.1063751
-#&gt; z           -0.9974694 1.4365078</div><div class='input'>
+#&gt;   3.7082156  -0.5992562  -2.0006166 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>lmro</span>, level <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                   10 %       90 %
+#&gt; (Intercept)  4.0246601  5.1695157
+#&gt; x           -0.3241398  0.6711961
+#&gt; z           -1.6093809 -0.1939405</div><div class='input'>
 <span class='co'># Can recover classical standard errors</span>
 <span class='va'>lmclassic</span> <span class='op'>&lt;-</span> <span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span>, data <span class='op'>=</span> <span class='va'>dat</span>, se_type <span class='op'>=</span> <span class='st'>"classical"</span><span class='op'>)</span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>lmclassic</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          term   estimate std.error  statistic      p.value  conf.low conf.high
-#&gt; 1 (Intercept)  3.9737898 0.4908831  8.0951850 1.039569e-09  2.979166 4.9684135
-#&gt; 2           x -0.5307197 0.4368420 -1.2149007 2.321003e-01 -1.415846 0.3544063
-#&gt; 3           z  0.2195192 0.8975742  0.2445694 8.081411e-01 -1.599139 2.0381773
+</div><div class='output co'>#&gt;          term   estimate std.error  statistic      p.value   conf.low conf.high
+#&gt; 1 (Intercept)  4.5970879 0.3802497 12.0896557 2.044110e-14  3.8266288 5.3675470
+#&gt; 2           x  0.1735281 0.3380391  0.5133374 6.107671e-01 -0.5114042 0.8584604
+#&gt; 3           z -0.9016607 0.6184263 -1.4579922 1.532792e-01 -2.1547114 0.3513900
 #&gt;   df outcome
 #&gt; 1 37       y
 #&gt; 2 37       y
@@ -414,10 +415,10 @@ observations into the estimation that have no missingness on any outcome.</p>
 <span class='co'># Can easily match Stata's robust standard errors</span>
 <span class='va'>lmstata</span> <span class='op'>&lt;-</span> <span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span>, data <span class='op'>=</span> <span class='va'>dat</span>, se_type <span class='op'>=</span> <span class='st'>"stata"</span><span class='op'>)</span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>lmstata</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          term   estimate std.error  statistic      p.value  conf.low conf.high
-#&gt; 1 (Intercept)  3.9737898 0.4517381  8.7966665 1.338896e-10  3.058481 4.8890982
-#&gt; 2           x -0.5307197 0.4798608 -1.1059867 2.758718e-01 -1.503010 0.4415707
-#&gt; 3           z  0.2195192 0.9172312  0.2393281 8.121720e-01 -1.638968 2.0780060
+</div><div class='output co'>#&gt;          term   estimate std.error  statistic      p.value   conf.low conf.high
+#&gt; 1 (Intercept)  4.5970879 0.4398377 10.4517829 1.356971e-12  3.7058921 5.4882837
+#&gt; 2           x  0.1735281 0.3731076  0.4650887 6.445936e-01 -0.5824596 0.9295159
+#&gt; 3           z -0.9016607 0.5377414 -1.6767553 1.020208e-01 -1.9912282 0.1879068
 #&gt;   df outcome
 #&gt; 1 37       y
 #&gt; 2 37       y
@@ -427,14 +428,14 @@ observations into the estimation that have no missingness on any outcome.</p>
 
 <span class='va'>lmclust</span> <span class='op'>&lt;-</span> <span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span>, data <span class='op'>=</span> <span class='va'>dat</span>, clusters <span class='op'>=</span> <span class='va'>clusterID</span><span class='op'>)</span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>lmclust</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          term   estimate std.error  statistic      p.value  conf.low conf.high
-#&gt; 1 (Intercept)  3.9737898 0.6045112  6.5735587 0.0004326423  2.520725 5.4268549
-#&gt; 2           x -0.5307197 0.3732881 -1.4217430 0.2009822588 -1.426117 0.3646777
-#&gt; 3           z  0.2195192 0.7957097  0.2758785 0.7913574413 -1.699550 2.1385881
-#&gt;         df outcome
-#&gt; 1 6.479238       y
-#&gt; 2 6.541055       y
-#&gt; 3 6.382863       y</div><div class='input'>
+</div><div class='output co'>#&gt;          term   estimate std.error  statistic      p.value   conf.low
+#&gt; 1 (Intercept)  4.5970879 0.3915230 11.7415521 7.616489e-05  3.5922426
+#&gt; 2           x  0.1735281 0.3018399  0.5749012 5.896636e-01 -0.5966033
+#&gt; 3           z -0.9016607 0.4089681 -2.2047214 6.507872e-02 -1.8780217
+#&gt;    conf.high       df outcome
+#&gt; 1 5.60193322 5.026547       y
+#&gt; 2 0.94365951 5.127624       y
+#&gt; 3 0.07470026 6.685305       y</div><div class='input'>
 <span class='co'># Can also match Stata's clustered standard errors</span>
 <span class='fu'>lm_robust</span><span class='op'>(</span>
   <span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span>,
@@ -442,28 +443,32 @@ observations into the estimation that have no missingness on any outcome.</p>
   clusters <span class='op'>=</span> <span class='va'>clusterID</span>,
   se_type <span class='op'>=</span> <span class='st'>"stata"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt;               Estimate Std. Error    t value    Pr(&gt;|t|)  CI Lower  CI Upper DF
-#&gt; (Intercept)  3.9737898  0.6145043  6.4666589 0.000115865  2.583684 5.3638951  9
-#&gt; x           -0.5307197  0.3689754 -1.4383606 0.184182152 -1.365400 0.3039607  9
-#&gt; z            0.2195192  0.7855876  0.2794331 0.786227898 -1.557603 1.9966418  9</div><div class='input'>
+</div><div class='output co'>#&gt;               Estimate Std. Error    t value     Pr(&gt;|t|)   CI Lower   CI Upper
+#&gt; (Intercept)  4.5970879  0.3942711 11.6597139 2.668545e-06  3.6878972 5.50627862
+#&gt; x            0.1735281  0.3017859  0.5750041 5.810951e-01 -0.5223914 0.86944760
+#&gt; z           -0.9016607  0.4204547 -2.1444897 6.432503e-02 -1.8712309 0.06790948
+#&gt;             DF
+#&gt; (Intercept)  8
+#&gt; x            8
+#&gt; z            8</div><div class='input'>
 <span class='co'># Works just as LM does with functions in the formula</span>
 <span class='va'>dat</span><span class='op'>$</span><span class='va'>blockID</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span><span class='op'>)</span>, each <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 
 <span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>blockID</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>dat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                    Estimate Std. Error    t value     Pr(&gt;|t|)  CI Lower
-#&gt; (Intercept)       4.1595712  0.9428286  4.4117999 9.804957e-05  2.243513
-#&gt; x                -0.5860799  0.5340797 -1.0973641 2.801935e-01 -1.671460
-#&gt; z                 0.3870498  1.0611313  0.3647521 7.175555e-01 -1.769428
-#&gt; factor(blockID)B -0.3962175  1.2706935 -0.3118120 7.570875e-01 -2.978577
-#&gt; factor(blockID)C  0.2792504  1.3812823  0.2021675 8.409906e-01 -2.527853
-#&gt; factor(blockID)D -0.8210846  1.1856909 -0.6924946 4.933297e-01 -3.230698
+</div><div class='output co'>#&gt;                    Estimate Std. Error    t value     Pr(&gt;|t|)   CI Lower
+#&gt; (Intercept)       5.0761464  0.7420501  6.8407062 7.125209e-08  3.5681192
+#&gt; x                 0.1905284  0.3731326  0.5106186 6.129177e-01 -0.5677682
+#&gt; z                -0.6517671  0.5811381 -1.1215355 2.699187e-01 -1.8327818
+#&gt; factor(blockID)B -0.1538306  0.9367502 -0.1642173 8.705325e-01 -2.0575361
+#&gt; factor(blockID)C -1.0519650  0.9520788 -1.1049138 2.769549e-01 -2.9868220
+#&gt; factor(blockID)D -1.0871302  0.8479584 -1.2820561 2.084963e-01 -2.8103891
 #&gt;                   CI Upper DF
-#&gt; (Intercept)      6.0756295 34
-#&gt; x                0.4993006 34
-#&gt; z                2.5435280 34
-#&gt; factor(blockID)B 2.1861423 34
-#&gt; factor(blockID)C 3.0863538 34
-#&gt; factor(blockID)D 1.5885293 34</div><div class='input'>
+#&gt; (Intercept)      6.5841735 34
+#&gt; x                0.9488250 34
+#&gt; z                0.5292477 34
+#&gt; factor(blockID)B 1.7498750 34
+#&gt; factor(blockID)C 0.8828920 34
+#&gt; factor(blockID)D 0.6361286 34</div><div class='input'>
 <span class='co'># Weights are also easily specified</span>
 <span class='va'>dat</span><span class='op'>$</span><span class='va'>w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>40</span><span class='op'>)</span>
 
@@ -473,35 +478,34 @@ observations into the estimation that have no missingness on any outcome.</p>
   weights <span class='op'>=</span> <span class='va'>w</span>,
   clusters <span class='op'>=</span> <span class='va'>clusterID</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt;               Estimate Std. Error    t value     Pr(&gt;|t|)  CI Lower  CI Upper
-#&gt; (Intercept)  4.0120339  0.6209751  6.4608607 0.0004885974  2.517552 5.5065158
-#&gt; x           -0.4938056  0.4225456 -1.1686443 0.2893483806 -1.542660 0.5550485
-#&gt; z            0.3181113  1.0831727  0.2936847 0.7816242950 -2.528463 3.1646859
+</div><div class='output co'>#&gt;               Estimate Std. Error   t value     Pr(&gt;|t|)   CI Lower  CI Upper
+#&gt; (Intercept)  4.5913785  0.4910753  9.349642 0.0003289342  3.3038538 5.8789032
+#&gt; x            0.4028538  0.2133290  1.888416 0.1475001559 -0.2444348 1.0501424
+#&gt; z           -1.0782068  0.5341716 -2.018465 0.1086801430 -2.5205693 0.3641556
 #&gt;                   DF
-#&gt; (Intercept) 6.443394
-#&gt; x           5.666692
-#&gt; z           4.660184</div><div class='input'>
+#&gt; (Intercept) 4.693802
+#&gt; x           3.279816
+#&gt; z           4.306669</div><div class='input'>
 <span class='co'># Subsetting works just as in `lm()`</span>
 <span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span>, data <span class='op'>=</span> <span class='va'>dat</span>, subset <span class='op'>=</span> <span class='va'>z</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;              Estimate Std. Error   t value     Pr(&gt;|t|)  CI Lower  CI Upper DF
-#&gt; (Intercept)  3.972133  0.7444527  5.335641 0.0003302924  2.313389 5.6308765 10
-#&gt; x           -2.601287  1.4320438 -1.816486 0.0993453585 -5.792079 0.5895056 10</div><div class='input'>
+#&gt; (Intercept)  4.026354  0.3785824 10.635346 1.833544e-07  3.201494 4.8512143 12
+#&gt; x           -0.462500  0.3599288 -1.284976 2.230493e-01 -1.246718 0.3217174 12</div><div class='input'>
 <span class='co'># One can also choose to set the significance level for different CIs</span>
 <span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span>, data <span class='op'>=</span> <span class='va'>dat</span>, alpha <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;               Estimate Std. Error    t value     Pr(&gt;|t|)  CI Lower  CI Upper
-#&gt; (Intercept)  3.9737898  0.4485498  8.8591939 1.118544e-10  3.064942 4.8826380
-#&gt; x           -0.5307197  0.4882497 -1.0869841 2.840745e-01 -1.520008 0.4585682
-#&gt; z            0.2195192  0.9326624  0.2353683 8.152208e-01 -1.670234 2.1092726
+</div><div class='output co'>#&gt;               Estimate Std. Error    t value     Pr(&gt;|t|)   CI Lower  CI Upper
+#&gt; (Intercept)  4.5970879  0.4386909 10.4791036 1.261673e-12  3.7082156 5.4859602
+#&gt; x            0.1735281  0.3813973  0.4549799 6.517822e-01 -0.5992562 0.9463125
+#&gt; z           -0.9016607  0.5423749 -1.6624308 1.048766e-01 -2.0006166 0.1972952
 #&gt;             DF
 #&gt; (Intercept) 37
 #&gt; x           37
 #&gt; z           37</div><div class='input'>
 <span class='co'># We can also specify fixed effects</span>
-<span class='co'># Speed gains with fixed effects are greatests with "stata" or "HC1" std.errors</span>
-<span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span>, data <span class='op'>=</span> <span class='va'>dat</span>, fixed_effects <span class='op'>=</span> <span class='op'>~</span> <span class='va'>blockID</span>, se_type <span class='op'>=</span> <span class='st'>"HC1"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   term   estimate std.error  statistic   p.value  conf.low conf.high df outcome
-#&gt; 1    x -0.5860799 0.5156647 -1.1365522 0.2636730 -1.634037 0.4618769 34       y
-#&gt; 2    z  0.3870498 1.0278841  0.3765501 0.7088478 -1.701862 2.4759618 34       y</div><div class='input'>
+<span class='co'># Speed gains with fixed effects are greatest with "stata" or "HC1" std.errors</span>
+<span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>z</span>, data <span class='op'>=</span> <span class='va'>dat</span>, fixed_effects <span class='op'>=</span> <span class='op'>~</span> <span class='va'>blockID</span>, se_type <span class='op'>=</span> <span class='st'>"HC1"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   term   estimate std.error statistic   p.value  conf.low conf.high df outcome
+#&gt; 1    z -0.5857143 0.5551326 -1.055089 0.2986138 -1.712693 0.5412649 35       y</div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># Can also use 'margins' or 'emmeans' package if you have them installed</span>
   <span class='co'># to get marginal effects</span>
