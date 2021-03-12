@@ -78,17 +78,16 @@ This design can be declared formally like this:
 ```{r}
 design <-
 # M: Model ----------------------------------------------------------------
-  declare_population(
+  declare_model(
     N = 500,
     noise = rnorm(N),
     type = sample(1:4, N, replace = TRUE),
     AR = type == 1,
     IUR = type == 2,
     ITR = type == 3,
-    NR = type == 4
-  ) +
-  
-  declare_potential_outcomes(
+    NR = type == 4,
+    
+    # potential outcomes
     # AR and IUR types report in the control condition
     R_Z_0 = AR | IUR,
     # R and ITR types report in the treatment condition
@@ -100,15 +99,16 @@ design <-
   ) +
   
 # I: Inquiry --------------------------------------------------------------
-  declare_estimand(
+  declare_inquiry(
     ATE_R = mean(R_Z_1 - R_Z_0),
     ATE_Y = mean(Y_Z_1 - Y_Z_0),
     CATE_Y_AR = mean(Y_Z_1[AR] - Y_Z_0[AR])
   ) +
   
 # D: Data Strategy --------------------------------------------------------
-  declare_assignment(prob = 0.5) +
-  declare_reveal(outcome_variables = c("R", "Y")) +
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) +
+  declare_measurement(R = reveal_outcomes(R ~ Z),
+                      Y = reveal_outcomes(Y ~ Z)) +
 # Answer Strategy ---------------------------------------------------------
   declare_estimator(R ~ Z, estimand = "ATE_R", label = "DIM_R") +
   declare_estimator(
@@ -132,13 +132,12 @@ simulations <- read_rds("rfiles/22_bad_questions.rds")
 summary_df <- 
   simulations %>%
   group_by(estimand_label) %>%
-  summarize(estimand = mean(estimand), .groups = "drop")
-
+  summarize(estimand = mean(estimand))
 ggplot(simulations, aes(estimate)) +
   geom_histogram(bins = 30) +
   geom_vline(data = summary_df, aes(xintercept = estimand), color = "purple") +
   facet_wrap(~estimand_label)
-kable(reshape_diagnosis(diagnose_design(simulations), select = c("Mean Estimate", "Mean Estimand", "Bias", "Coverage", "Power")))
+kable(reshape_diagnosis(diagnose_design(simulations), select = c("Mean Estimate", "Mean Inquiry", "Bias", "Coverage", "Power")))
 ```
 
 We learn three things from the design diagnosis. 

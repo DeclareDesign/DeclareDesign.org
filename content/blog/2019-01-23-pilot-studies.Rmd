@@ -26,6 +26,9 @@ library(kableExtra)
 set.seed(90405)
 sims <- 1000
 
+library(future)
+plan(multiprocess)
+
 dd_theme <-
   function() {
     theme_bw() +
@@ -80,10 +83,12 @@ sd_estimator <- function(data){
 designer <- 
   function(sample_size = 50, true_effect_size = 0, sd_y = 1) {
   design <- 
-    declare_population(N = sample_size, u = rnorm(N, sd = sd_y)) +
-    declare_potential_outcomes(Y ~ true_effect_size * Z + u) +
-    declare_assignment(m = sample_size / 2) +
-    declare_reveal(Y, Z) +
+    declare_model(
+      N = sample_size, 
+      u = rnorm(N, sd = sd_y),
+      potential_outcomes(Y ~ true_effect_size * Z + u)) +
+    declare_assignment(Z = complete_ra(N), legacy = FALSE) +
+    declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
     declare_estimator(Y ~ Z, model = difference_in_means, label = "dim") +
     declare_estimator(handler = label_estimator(sd_estimator), label = "sd_estimator")
 }

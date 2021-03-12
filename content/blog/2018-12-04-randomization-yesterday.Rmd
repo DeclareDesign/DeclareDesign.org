@@ -75,9 +75,9 @@ We got the job done. How well did the approach do in terms of satisfying various
 Rather than writing code that produces an assignment and dataframe directly it can be useful to write down a *procedure* for generating data and assignment. `DeclareDesign` functions are good for this since these are mostly *functions that make functions*.
 
 ```{r}
-make_data  <- declare_population(school = add_level(N = 20),
-                                 class  = add_level(N = 4))
-assignment <- declare_assignment(blocks = class, prob = .5)
+make_data  <- declare_model(school = add_level(N = 20),
+                            class  = add_level(N = 4))
+assignment <- declare_assignment(Z = block_ra(blocks = class), legacy = FALSE)
 ```
 
 With these functions (`make_data()` and `assignment()` are functions!) written up, you have both the data structure and the assignment strategy declared. There are many ways now to run these one after another to generate a dataset with assignments. Some examples:
@@ -123,8 +123,9 @@ In general the world is not quite as neat as in the example above. Say in fact o
 We want to incorporate this information in the data fabrication step. The `add_level` functionality in the `fabricate` function is key here for respecting the multilevel nature of the dataset.
 
 ```{r}
-make_data <- declare_population(school = add_level(N = 10),
-                                class  = add_level(N = c(6, 8, 4, 3, 5, 2, 4, 3, 5, 7)))
+make_data <- declare_model(
+  school = add_level(N = 10),
+  class  = add_level(N = c(6, 8, 4, 3, 5, 2, 4, 3, 5, 7)))
 ```
 
 
@@ -139,7 +140,7 @@ Say that you had even richer data about the sampling frame. Then you could use t
 We want to incorporate this information in the data fabrication step. 
 
 ```{r}
-make_data <- declare_population(
+make_data <- declare_model(
     school = add_level(N = 10),
     class = add_level(N = c(6, 8, 4, 3, 5, 2, 4, 3, 5, 7),
                 size = c(

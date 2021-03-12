@@ -19,6 +19,9 @@ library(DesignLibrary)
 library(knitr)
 opts_chunk$set(echo = TRUE)
 
+library(future)
+plan(multiprocess)
+
 sims   <- 200
 b_sims <- 100
 
@@ -47,7 +50,7 @@ hj_dag <- function(x,
                         xlim = c(min(x)-padding, max(x)+padding),
                         ylim = c(min(y)-padding-add_functions, max(y)+padding),
                         main = title)
-
+  
   arrows(x[arcs[,1]]*(1-contraction) + x[arcs[,2]]*contraction,
          y[arcs[,1]]*(1-contraction) + y[arcs[,2]]*contraction,
          x[arcs[,2]]*(1-contraction) + x[arcs[,1]]*contraction,
@@ -102,52 +105,45 @@ path_weight   <- .5  # what fraction of compliers are U1 compliers?
 design <-
   
   # U2 is the compliance "type" (U1 complier, Z complier, or Never Taker)
-  declare_population(N = 2000, 
-                     U2 = complete_ra(
-                             N, 
-                             prob_each = c(path_weight * 0.6, (1 - path_weight) * 0.6, 0.4), 
-                             conditions = c("U1_c", "Z_c", "NT")),
-                     noise = rnorm(N)) +
+  declare_model(
+    N = 2000, 
+    # U1 is binary
+    U1 = complete_ra(N),
+    U2 = complete_ra(
+      N, 
+      prob_each = c(path_weight * 0.6, (1 - path_weight) * 0.6, 0.4), 
+      conditions = c("U1_c", "Z_c", "NT")),
+    noise = rnorm(N),
+    # X potential outcomes in terms of U1 and Z, given U2 (there are **four**)
+    potential_outcomes(X ~ as.numeric((U2 == "U1_c") * U1 +
+                                        (U2 == "Z_c")  * Z),
+                       conditions = list(U1 = c(0, 1), Z = c(0, 1))),
+    # X potential outcomes in terms of Z given U1 and U2 (there are **two**)
+    potential_outcomes(X ~ as.numeric((U2 == "U1_c") * U1 +
+                                        (U2 == "Z_c")  * Z)),
+    # Y potential outcomes in terms of X (there are **two**)
+    potential_outcomes(Y ~ X * (1 + heterogeneity * as.numeric(U2)) + noise, 
+                       conditions = list(X = c(0, 1))),
+    # Y potential outcomes in terms of Z (there are **two**)
+    # this is same as above, but X is written in terms of Z
+    potential_outcomes(Y ~ as.numeric((U2 == "U1_c") * U1 + (U2 == "Z_c") * Z) * 
+                         (1 + heterogeneity * as.numeric(U2)) + noise)) +
   
-  # U1 is binary
-  declare_assignment(prob = 0.5, assignment_variable = "U1") +
-
   # Z is affected by U1: among U1 = 0, Z has probability 0.3; among U1 = 1, probability 0.6
-  declare_assignment(blocks = U1, block_prob = c(0.3, 0.6), assignment_variable = "Z") +
+  declare_assignment(Z = block_ra(blocks = U1, block_prob = c(0.3, 0.6)), legacy = FALSE) +
   
-  # X potential outcomes in terms of U1 and Z, given U2 (there are **four**)
-  declare_potential_outcomes(X ~ as.numeric((U2 == "U1_c") * U1 +
-                                            (U2 == "Z_c")  * Z),
-                             assignment_variables = c(U1, Z)) +
-
-  # X potential outcomes in terms of Z given U1 and U2 (there are **two**)
-  declare_potential_outcomes(X ~ as.numeric((U2 == "U1_c") * U1 +
-                                            (U2 == "Z_c")  * Z),
-                             assignment_variables = Z) +
-  
-  declare_reveal(X, assignment_variables = c(U1, Z)) +
-  
-  # Y potential outcomes in terms of X (there are **two**)
-  declare_potential_outcomes(Y ~ X * (1 + heterogeneity * as.numeric(U2)) + noise, 
-                             assignment_variables = X) +
-  
-  # Y potential outcomes in terms of Z (there are **two**)
-  # this is same as above, but X is written in terms of Z
-  declare_potential_outcomes(Y ~ as.numeric((U2 == "U1_c") * U1 + (U2 == "Z_c") * Z) * 
-                              (1 + heterogeneity * as.numeric(U2)) + noise,
-                              assignment_variables = Z) +
+  declare_measurement(X = reveal_outcomes(X ~ U1 + Z)) +
   
   # reveal Y (doesn't matter "how" this is revealed, either via the X pos or the Z pos)
-  declare_reveal(Y, assignment_variables = X) +
+  declare_measurement(Y = reveal_outcomes(Y ~ X)) +
   
   # Use X POs to learn about the two complier definitions
-  declare_step(
+  declare_measurement(
     U1_complier = X_U1_0_Z_0 == 0 & X_U1_0_Z_1 == 0 & X_U1_1_Z_0 == 1 & X_U1_1_Z_1 == 1,
-    Z_complier  = X_U1_0_Z_0 == 0 & X_U1_1_Z_0 == 0 & X_U1_0_Z_1 == 1 & X_U1_1_Z_1 == 1, 
-    handler = fabricate) +
+    Z_complier  = X_U1_0_Z_0 == 0 & X_U1_1_Z_0 == 0 & X_U1_0_Z_1 == 1 & X_U1_1_Z_1 == 1) +
   
   # 5 (!) estimands
-  declare_estimand(
+  declare_inquiry(
     ATE =         mean(Y_X_1 - Y_X_0),
     LATE_U1 =     mean(Y_X_1[U1_complier] - Y_X_0[U1_complier]),
     LATE_Z =      mean(Y_X_1[Z_complier] - Y_X_0[Z_complier]),
@@ -155,10 +151,10 @@ design <-
     first_stage = mean(X_Z_1) - mean(X_Z_0)) + 
   
   # Three estimators
-  declare_estimator(Y ~ Z, estimand = "ITT", model = lm_robust, label =  "itt") +
-  declare_estimator(X ~ Z, estimand = "first_stage", model = lm_robust, label =  "first") +
-  declare_estimator(Y ~ X | Z, estimand = c("ATE", "LATE_U1", "LATE_Z"), 
-                              model = iv_robust, label =  "iv_robust")
+  declare_estimator(Y ~ Z, inquiry = "ITT", model = lm_robust, label =  "itt") +
+  declare_estimator(X ~ Z, inquiry = "first_stage", model = lm_robust, label =  "first") +
+  declare_estimator(Y ~ X | Z, inquiry = c("ATE", "LATE_U1", "LATE_Z"), 
+                    model = iv_robust, label =  "iv_robust")
 ```
 
 Let's now diagnose this design to show that -- pretty counterintuitively for us at least! -- the IV estimator still recovers the LATE even when $Z$ and $X$ have a common cause.
@@ -171,11 +167,11 @@ diagnosis_1 <-
 
 ```{r, echo = FALSE, warning = FALSE}
 if(do_diagnosis){
-diagnosis_1 <- 
-  diagnose_design(
-    design, 
-    diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
-    sims = sims, bootstrap_sims = b_sims)
+  diagnosis_1 <- 
+    diagnose_design(
+      design, 
+      diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
+      sims = sims, bootstrap_sims = b_sims)
   write_rds(diagnosis_1, path = "rfiles/iv1.rds")
 }
 
@@ -209,13 +205,13 @@ diagnosis_2 <-
 
 ```{r, echo = FALSE, warning = FALSE}
 if(do_diagnosis){
-design_h <- redesign(design, heterogeneity = 1)
-
-diagnosis_2 <- 
-  diagnose_design(
-    design_h, 
-    diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
-    sims = sims, bootstrap_sims = b_sims)
+  design_h <- redesign(design, heterogeneity = 1)
+  
+  diagnosis_2 <- 
+    diagnose_design(
+      design_h, 
+      diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
+      sims = sims, bootstrap_sims = b_sims)
   write_rds(diagnosis_2, path = "rfiles/iv2.rds")
 }
 
@@ -242,18 +238,18 @@ These cases are the two extremes of a continuum of the relative strength of the 
 designs <- redesign(design, heterogeneity = 1, path_weight = seq(0.01, .99, length = 5))
 
 diagnosis_3 <- diagnose_design(
-    designs, diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)))
+  designs, diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)))
 ```
 
 ```{r, echo = FALSE, warning = FALSE}
 library(ggrepel)
 if(do_diagnosis){
-designs <- redesign(design, heterogeneity = 1, path_weight = seq(0.01, .99, length = 5))
-diagnosis_3 <- 
-  diagnose_design(
-    designs, 
-    diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
-    sims = sims, bootstrap_sims = b_sims)
+  designs <- redesign(design, heterogeneity = 1, path_weight = seq(0.01, .99, length = 5))
+  diagnosis_3 <- 
+    diagnose_design(
+      designs, 
+      diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
+      sims = sims, bootstrap_sims = b_sims)
   write_rds(diagnosis_3, path = "rfiles/iv3.rds")
 }
 
@@ -261,7 +257,7 @@ diagnosis_3 <- read_rds("rfiles/iv3.rds")
 
 
 gg_df <- 
-diagnosis_3 %>%
+  diagnosis_3 %>%
   get_diagnosands()
 
 label_df <- gg_df %>% filter(path_weight == 0.5)

@@ -47,26 +47,26 @@ dgp <- function(i, Z, G) Z[i]/3 + sum(Z[G == G[i]])^2/5 + rnorm(1)
 
 spillover_design <- 
 
-  declare_population(G = add_level(N = 80), 
+  declare_model(G = add_level(N = 80), 
                      j = add_level(N = 3, zeros = 0, ones = 1)) +
   
-  declare_estimand(direct = mean(sapply(1:240,  # just i treated v no one treated 
+  declare_inquiry(direct = mean(sapply(1:240,  # just i treated v no one treated 
     function(i) { Z_i <- (1:240) == i
                   dgp(i, Z_i, G) - dgp(i, zeros, G)}))) +
   
-  declare_estimand(indirect = mean(sapply(1:240, 
+  declare_inquiry(indirect = mean(sapply(1:240, 
     function(i) { Z_i <- (1:240) == i           # all but i treated v no one treated   
                   dgp(i, ones - Z_i, G) - dgp(i, zeros, G)}))) +
   
-  declare_assignment() + 
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) + 
   
-  declare_step(handler = fabricate,
-               neighbors_treated = sapply(1:N, function(i) sum(Z[-i][G[-i] == G[i]])),
-               one_neighbor  = as.numeric(neighbors_treated == 1),
-               two_neighbors = as.numeric(neighbors_treated == 2)) +
+  declare_measurement(
+    neighbors_treated = sapply(1:N, function(i) sum(Z[-i][G[-i] == G[i]])),
+    one_neighbor  = as.numeric(neighbors_treated == 1),
+    two_neighbors = as.numeric(neighbors_treated == 2),
+    Y = sapply(1:N, function(i) dgp(i, Z, G))
+  ) +
   
-  declare_reveal(handler = fabricate, Y = sapply(1:N, function(i) dgp(i, Z, G))) +
-
   declare_estimator(Y ~ Z, 
                     estimand = "direct", 
                     model = lm_robust, 
@@ -106,13 +106,13 @@ In this context, where the spillover mechanism is well-understood and captured b
 
 ```{r, eval = do_diagnosis, echo=FALSE}
 diagnosis  <- diagnose_design(spillover_design,  sims = sims)
-write_rds(diagnosis, path = "rfiles/11_model_spillovers_1.rds")
+write_rds(diagnosis, file = "rfiles/11_model_spillovers_1.rds")
 ```
 
 ```{r, echo = FALSE, eval = TRUE}
 diagnosis <- read_rds("rfiles/11_model_spillovers_1.rds")
 get_simulations(diagnosis) %>% 
-  group_by(estimator_label, estimand_label) %>% 
+  group_by(estimator_label, inquiry_label) %>% 
   mutate(
     mean_estimate = mean(estimate),
     mean_estimand = mean(estimand)) %>% 
@@ -122,7 +122,7 @@ get_simulations(diagnosis) %>%
                   ordered = TRUE)) %>%
   ggplot(aes(estimate)) +
   geom_histogram(bins = 30) +
-  facet_wrap( ~ estimand_label + estimator_label) + 
+  facet_wrap( ~ inquiry_label + estimator_label) + 
   
   geom_vline(aes(xintercept = mean_estimate), linetype = "dashed", color = "blue") +
   geom_vline(aes(xintercept = mean_estimand), color = "red") +
@@ -139,7 +139,7 @@ get_diagnosands(diagnosis) %>%
   geom_hline(aes(yintercept = power, color = estimator_label), alpha = .3, linetype = "dashed") +
   scale_y_continuous(labels = scales::percent, breaks = seq(.4,1,.1), limits = c(0.35,1)) +
   geom_point() + 
-  facet_wrap( ~ estimand_label) +
+  facet_wrap( ~ inquiry_label) +
   scale_color_brewer(palette = "Set1", guide = FALSE) +
   theme_bw() + dd_theme
 ```

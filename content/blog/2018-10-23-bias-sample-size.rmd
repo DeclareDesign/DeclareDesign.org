@@ -39,7 +39,7 @@ N <- 100
 
 big_data_design <- 
   
-  declare_population(
+  declare_model(
     N = N,                # sample size -- we will allow this to grow
     u = rnorm(N),         # unobserved heterogeneity affects outcome and assignment
     e = rnorm(N, sd = 4), # idiosyncratic error
@@ -50,10 +50,10 @@ big_data_design <-
   declare_potential_outcomes(Y ~ u + e) +
   
   # reveal outcomes on the basis of realized treatment
-  declare_reveal(Y, Z) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   
   # true effect is 0
-  declare_estimand(ATE = 0) +
+  declare_inquiry(ATE = 0) +
   
   # use difference-in-means to estimate effect
   declare_estimator(Y ~ Z, model = difference_in_means, estimand = "ATE")

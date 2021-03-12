@@ -51,14 +51,14 @@ r <- 0 # correlation between Y0 and Y1
 b <- 0 # average treatment effect
 
 design <- 
-  declare_population(N = 64,
+  declare_model(N = 64,
                      u_0 = rnorm(N),
                      u_1 = rnorm(n = N, mean = r * u_0, sd = sqrt(1 - r^2))) +
   declare_potential_outcomes(Y_Z_0 = u_0, 
                              Y_Z_1 = u_1 + b) +
   declare_sampling(n = 32) +
   declare_assignment(prob = 0.5) +
-  declare_reveal(Y, Z) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   declare_estimator(Y ~ Z)
 ```
 
@@ -68,7 +68,7 @@ Let's start with the bottom level, the sample. If the target is the SATE, that m
 
 To simulate the sampling distribution of the SATE estimator, given a particular sample, we want:
 
-- 1 draw each from the `declare_population()`, `declare_potential_outcomes()`, and `declare_sampling()` steps (together, a single draw of a sample from the population with its potential outcomes)
+- 1 draw each from the `declare_model()`, `declare_potential_outcomes()`, and `declare_sampling()` steps (together, a single draw of a sample from the population with its potential outcomes)
 - A bunch of draws from the `declare_assignment` step (assigning treatment over and over within the fixed sample). For this simulation, we've set `assignment_draws` to 500
 - 1 draw each from the `declare_reveal` and `declare_estimator` steps
 

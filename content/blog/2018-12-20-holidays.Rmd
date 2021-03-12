@@ -16,7 +16,7 @@ library(DeclareDesign)
 library(ggplot2)
 
 pop <-
-  declare_population(
+  declare_model(
     N = 14,
     X = c("H", "A", "P", "P", "Y", " ", 
           "H", "O", "L", "I", "D", "A", "Y", "S"),

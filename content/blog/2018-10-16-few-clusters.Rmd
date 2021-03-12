@@ -55,18 +55,18 @@ cluster_size <- 5
 
 cluster_design <- 
   
-    declare_population(
+    declare_model(
       clusters = add_level(N = N_clusters,   u_c = rnorm(N, sd = .707)),
       units    = add_level(N = cluster_size, u_i = rnorm(N, sd = .707))) +
       
     declare_potential_outcomes(Y ~ u_i + u_c) +
       
-    declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) +
+    declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0)) +
       
     # cluster assignment
     declare_assignment(clusters = clusters, prob = 0.5) +
       
-    declare_reveal(Y, Z) +
+    declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
       
     # analysis, with different approaches to clustering
     declare_estimator(Y ~ Z, model = lm_robust,  

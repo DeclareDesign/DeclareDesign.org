@@ -1,5 +1,4 @@
 ---
-title: "Blog home"
-output:
-  blogdown::html_page
+title: "Blog"
+disable_comments: true
 ---

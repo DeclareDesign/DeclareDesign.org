@@ -34,15 +34,15 @@ Here is an illustration of a two-arm trial with 40 units in which 20 units are a
 N = 40
 
 # Model
-population <- declare_population(N, W = rep(0:1, N / 2), u = rnorm(N))  
+model <- declare_model(N, W = rep(0:1, N / 2), u = rnorm(N))  
 potentials <- declare_potential_outcomes(Y ~ 2 * Z * W + u)
 
 # Inquiry
-estimand   <- declare_estimand(ate = 1)  
+estimand   <- declare_inquiry(ate = 1)  
 
 # Data strategy
 assignment <- declare_assignment(assignment_variable = "Z", blocks = W)
-reveal     <- declare_reveal(Y, Z)
+reveal     <- declare_measurement(Y = reveal_outcomes(Y ~ Z))
 
 # Answer strategy
 estimator  <- declare_estimator(Y ~ Z, estimand = "ate", label = "Simple D-I-M")

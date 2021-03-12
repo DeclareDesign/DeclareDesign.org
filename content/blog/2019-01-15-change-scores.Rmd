@@ -43,21 +43,20 @@ r <- 1   # magnitude of confounding
 
 prepost <- 
   
-  declare_population(N = 100, 
-                     u = rnorm(N) / 2, 
-                     e1 = rnorm(N), 
-                     e2 = rnorm(N), 
-                     Y1 = u + e1) + 
+  declare_model(N = 100, 
+                u = rnorm(N) / 2, 
+                e1 = rnorm(N), 
+                e2 = rnorm(N), 
+                Y1 = u + e1,
+                potential_outcomes(Y2 ~ Z + u + e2)
+  ) + 
   
-  declare_assignment(prob = r * pnorm(u) + (1 - r) * .5, simple = TRUE) +
+  declare_assignment(Z = simple_ra(N, prob = r * pnorm(u) + (1 - r) * .5), legacy = FALSE) +
   
-  declare_potential_outcomes(Y2 ~ Z + u + e2) + 
+  declare_inquiry(ate = mean(Y2_Z_1 - Y2_Z_0)) +
   
-  declare_estimand(ate = mean(Y2_Z_1 - Y2_Z_0)) +
-  
-  declare_reveal(outcome_variables = Y2) +
-  
-  declare_step(D = Y2 - Y1, handler = fabricate) +
+  declare_measurement(Y2 = reveal_outcomes(Y2 ~ Z),
+                      D = Y2 - Y1) +
   
   declare_estimator(Y2 ~ Z, model = lm_robust, estimand = "ate", 
                     label = "Naive") +
@@ -98,21 +97,20 @@ get_diagnosands(diagnosis) %>%
 ```{r, include = FALSE}
 prepost_2 <- 
   
-  declare_population(N = 100, 
-                     u = rnorm(N)/2, 
-                     e1 = rnorm(N), 
-                     e2 = rnorm(N), 
-                     Y1 = u + e1) + 
+  declare_model(N = 100, 
+                u = rnorm(N)/2, 
+                e1 = rnorm(N), 
+                e2 = rnorm(N), 
+                Y1 = u + e1,
+                potential_outcomes(Y2 ~ Z + u + e2)
+  ) + 
   
-  declare_assignment(prob = r * pnorm(u) + (1 - r) * .5, simple = TRUE) +
+  declare_assignment(Z = simple_ra(N, prob = r * pnorm(u) + (1 - r) * .5), legacy = FALSE) +
   
-  declare_potential_outcomes(Y2 ~ Z + u + e2) + 
+  declare_inquiry(ate = mean(Y2_Z_1 - Y2_Z_0)) +
   
-  declare_estimand(ate = mean(Y2_Z_1 - Y2_Z_0)) +
-  
-  declare_reveal(outcome_variables = Y2) +
-  
-  declare_step(D = Y2 - Y1, handler = fabricate) +  # change score
+  declare_measurement(Y2 = reveal_outcomes(Y2 ~ Z),
+                      D = Y2 - Y1) +  # change score
   
   declare_estimator(Y2 ~ Y1 + Z, model = lm_robust, estimand = "ate", 
                     label = "Condition on pretest") 

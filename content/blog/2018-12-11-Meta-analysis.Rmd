@@ -72,7 +72,7 @@ f_metaplus = function(data) with(data,  {
   data.frame(estimate = c(muhat    = metaplus_ests[1],
                           tauhat   = metaplus_ests[2]^.5,
                           prob_pos = 1-pnorm(0, metaplus_ests[1], metaplus_ests[2])))
-                })
+})
 ```
 
 3. For a Bayesian approach we will use the "8 schools model" [@gelman2013bayesian] implemented via [stan](http://mc-stan.org/). See  [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started) for more on stan and this model in particular.  To feed the `stan` model into `declaredesign` we use a handler to generate an analysis step that uses stan. The  handler generates data in the form `stan` wants it in, runs the model, and extracts the quantities we care about. 
@@ -131,22 +131,22 @@ sigma = .5  # Error in studies (assumed the same across studies),
 
 # Design
 metadesign <- 
-  declare_population(N = J, 
-                     true_effects = rnorm(N, mu, tau),
-                     est_effects = rnorm(N, true_effects, sigma),
-                     est_sds = sigma) +
+  declare_model(N = J, 
+                true_effects = rnorm(N, mu, tau),
+                est_effects = rnorm(N, true_effects, sigma),
+                est_sds = sigma) +
 
-  declare_estimand(mu = mu, tau = tau, study_effect = true_effects[1], 
-                   prob_pos  = 1 - pnorm(0, mu, tau))  +
+  declare_inquiry(mu = mu, tau = tau, study_effect = true_effects[1], 
+                  prob_pos  = 1 - pnorm(0, mu, tau))  +
   
   declare_estimator(handler = label_estimator(f_agnostic), label = "Agnostic",
-                   estimand = c("mu", "tau", "study_effect")) + 
-    
+                    estimand = c("mu", "tau", "study_effect")) + 
+  
   declare_estimator(handler = label_estimator(f_metaplus), label = "Metaplus", 
-                   estimand = c("mu", "tau", "prob_pos")) +
+                    estimand = c("mu", "tau", "prob_pos")) +
   
   declare_estimator(handler = label_estimator(f_bayesian), label = "Bayesian",
-                   estimand = c("mu", "tau", "study_effect", "prob_pos"))
+                    estimand = c("mu", "tau", "study_effect", "prob_pos"))
 ```
 
 
@@ -210,10 +210,10 @@ We explore a little by declaring a design in which effects are in fact distribut
 ```{r}
 metadesign_2    <- 
   
-  declare_population(N = J, true_effects = runif(N, 0, 2),
+  declare_model(N = J, true_effects = runif(N, 0, 2),
                      est_effects = rnorm(N, true_effects, sigma), est_sds = sigma) +
 
-  declare_estimand(mu = mu, tau = .577, study_effect = true_effects[1], prob_pos  = 0)  +
+  declare_inquiry(mu = mu, tau = .577, study_effect = true_effects[1], prob_pos  = 0)  +
 
   metadesign[[3]] + metadesign[[4]] + metadesign[[5]] 
 ```

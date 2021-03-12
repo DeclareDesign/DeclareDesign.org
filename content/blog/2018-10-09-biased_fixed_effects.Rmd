@@ -45,7 +45,7 @@ Here's the design declaration:
 
 ```{r}
 # Model ------------------------------------------------------------------------
-U <- declare_population(block = add_level(N = 3,
+U <- declare_model(block = add_level(N = 3,
                                           prob = c(.5, .7, .9),
                                           tau = c(4, 2, 0)),
                         indiv = add_level(N = 100, e = rnorm(N)))
@@ -54,11 +54,11 @@ Y <- declare_potential_outcomes(Y_Z_0 = e,
                                 Y_Z_1 = e + tau)
 
 # Inquiry ----------------------------------------------------------------------
-Q <- declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0))
+Q <- declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0))
 
 # Data Strategy ----------------------------------------------------------------
 Z <- declare_assignment(blocks = block, block_prob = c(.5, .7, .9))
-R <- declare_reveal(Y, Z)
+R <- declare_measurement(Y = reveal_outcomes(Y ~ Z))
 
 # Answer Strategy --------------------------------------------------------------
 A0 <- declare_estimator(Y ~ Z, estimand = Q,  
@@ -213,7 +213,7 @@ simulations <- read_rds("rfiles/fe_simulations.rds")
 simulations %>%
   group_by(estimator_label) %>%
   summarize(SE_bias = mean(std.error - sd(estimate)),
-            ATE_bias = mean(estimate - estimand), .groups = "drop") %>%
+            ATE_bias = mean(estimate - estimand)) %>%
   ggplot(aes(x = ATE_bias, y = SE_bias)) +
   geom_point() +
   geom_hline(yintercept = 0, size = .1, linetype = "dashed") +

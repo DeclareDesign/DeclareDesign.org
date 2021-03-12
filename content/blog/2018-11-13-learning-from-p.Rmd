@@ -39,11 +39,11 @@ Here is an illustration. Unlike most other designs we have looked at, in this de
 ```{r}
 N <- 50
 design <- 
-  declare_population(N = N, b = runif(1, min = 0, max = 1), u = runif(N, min = 0, max = 1)) +
+  declare_model(N = N, b = runif(1, min = 0, max = 1), u = runif(N, min = 0, max = 1)) +
   declare_assignment(prob = .5) +
   declare_potential_outcomes(Y ~ (u < b)*Z + (u > (1 + b)/2)) + 
-  declare_estimand(ATE = b[1]) +
-  declare_reveal(Y, Z) +
+  declare_inquiry(ATE = b[1]) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   declare_estimator(Y ~ Z)
 ```
 
@@ -84,7 +84,7 @@ We have shown a set of posterior distributions and marked the posterior mean, bu
 Here we make a new design, in which we specify the prior belief that the true effect is 0 with 50% probability, and otherwise is flat over [0,1]. Remember, our priors are coded in the distribution we provide for `b` in our model of the world. Here's the modified design:
 
 ```{r}
-pop_mass    <- declare_population(N = N, 
+pop_mass    <- declare_model(N = N, 
                                   b = sample(c(0, runif(1, min = 0, max = 1)), prob = c(.5, .5), size = 1), 
                                   u = runif(N, min = 0, max = 1))
 design_mass <- replace_step(design, 1, pop_mass)

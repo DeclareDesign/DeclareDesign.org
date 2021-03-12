@@ -37,11 +37,10 @@ The design described by Deaton and Cartwright can be declared quite compactly:
 N = 50
 
 dc_design <-
-  declare_population(N = N, u = rlnorm(N) - exp(.5)) +
-  declare_potential_outcomes(Y_Z_0 = 0, Y_Z_1 = u) +
-  declare_estimand(SPATE = 0, SATE = mean(Y_Z_1 - Y_Z_0)) +
-  declare_assignment(prob = .5) +
-  declare_reveal(Y, Z) +
+  declare_model(N = N, u = rlnorm(N) - exp(.5), Y_Z_0 = 0, Y_Z_1 = u) +
+  declare_inquiry(SPATE = 0, SATE = mean(Y_Z_1 - Y_Z_0)) +
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   declare_estimator(Y ~ Z, estimand = c("SPATE", "SATE")) 
 ```
 
@@ -56,7 +55,7 @@ if(do_diagnosis) {
   diagnosis <- diagnose_design(redesign(dc_design, N = c(50, 100, 200, 400, 600, 800, 1000)), sims = sims)
   write_rds(diagnosis, file = "rfiles/12_dc_1.rds")
 }
-diagnosis <- read_rds(file = "rfiles/12_dc_1.rds")
+diagnosis <- read_rds("rfiles/12_dc_1.rds")
 ```
 
 ```{r, eval = FALSE}
@@ -122,7 +121,7 @@ if(do_diagnosis) {
 diagnosis2 <- diagnose_design(dc_design, diagnosands = diagnosands, sims = sims)
 write_rds(diagnosis2, file = "rfiles/12_dc_2.rds")
 }
-diagnosis2 <- read_rds(file = "rfiles/12_dc_2.rds")
+diagnosis2 <- read_rds("rfiles/12_dc_2.rds")
 
 kable(reshape_diagnosis(diagnosis2)[, -c(1,3:5)])
 ```
@@ -152,20 +151,20 @@ We get a little further into the weeds here.
 For the record, we can do the same analysis when the sharp null is in fact true. This just requires replacing the potential outcomes step (step 2) in the design.
 
 ```{r, eval = FALSE}
-dc_sharp <- replace_step(dc_design, 2, 
-                         declare_potential_outcomes(Y_Z_0 = u, Y_Z_1 = u))
+dc_sharp <- replace_step(dc_design, 1, 
+                         declare_model(N = N, u = rlnorm(N) - exp(.5), Y_Z_0 = u, Y_Z_1 = u))
 diagnose_design(dc_sharp)
 ```
 
 ```{r, echo = FALSE}
-dc_sharp <- replace_step(dc_design, 2, 
-                         declare_potential_outcomes(Y_Z_0 = u, Y_Z_1 = u))
+dc_sharp <- replace_step(dc_design, 1, 
+                         declare_model(N = N, u = rlnorm(N) - exp(.5), Y_Z_0 = u, Y_Z_1 = u))
 
 if(do_diagnosis) {
 diagnosis3 <- diagnose_design(dc_sharp, diagnosands = diagnosands, sims = sims)
 write_rds(diagnosis3, file = "rfiles/12_dc_3.rds")
 }
-diagnosis3 <- read_rds(file = "rfiles/12_dc_3.rds")
+diagnosis3 <- read_rds("rfiles/12_dc_3.rds")
 
 kable(reshape_diagnosis(diagnosis3)[, -c(1,3:5)])
 ```

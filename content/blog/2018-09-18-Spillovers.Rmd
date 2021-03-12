@@ -60,13 +60,13 @@ N_i_group <- 3
 sd_i <- 0.2
 gamma <- 2
 
-population <- declare_population(G = add_level(N = N_groups,
+model <- declare_model(G = add_level(N = N_groups,
                                                n = N_i_group),
                                  i = add_level(N = n, I = 1:N, zeros = 0, ones = 1))
 
 dgp <- function(i, Z, G, n) (sum(Z[G == G[i]])/n[i])^gamma + rnorm(1,0,sd_i)
 
-estimand <- declare_estimand(Treat_one = mean(
+estimand <- declare_inquiry(Treat_one = mean(
                  sapply(I, function(i) dgp(i, I==i, G, n) - dgp(i, zeros, G, n))
                  ))
 
@@ -161,7 +161,7 @@ We answer this question by declaring a new design that adds in the new  estimand
 We first define the steps:
 
 ```{r}
-new_estimand  <- declare_estimand(Treat_all = mean(
+new_estimand  <- declare_inquiry(Treat_all = mean(
                   sapply(I, function(i) dgp(i,ones,G,n) - dgp(i, zeros, G,n))
                   ))
 
