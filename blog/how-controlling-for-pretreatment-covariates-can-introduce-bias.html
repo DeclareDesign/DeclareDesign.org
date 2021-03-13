@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>How controlling for pretreatment covariates can introduce bias - DeclareDesign</title>
@@ -109,7 +109,7 @@
 
 
 <p>Consider an observational study looking at the effect of a non-randomly assigned treatment, <span class="math inline">\(Z\)</span>, on an outcome <span class="math inline">\(Y\)</span>. Say you have a pretreatment covariate, <span class="math inline">\(X\)</span>, that is correlated with both <span class="math inline">\(Z\)</span> and <span class="math inline">\(Y\)</span>. Should you control for <span class="math inline">\(X\)</span> when you try to assess the effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span>?</p>
-<p>This has been a question of some disagreement, with <span class="citation">Rosenbaum (2002)</span>, for instance, arguing that “there is little to no reason to avoid adjustment for a true covariate, a variable describing subjects before treatment,” and <span class="citation">Greenland, Pearl, and Robins (1999)</span> and others arguing that you cannot answer this question without a causal model of how <span class="math inline">\(Z\)</span> relates to <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. See also <a href="https://andrewgelman.com/2009/07/23/pearls_and_gelm/">this</a> discussion hosted by Andy Gelman. Controlling for pretreatment covariates in a randomized experiment usually can’t hurt and usually increases precision – but what about in an observational study in which pretreatment covariates might be correlated with both the (nonrandomly assigned) treatment and the outcome?</p>
+<p>This has been a question of some disagreement, with <span class="citation">Rosenbaum (<a href="#ref-rosenbaum2002observational" role="doc-biblioref">2002</a>)</span>, for instance, arguing that “there is little to no reason to avoid adjustment for a true covariate, a variable describing subjects before treatment,” and <span class="citation">Greenland, Pearl, and Robins (<a href="#ref-greenland1999causal" role="doc-biblioref">1999</a>)</span> and others arguing that you cannot answer this question without a causal model of how <span class="math inline">\(Z\)</span> relates to <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. See also <a href="https://andrewgelman.com/2009/07/23/pearls_and_gelm/">this</a> discussion hosted by Andy Gelman. Controlling for pretreatment covariates in a randomized experiment usually can’t hurt and usually increases precision – but what about in an observational study in which pretreatment covariates might be correlated with both the (nonrandomly assigned) treatment and the outcome?</p>
 <p>Design declaration and diagnosis makes it relatively simple to examine the kinds of cases that worry Greenland et al and see where risks of bias might come from.</p>
 <p>Let’s declare a design with a model of the form:</p>
 <ul>
@@ -123,17 +123,17 @@ b &lt;- 1
 N &lt;- 40
 
 # Declaration
-population &lt;- declare_population(N = N, U_1 = rnorm(N), U_2 = rnorm(N),
-                                 X = U_1 + U_2, Z  = 1 * (U_2 &gt; 0))
-potentials &lt;- declare_potential_outcomes(Y ~ b * Z + U_1)
-estimand   &lt;- declare_estimand(ate = mean(Y_Z_1 - Y_Z_0))
-reveal_Y   &lt;- declare_reveal()
-answer_1   &lt;- declare_estimator(Y ~ Z, estimand = &quot;ate&quot;,
-                                model = lm_robust, label = &quot;No control&quot;)
-answer_2   &lt;- declare_estimator(Y ~ Z + X, estimand = &quot;ate&quot;,
-                                model = lm_robust, label = &quot;With control&quot;)
+model &lt;- declare_model(N = N, U_1 = rnorm(N), U_2 = rnorm(N),
+                       X = U_1 + U_2, Z  = 1 * (U_2 &gt; 0),
+                       potential_outcomes(Y ~ b * Z + U_1))
+inquiry     &lt;- declare_inquiry(ate = mean(Y_Z_1 - Y_Z_0))
+measurement &lt;- declare_measurement(Y = reveal_outcomes(Y ~ Z))
+answer_1    &lt;- declare_estimator(Y ~ Z, inquiry = &quot;ate&quot;,
+                                 model = lm_robust, label = &quot;No control&quot;)
+answer_2    &lt;- declare_estimator(Y ~ Z + X, inquiry = &quot;ate&quot;,
+                                 model = lm_robust, label = &quot;With control&quot;)
 
-design &lt;- population + potentials + estimand + reveal_Y + answer_1 + answer_2</code></pre>
+design &lt;- model + inquiry + measurement + answer_1 + answer_2</code></pre>
 <p>Here is the diagnosis:</p>
 <pre class="r"><code>diagnosis &lt;- diagnose_design(design)</code></pre>
 <table style="width:100%;">

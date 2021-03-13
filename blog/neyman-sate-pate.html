@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Common estimators of uncertainty overestimate uncertainty - DeclareDesign</title>
@@ -124,21 +124,21 @@
 b &lt;- 0 # average treatment effect
 
 design &lt;- 
-  declare_population(N = 64,
-                     u_0 = rnorm(N),
-                     u_1 = rnorm(n = N, mean = r * u_0, sd = sqrt(1 - r^2))) +
-  declare_potential_outcomes(Y_Z_0 = u_0, 
-                             Y_Z_1 = u_1 + b) +
-  declare_sampling(n = 32) +
-  declare_assignment(prob = 0.5) +
-  declare_reveal(Y, Z) +
+  declare_model(N = 64,
+                u_0 = rnorm(N),
+                u_1 = rnorm(n = N, mean = r * u_0, sd = sqrt(1 - r^2)),
+                Y_Z_0 = u_0, 
+                Y_Z_1 = u_1 + b) +
+  declare_sampling(S = complete_rs(N, n = 32), legacy = FALSE) +
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   declare_estimator(Y ~ Z)</code></pre>
 <div id="the-sate" class="section level1">
 <h1>The SATE</h1>
 <p>Let’s start with the bottom level, the sample. If the target is the SATE, that means we want to understand the sampling distribution of the ATE estimator, <strong>conditional</strong> on the sample. We take advantage of a cool feature in <code>DeclareDesign</code> that allows you to control exactly how many draws are conducted at each step by passing a <strong>vector</strong> to the <code>sims</code> argument. If you said <code>sims = c(1, 2, 3)</code>, we would simulate the first step once, the second step twice (<span class="math inline">\(1 \times 2\)</span>), and the third step six times (<span class="math inline">\(1 \times 2 \times 3\)</span>).</p>
 <p>To simulate the sampling distribution of the SATE estimator, given a particular sample, we want:</p>
 <ul>
-<li>1 draw each from the <code>declare_population()</code>, <code>declare_potential_outcomes()</code>, and <code>declare_sampling()</code> steps (together, a single draw of a sample from the population with its potential outcomes)</li>
+<li>1 draw each from the <code>declare_model()</code>, <code>declare_potential_outcomes()</code>, and <code>declare_sampling()</code> steps (together, a single draw of a sample from the population with its potential outcomes)</li>
 <li>A bunch of draws from the <code>declare_assignment</code> step (assigning treatment over and over within the fixed sample). For this simulation, we’ve set <code>assignment_draws</code> to 500</li>
 <li>1 draw each from the <code>declare_reveal</code> and <code>declare_estimator</code> steps</li>
 </ul>
@@ -203,7 +203,7 @@ design &lt;-
 </div>
 <div id="further-reading" class="section level1">
 <h1>Further reading</h1>
-<p>It is possible to do better than the Neyman estimate by putting upper and lower <em>bounds</em> on the standard error. See <span class="citation">Aronow et al. (2014)</span> ( <a href="https://projecteuclid.org/euclid.aos/1400592645">ungated</a> ) for a lovely treatment of these issues.</p>
+<p>It is possible to do better than the Neyman estimate by putting upper and lower <em>bounds</em> on the standard error. See <span class="citation">Aronow et al. (<a href="#ref-aronow2014sharp" role="doc-biblioref">2014</a>)</span> ( <a href="https://projecteuclid.org/euclid.aos/1400592645">ungated</a> ) for a lovely treatment of these issues.</p>
 <div id="refs" class="references">
 <div id="ref-aronow2014sharp">
 <p>Aronow, Peter M, Donald P Green, Donald KK Lee, and others. 2014. “Sharp Bounds on the Variance in Randomized Experiments.” <em>The Annals of Statistics</em> 42 (3): 850–71.</p>

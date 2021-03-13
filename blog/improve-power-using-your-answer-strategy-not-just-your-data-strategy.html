@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Improve power using your answer strategy, not just your data strategy - DeclareDesign</title>
@@ -117,21 +117,20 @@
 <pre class="r"><code>N = 40
 
 # Model
-population &lt;- declare_population(N, W = rep(0:1, N / 2), u = rnorm(N))  
-potentials &lt;- declare_potential_outcomes(Y ~ 2 * Z * W + u)
+model &lt;- declare_model(N, W = rep(0:1, N / 2), u = rnorm(N), potential_outcomes(Y ~ 2 * Z * W + u))  
 
 # Inquiry
-estimand   &lt;- declare_estimand(ate = 1)  
+inquiry     &lt;- declare_inquiry(ate = 1)  
 
 # Data strategy
-assignment &lt;- declare_assignment(assignment_variable = &quot;Z&quot;, blocks = W)
-reveal     &lt;- declare_reveal(Y, Z)
+assignment   &lt;- declare_assignment(assignment_variable = &quot;Z&quot;, blocks = W)
+measurement  &lt;- declare_measurement(Y = reveal_outcomes(Y ~ Z))
 
 # Answer strategy
 estimator  &lt;- declare_estimator(Y ~ Z, estimand = &quot;ate&quot;, label = &quot;Simple D-I-M&quot;)
 
 # Declare the design
-design &lt;- population + potentials + estimand + assignment + reveal + estimator</code></pre>
+design &lt;- model + inquiry + assignment + measurement + estimator</code></pre>
 <p>Under this data generating process, the treatment interacts quite strongly with <span class="math inline">\(W\)</span>. The average effect of treatment is 1, but the <strong>conditional</strong> average treatment effects are 0 and 2 for the two levels of <span class="math inline">\(W\)</span>. The difference-in-means analysis strategy for this design is equivalent to an OLS regression of the outcome on the treatment with no control variables included. Because of random assignment, this procedure is of course unbiased, but it leaves money on the table in the sense that we could achieve higher statistical power if we included information about <span class="math inline">\(W\)</span> in some way. Here is the power of the difference-in-means answer strategy:</p>
 <pre class="r"><code>diagnose_design(design)</code></pre>
 <table>
@@ -177,13 +176,13 @@ design &lt;- population + potentials + estimand + assignment + reveal + estimato
 </tbody>
 </table>
 <p>So power is good though short of conventional standards. Based on this diagnosis the probability of getting a statistically significant result is only 0.74 even though the true effect is reasonably large.</p>
-<p>Let’s consider two additional estimation strategies. The first controls for the pre-treatment covariate <span class="math inline">\(W\)</span> in an OLS regression of the outcome on treatment plus the covariate. This strategy is the standard approach to the inclusion of covariates in experimental analysis. An alternative is the “Lin estimator,” so named by us because of the lovely description of this approach given in <span class="citation">Lin (2013)</span>. This estimator interacts treatment with the de-meaned covariates. The <code>lm_lin()</code> function in the <code>estimatr</code> package implements the Lin estimator for easy use.</p>
+<p>Let’s consider two additional estimation strategies. The first controls for the pre-treatment covariate <span class="math inline">\(W\)</span> in an OLS regression of the outcome on treatment plus the covariate. This strategy is the standard approach to the inclusion of covariates in experimental analysis. An alternative is the “Lin estimator,” so named by us because of the lovely description of this approach given in <span class="citation">Lin (<a href="#ref-lin2013agnostic" role="doc-biblioref">2013</a>)</span>. This estimator interacts treatment with the de-meaned covariates. The <code>lm_lin()</code> function in the <code>estimatr</code> package implements the Lin estimator for easy use.</p>
 <p>Here is the expanded design and the diagnosis:</p>
 <pre class="r"><code>new_design &lt;- design +
               declare_estimator(Y ~ Z + W,  model = lm_robust,
-                                estimand = &quot;ate&quot;, label = &quot;OLS: Control for W&quot;) +
+                                inquiry = &quot;ate&quot;, label = &quot;OLS: Control for W&quot;) +
               declare_estimator(Y ~ Z, covariates = ~ W, model = lm_lin,
-                                estimand = &quot;ate&quot;, label = &quot;Lin: Control + Interaction&quot;)</code></pre>
+                                inquiry = &quot;ate&quot;, label = &quot;Lin: Control + Interaction&quot;)</code></pre>
 <table>
 <colgroup>
 <col width="22%" />

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Some designs have badly posed questions and design diagnosis can alert you to the problem - DeclareDesign</title>
@@ -183,17 +183,16 @@
 <p>This design can be declared formally like this:</p>
 <pre class="r"><code>design &lt;-
 # M: Model ----------------------------------------------------------------
-  declare_population(
+  declare_model(
     N = 500,
     noise = rnorm(N),
     type = sample(1:4, N, replace = TRUE),
     AR = type == 1,
     IUR = type == 2,
     ITR = type == 3,
-    NR = type == 4
-  ) +
-  
-  declare_potential_outcomes(
+    NR = type == 4,
+    
+    # potential outcomes
     # AR and IUR types report in the control condition
     R_Z_0 = AR | IUR,
     # R and ITR types report in the treatment condition
@@ -205,15 +204,16 @@
   ) +
   
 # I: Inquiry --------------------------------------------------------------
-  declare_estimand(
+  declare_inquiry(
     ATE_R = mean(R_Z_1 - R_Z_0),
     ATE_Y = mean(Y_Z_1 - Y_Z_0),
     CATE_Y_AR = mean(Y_Z_1[AR] - Y_Z_0[AR])
   ) +
   
 # D: Data Strategy --------------------------------------------------------
-  declare_assignment(prob = 0.5) +
-  declare_reveal(outcome_variables = c(&quot;R&quot;, &quot;Y&quot;)) +
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) +
+  declare_measurement(R = reveal_outcomes(R ~ Z),
+                      Y = reveal_outcomes(Y ~ Z)) +
 # Answer Strategy ---------------------------------------------------------
   declare_estimator(R ~ Z, estimand = &quot;ATE_R&quot;, label = &quot;DIM_R&quot;) +
   declare_estimator(
@@ -226,26 +226,24 @@
 <p><img src="/blog/2019-02-12-bad-questions_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <table>
 <colgroup>
-<col width="12%" />
 <col width="14%" />
+<col width="17%" />
+<col width="5%" />
+<col width="7%" />
+<col width="15%" />
 <col width="14%" />
-<col width="4%" />
-<col width="6%" />
-<col width="13%" />
-<col width="13%" />
-<col width="6%" />
-<col width="8%" />
-<col width="6%" />
+<col width="7%" />
+<col width="9%" />
+<col width="7%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="left">Design Label</th>
-<th align="left">Estimand Label</th>
 <th align="left">Estimator Label</th>
 <th align="left">Term</th>
 <th align="left">N Sims</th>
 <th align="left">Mean Estimate</th>
-<th align="left">Mean Estimand</th>
+<th align="left">Mean Inquiry</th>
 <th align="left">Bias</th>
 <th align="left">Coverage</th>
 <th align="left">Power</th>
@@ -254,7 +252,6 @@
 <tbody>
 <tr class="odd">
 <td align="left">design</td>
-<td align="left">ATE_R</td>
 <td align="left">DIM_R</td>
 <td align="left">Z</td>
 <td align="left">500</td>
@@ -269,7 +266,6 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left"></td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>
@@ -278,10 +274,9 @@
 </tr>
 <tr class="odd">
 <td align="left">design</td>
-<td align="left">ATE_Y</td>
 <td align="left">DIM_Y</td>
 <td align="left">Z</td>
-<td align="left">500</td>
+<td align="left">1000</td>
 <td align="left">0.36</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
@@ -293,35 +288,10 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left"></td>
 <td align="left">(0.01)</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
 <td align="left">NA</td>
-<td align="left">(0.02)</td>
-</tr>
-<tr class="odd">
-<td align="left">design</td>
-<td align="left">CATE_Y_AR</td>
-<td align="left">DIM_Y</td>
-<td align="left">Z</td>
-<td align="left">500</td>
-<td align="left">0.36</td>
-<td align="left">0.25</td>
-<td align="left">0.11</td>
-<td align="left">0.86</td>
-<td align="left">0.76</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">(0.01)</td>
-<td align="left">(0.00)</td>
-<td align="left">(0.01)</td>
-<td align="left">(0.02)</td>
 <td align="left">(0.02)</td>
 </tr>
 </tbody>
@@ -332,7 +302,7 @@
 <li>Second, our second inquiry (<code>ATE_Y</code>), as well as our diagnostics for it, are undefined. The diagnosis tells us that our definition of potential outcomes produces a definition problem for the estimand. Note that some diagnosands are defined, including power, but none of the diagnosands that depend on the value of the estimand (bias, coverage, rmse) can be calculated.</li>
 <li>The third estimand (<code>CATE_Y_AR</code>) <em>is</em> defined but the estimator is biased. The reason is that we cannot tell from the data which types are the <span class="math inline">\(AR\)</span> types; we are not conditioning on the correct subset. Indeed, we are unable to do so. If a subject responds in the treatment group, we don’t know if she is a <span class="math inline">\(AR\)</span> or a <span class="math inline">\(ITR\)</span> type; in the control group, we can’t tell if a responder is an <span class="math inline">\(AR\)</span> or an <span class="math inline">\(IUR\)</span> type. Our difference-in-means estimator of the CATE on <span class="math inline">\(Y\)</span> among <span class="math inline">\(AR\)</span>s will be off whenever <span class="math inline">\(AR\)</span>s have different outcomes from <span class="math inline">\(ITR\)</span>s and <span class="math inline">\(IUR\)</span>s.</li>
 </ul>
-<p>There are some solutions to this problem. In some cases, the problem might be resolved by changing the inquiry. Closely related estimands can often be defined, perhaps by redefining <span class="math inline">\(Y\)</span> (e.g., emails never sent have a tone of zero). See <span class="citation">Coppock (2019)</span> for a more detailed discussion of solutions that may work for different research scenarios.</p>
+<p>There are some solutions to this problem. In some cases, the problem might be resolved by changing the inquiry. Closely related estimands can often be defined, perhaps by redefining <span class="math inline">\(Y\)</span> (e.g., emails never sent have a tone of zero). See <span class="citation">Coppock (<a href="#ref-coppock2019audit" role="doc-biblioref">2019</a>)</span> for a more detailed discussion of solutions that may work for different research scenarios.</p>
 </div>
 <div id="other-instances-of-this-problem" class="section level1">
 <h1>Other instances of this problem</h1>

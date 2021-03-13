@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Meta-analysis can be used not just to guess about effects out-of-sample but also to re-evaluate effects in sample - DeclareDesign</title>
@@ -124,7 +124,7 @@ The idea here is that estimates are a draw from a Normal distribution centered o
 <li><span class="math inline">\(\tau\)</span> the fundamental heterogeneity of effects</li>
 <li><span class="math inline">\(\theta\)</span> the country level effects and <span class="math inline">\(\overline{\theta}\)</span> the average effect in our sample</li>
 </ul>
-<p>In addition, partially heeding <span class="citation">IntHout et al. (2016)</span>’s plea for presenting “prediction intervals,” we will add an <em>estimate</em> for the probability that a new study will have a positive effect:</p>
+<p>In addition, partially heeding <span class="citation">IntHout et al. (<a href="#ref-inthout2016plea" role="doc-biblioref">2016</a>)</span>’s plea for presenting “prediction intervals,” we will add an <em>estimate</em> for the probability that a new study will have a positive effect:</p>
 <ul>
 <li><span class="math inline">\(\int_{0}^{\infty}f(x|\mu, \sigma)dx\)</span></li>
 </ul>
@@ -142,7 +142,7 @@ The idea here is that estimates are a draw from a Normal distribution centered o
                          tauhat    = sd(est_effects),
                          study_est = est_effects[1]))})</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li>A model-based frequentist approach in which the estimates for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are generated using a random effects model via maximum likelihood procedures using the <code>metaplus</code> package <span class="citation">(Beath and Bolker 2015)</span>.</li>
+<li>A model-based frequentist approach in which the estimates for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are generated using a random effects model via maximum likelihood procedures using the <code>metaplus</code> package <span class="citation">(Beath and Bolker <a href="#ref-beath2015metaplus" role="doc-biblioref">2015</a>)</span>.</li>
 </ol>
 <pre class="r"><code>f_metaplus = function(data) with(data,  {
   metaplus_result &lt;- metaplus(yi = est_effects, sei = est_sds)
@@ -150,9 +150,9 @@ The idea here is that estimates are a draw from a Normal distribution centered o
   data.frame(estimate = c(muhat    = metaplus_ests[1],
                           tauhat   = metaplus_ests[2]^.5,
                           prob_pos = 1-pnorm(0, metaplus_ests[1], metaplus_ests[2])))
-                })</code></pre>
+})</code></pre>
 <ol start="3" style="list-style-type: decimal">
-<li>For a Bayesian approach we will use the “8 schools model” <span class="citation">(Gelman et al. 2013)</span> implemented via <a href="http://mc-stan.org/">stan</a>. See <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">here</a> for more on stan and this model in particular. To feed the <code>stan</code> model into <code>declaredesign</code> we use a handler to generate an analysis step that uses stan. The handler generates data in the form <code>stan</code> wants it in, runs the model, and extracts the quantities we care about.</li>
+<li>For a Bayesian approach we will use the “8 schools model” <span class="citation">(Gelman et al. <a href="#ref-gelman2013bayesian" role="doc-biblioref">2013</a>)</span> implemented via <a href="http://mc-stan.org/">stan</a>. See <a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">here</a> for more on stan and this model in particular. To feed the <code>stan</code> model into <code>declaredesign</code> we use a handler to generate an analysis step that uses stan. The handler generates data in the form <code>stan</code> wants it in, runs the model, and extracts the quantities we care about.</li>
 </ol>
 <pre class="r"><code>f_bayesian = function(data) {
   J      &lt;- nrow(data)
@@ -194,22 +194,22 @@ sigma = .5  # Error in studies (assumed the same across studies),
 
 # Design
 metadesign &lt;- 
-  declare_population(N = J, 
-                     true_effects = rnorm(N, mu, tau),
-                     est_effects = rnorm(N, true_effects, sigma),
-                     est_sds = sigma) +
+  declare_model(N = J, 
+                true_effects = rnorm(N, mu, tau),
+                est_effects = rnorm(N, true_effects, sigma),
+                est_sds = sigma) +
 
-  declare_estimand(mu = mu, tau = tau, study_effect = true_effects[1], 
-                   prob_pos  = 1 - pnorm(0, mu, tau))  +
+  declare_inquiry(mu = mu, tau = tau, study_effect = true_effects[1], 
+                  prob_pos  = 1 - pnorm(0, mu, tau))  +
   
   declare_estimator(handler = label_estimator(f_agnostic), label = &quot;Agnostic&quot;,
-                   estimand = c(&quot;mu&quot;, &quot;tau&quot;, &quot;study_effect&quot;)) + 
-    
+                    estimand = c(&quot;mu&quot;, &quot;tau&quot;, &quot;study_effect&quot;)) + 
+  
   declare_estimator(handler = label_estimator(f_metaplus), label = &quot;Metaplus&quot;, 
-                   estimand = c(&quot;mu&quot;, &quot;tau&quot;, &quot;prob_pos&quot;)) +
+                    estimand = c(&quot;mu&quot;, &quot;tau&quot;, &quot;prob_pos&quot;)) +
   
   declare_estimator(handler = label_estimator(f_bayesian), label = &quot;Bayesian&quot;,
-                   estimand = c(&quot;mu&quot;, &quot;tau&quot;, &quot;study_effect&quot;, &quot;prob_pos&quot;))</code></pre>
+                    estimand = c(&quot;mu&quot;, &quot;tau&quot;, &quot;study_effect&quot;, &quot;prob_pos&quot;))</code></pre>
 <p>Let’s diagnose a set of designs of different sizes and plot some results.</p>
 <pre class="r"><code>metadesigns &lt;- redesign(metadesign, J = c(4, 8, 16, 32))
 diagnosis   &lt;- diagnose_design(metadesigns)</code></pre>
@@ -230,10 +230,10 @@ diagnosis   &lt;- diagnose_design(metadesigns)</code></pre>
 <p>We explore a little by declaring a design in which effects are in fact distributed uniform over [0,2], rather than normally (so the mean is 1 and sd is (1/3)^.5) but the estimation erroneously supposes that effects are distributed normal. One big difference here is that although the variance in effects is a little larger there is now zero probability of a non positive effect. This new design requires changing both of the first two steps, though we will recycle steps 3 - 5:</p>
 <pre class="r"><code>metadesign_2    &lt;- 
   
-  declare_population(N = J, true_effects = runif(N, 0, 2),
+  declare_model(N = J, true_effects = runif(N, 0, 2),
                      est_effects = rnorm(N, true_effects, sigma), est_sds = sigma) +
 
-  declare_estimand(mu = mu, tau = .577, study_effect = true_effects[1], prob_pos  = 0)  +
+  declare_inquiry(mu = mu, tau = .577, study_effect = true_effects[1], prob_pos  = 0)  +
 
   metadesign[[3]] + metadesign[[4]] + metadesign[[5]] </code></pre>
 <table>
@@ -291,7 +291,7 @@ diagnosis   &lt;- diagnose_design(metadesigns)</code></pre>
 </tbody>
 </table>
 <p>We see the Bayesian approach continues to estimate study level effects better than the agnostic approach, despite having the wrong model. Though it does quite poorly on the out of sample predictions since it is working wiht the wrong distribution (and in particular one for which negative effects are always possible).</p>
-<p>There are a few ways to improve upon this. Performance of the model can to some extent be assessed <em>within</em> the sample, e.g. by assessing how well a model developed on a subset of studies fares in predicting outcomes in another set of studies. Or more flexible approaches for modelling the underlying distribution of effects could be used (see e.g. <span class="citation">Beath (2014)</span>).</p>
+<p>There are a few ways to improve upon this. Performance of the model can to some extent be assessed <em>within</em> the sample, e.g. by assessing how well a model developed on a subset of studies fares in predicting outcomes in another set of studies. Or more flexible approaches for modelling the underlying distribution of effects could be used (see e.g. <span class="citation">Beath (<a href="#ref-beath2014finite" role="doc-biblioref">2014</a>)</span>).</p>
 <p>So models can help, even when wrong. But they can also lead you astray if too wrong.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Hmm. If this all makes you nervous one option is to keep the focus on <span class="math inline">\(\mu\)</span> for which which is unbiased (though perhaps not very useful for out-of-sample predictions).</p>
 </div>
 <div id="if-we-dont-know-how-a-study-got-selected-into-a-sample-we-dont-have-strong-grounds-to-use-it-to-make-inferences-out-of-sample" class="section level1">
@@ -323,7 +323,7 @@ diagnosis   &lt;- diagnose_design(metadesigns)</code></pre>
 <ol>
 <li id="fn1"><p>The parameters are (i) a real number, <span class="math inline">\(\mu\)</span>, (ii) a nonnegative real number <span class="math inline">\(\tau\)</span> and (iii) a set of <span class="math inline">\(J\)</span> unit level effects <span class="math inline">\(\theta_i\)</span> (to simplify computation the model defines deviations from the average effect as <span class="math inline">\(\eta_i\)</span> and then defines <span class="math inline">\(\theta_i\)</span> as <span class="math inline">\(\theta_i = \mu + \eta_i\tau\)</span>). <a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>You might find it discomforting to be applying such a frequentist ideas as bias to a Bayesian model; Bayesian models that get the prior right shouldn’t have any bias. The idea here though is that we assess ex ante what is the expected inference that will be made from a Bayesian approach given some data generating process that is not available to a researcher.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>See <span class="citation">Kontopantelis and Reeves (2012)</span> for explorations.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>See <span class="citation">Kontopantelis and Reeves (<a href="#ref-kontopantelis2012performance" role="doc-biblioref">2012</a>)</span> for explorations.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

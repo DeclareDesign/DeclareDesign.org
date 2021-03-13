@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>What does a p-value tell you about the probability a hypothesis is true? - DeclareDesign</title>
@@ -115,11 +115,11 @@
 <p>Here is an illustration. Unlike most other designs we have looked at, in this design the estimand has a distribution. For simplicity we consider a design with a binary outcome; the estimand is the average treatment effect (or in epidemiology the “absolute risk increase”). The distribution for <code>b</code> in our model of the world reflects our beliefs about the estimand: we assume that it is distributed uniform over 0 and 1.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <pre class="r"><code>N &lt;- 50
 design &lt;- 
-  declare_population(N = N, b = runif(1, min = 0, max = 1), u = runif(N, min = 0, max = 1)) +
-  declare_assignment(prob = .5) +
-  declare_potential_outcomes(Y ~ (u &lt; b)*Z + (u &gt; (1 + b)/2)) + 
-  declare_estimand(ATE = b[1]) +
-  declare_reveal(Y, Z) +
+  declare_model(N = N, b = runif(1, min = 0, max = 1), u = runif(N, min = 0, max = 1),
+                potential_outcomes(Y ~ (u &lt; b)*Z + (u &gt; (1 + b)/2))) +
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) +
+  declare_inquiry(ATE = b[1]) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   declare_estimator(Y ~ Z)</code></pre>
 <p>When we simulate this design, each run takes a different estimand (<code>b</code>) from the uniform distribution, generates data and calculates effects and <span class="math inline">\(p\)</span>-values.</p>
 <pre class="r"><code>simulations &lt;- simulate_design(design) </code></pre>
@@ -136,7 +136,7 @@ design &lt;-
 <h1>Posterior beliefs about a null require prior mass on the null</h1>
 <p>We have shown a set of posterior distributions and marked the posterior mean, but we have not calculated the probability that the null is true. The reason is that, if the prior places a zero probability on the null hypothesis <span class="math inline">\(b=0\)</span>, then so will the posterior. To form a posterior on the null being true, one needs a prior distribution that is consistent with the null. One possibility is that you might think of the null hypothesis as being about a range (“the <code>ate</code> is small”) rather than a value (“the <code>ate</code> is 0”). Another possibility is that you really put prior probability mass on a point null, which is what we do here.</p>
 <p>Here we make a new design, in which we specify the prior belief that the true effect is 0 with 50% probability, and otherwise is flat over [0,1]. Remember, our priors are coded in the distribution we provide for <code>b</code> in our model of the world. Here’s the modified design:</p>
-<pre class="r"><code>pop_mass    &lt;- declare_population(N = N, 
+<pre class="r"><code>pop_mass    &lt;- declare_model(N = N, 
                                   b = sample(c(0, runif(1, min = 0, max = 1)), prob = c(.5, .5), size = 1), 
                                   u = runif(N, min = 0, max = 1))
 design_mass &lt;- replace_step(design, 1, pop_mass)</code></pre>

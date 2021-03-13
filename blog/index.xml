@@ -1,8 +1,8 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Blog home on A Hugo website</title>
+    <title>Blog on A Hugo website</title>
     <link>/blog.html</link>
-    <description>Recent content in Blog home on A Hugo website</description>
+    <description>Recent content in Blog on A Hugo website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 08 Jan 2020 00:00:00 +0000</lastBuildDate>

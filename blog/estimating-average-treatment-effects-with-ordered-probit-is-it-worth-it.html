@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Estimating Average Treatment Effects with Ordered Probit: Is it worth it? - DeclareDesign</title>
@@ -109,8 +109,8 @@
 
 
 <p>We sometimes worry about whether we need to model data generating processes correctly. For example you have ordinal outcome variables, on a five-point Likert scale. How should you model the data generation process? Do you need to model it at all? Go-to approaches include ordered probit and ordered logit models which are designed for this kind of outcome variable. But maybe you don’t need them. After all, the argument that the difference-in-means procedure estimates the treatment effect doesn’t depend on any assumptions about the type of data (as long as expectations are defined)—ordered, count, censored, etc. We diagnose a design that hedges by using both differences in means and an ordered probit model. We do so assuming that the ordered probit model correctly describes data generation. Which does better?</p>
-<p>For the design declaration we assume that the estimand of interest is the average treatment effect on the scale of the data. We do this, perhaps contentiously, even though our outcome is defined on a 1 to 5 ordinal scale. The estimand can be thought of as the average number of steps up or down induced by treatment. This estimand has to be interpreted cautiously, however. In particular it presupposes an interest in outcomes in terms of “steps.” But the “size” of steps depends on the categories provided. Adding in an extra option in the middle of a scale, for example, changes the range of the scale and changes the value of the estimand. Given these issues, other estimands are possible and perhaps preferable <span class="citation">(Volfovsky, Airoldi, and Rubin 2015)</span>, but for this design, we’ll focus on the ATE.</p>
-<p>Surprisingly, perhaps, we find no real difference between the model-based ordinal logit approach and the differences in means approach. The ordered probit is much more complicated to implement and to draw inferences from: the model is estimated using maximum likelihood, simulation is then used to generate a distribution of fitted values, from which a simulation of the distribution of treatment effects is produced. The standard deviation of these differences is used as an estimate of the standard deviation of treatment effects. The Zelig package <span class="citation">(Choirat et al. 2018)</span> makes it easy to do all this quite compactly and turn it all into a step in our design.</p>
+<p>For the design declaration we assume that the estimand of interest is the average treatment effect on the scale of the data. We do this, perhaps contentiously, even though our outcome is defined on a 1 to 5 ordinal scale. The estimand can be thought of as the average number of steps up or down induced by treatment. This estimand has to be interpreted cautiously, however. In particular it presupposes an interest in outcomes in terms of “steps.” But the “size” of steps depends on the categories provided. Adding in an extra option in the middle of a scale, for example, changes the range of the scale and changes the value of the estimand. Given these issues, other estimands are possible and perhaps preferable <span class="citation">(Volfovsky, Airoldi, and Rubin <a href="#ref-volfovsky2015causal" role="doc-biblioref">2015</a>)</span>, but for this design, we’ll focus on the ATE.</p>
+<p>Surprisingly, perhaps, we find no real difference between the model-based ordinal logit approach and the differences in means approach. The ordered probit is much more complicated to implement and to draw inferences from: the model is estimated using maximum likelihood, simulation is then used to generate a distribution of fitted values, from which a simulation of the distribution of treatment effects is produced. The standard deviation of these differences is used as an estimate of the standard deviation of treatment effects. The Zelig package <span class="citation">(Choirat et al. <a href="#ref-Zelig" role="doc-biblioref">2018</a>)</span> makes it easy to do all this quite compactly and turn it all into a step in our design.</p>
 <p>We call the <code>zelig</code> library, set some parameters, and define a function to take data in and return results.</p>
 <pre class="r"><code>library(Zelig)
 
@@ -141,15 +141,17 @@ ordered_probit &lt;-
 <p>We can now declare the design:</p>
 <pre class="r"><code>ordered_probit_design &lt;- 
   
-  declare_population(N = 200, noise = rnorm(N)) + 
+  declare_model(
+    N = 200, 
+    noise = rnorm(N),
+    potential_outcomes(Y ~ draw_ordered(1 * Z + noise, breaks = c(0, 0.75, 1, 1.25)))
+  ) + 
+      
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) +
   
-  declare_potential_outcomes(Y ~ draw_ordered(1 * Z + noise, breaks = c(0, 0.75, 1, 1.25))) +
+  declare_inquiry(ate = mean(Y_Z_1 - Y_Z_0)) +
   
-  declare_assignment(prob = 0.5) +
-  
-  declare_estimand(ate = mean(Y_Z_1 - Y_Z_0)) +
-  
-  declare_reveal(Y) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   
   declare_estimator(Y ~ Z, estimand = &quot;ate&quot;, label = &quot;DIM&quot;) +
   

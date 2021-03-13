@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Instead of avoiding spillovers, you can model them - DeclareDesign</title>
@@ -118,26 +118,26 @@
 
 spillover_design &lt;- 
 
-  declare_population(G = add_level(N = 80), 
+  declare_model(G = add_level(N = 80), 
                      j = add_level(N = 3, zeros = 0, ones = 1)) +
   
-  declare_estimand(direct = mean(sapply(1:240,  # just i treated v no one treated 
+  declare_inquiry(direct = mean(sapply(1:240,  # just i treated v no one treated 
     function(i) { Z_i &lt;- (1:240) == i
                   dgp(i, Z_i, G) - dgp(i, zeros, G)}))) +
   
-  declare_estimand(indirect = mean(sapply(1:240, 
+  declare_inquiry(indirect = mean(sapply(1:240, 
     function(i) { Z_i &lt;- (1:240) == i           # all but i treated v no one treated   
                   dgp(i, ones - Z_i, G) - dgp(i, zeros, G)}))) +
   
-  declare_assignment() + 
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) + 
   
-  declare_step(handler = fabricate,
-               neighbors_treated = sapply(1:N, function(i) sum(Z[-i][G[-i] == G[i]])),
-               one_neighbor  = as.numeric(neighbors_treated == 1),
-               two_neighbors = as.numeric(neighbors_treated == 2)) +
+  declare_measurement(
+    neighbors_treated = sapply(1:N, function(i) sum(Z[-i][G[-i] == G[i]])),
+    one_neighbor  = as.numeric(neighbors_treated == 1),
+    two_neighbors = as.numeric(neighbors_treated == 2),
+    Y = sapply(1:N, function(i) dgp(i, Z, G))
+  ) +
   
-  declare_reveal(handler = fabricate, Y = sapply(1:N, function(i) dgp(i, Z, G))) +
-
   declare_estimator(Y ~ Z, 
                     estimand = &quot;direct&quot;, 
                     model = lm_robust, 
@@ -188,7 +188,7 @@ spillovers_assigned_2 &lt;-
                                   density_probs = c(.45,.1,.45)))</code></pre>
 <p>Now power looks like this:</p>
 <p><img src="/blog/2018-11-20-Spillovers_Modelled_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<p>We see a large gain in power for the estimation of direct effects when assigning more groups to have 0 or 1 member treated, and a big loss when assigning fewer groups to those densities in favor of having 2 members treated. We see an opposite tradeoff for the estimation of indirect effects. Optimal assignment depends on the quantities of interest. See <span class="citation">Baird et al. (2017)</span> for a great treatment of these issues.</p>
+<p>We see a large gain in power for the estimation of direct effects when assigning more groups to have 0 or 1 member treated, and a big loss when assigning fewer groups to those densities in favor of having 2 members treated. We see an opposite tradeoff for the estimation of indirect effects. Optimal assignment depends on the quantities of interest. See <span class="citation">Baird et al. (<a href="#ref-baird2017optimal" role="doc-biblioref">2017</a>)</span> for a great treatment of these issues.</p>
 </div>
 <div id="some-warnings" class="section level1">
 <h1>Some warnings</h1>
@@ -196,7 +196,7 @@ spillovers_assigned_2 &lt;-
 <p>Less obvious, perhaps, things were easy here because the group sizes were homogeneous. Why does that matter? The reason is that in this example uniform assignment probabilities for the direct treatment translated into uniform assignment probabilities for the indirect treatments. But generally you cannot count on this. In this case, if groups were of heterogeneous size and treatment was randomly assigned, then units in big groups would be more likely to be exposed to treatment indirectly than units in small groups: a unit in a group of size 3 would be less likely to have two neighbors treated (<code>prob = .25</code>) than a unit in a group of size 4 (<code>prob = 3/8</code>).
 This can produce bias if treatment effects also depend on group size. To remove the bias you would need to take account of the fact that the indirect treatments were assigned with unequal propensities (even though the direct treatments were assigned to all units with the same probability!). This is a very similar issue to <a href="https://declaredesign.org/blog/biased-fixed-effects.html">one we discussed here</a>, and some of those approaches to addressing bias arising from heterogeneous (indirect) assignment propensities can also help in the spillover context.</p>
 <p>Also not too obvious, even if direct treatments are assigned independently, assignment of indirect treatments might be clustered. For example everyone in a family gets indirectly treated together when one member gets directly treated. Given the possibly complex nature of clustering, it might make sense to use <a href="https://egap.org/methods-guides/10-things-randomization-inference">randomization inference</a> for hypothesis testing is this setting.</p>
-<p>For more on this topic, including strategies for estimating uncertainty given indirect treatment, see, for example, <span class="citation">Aronow and Samii (2017)</span>.</p>
+<p>For more on this topic, including strategies for estimating uncertainty given indirect treatment, see, for example, <span class="citation">Aronow and Samii (<a href="#ref-aronow2017estimating" role="doc-biblioref">2017</a>)</span>.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>A journal of null results is a flawed fix for a significance filter - DeclareDesign</title>
@@ -122,7 +122,7 @@ designs     &lt;- expand_design(two_arm_designer,
                              ate = seq(0, 1, 0.1), N = c(20, 200))
 simulations &lt;- simulate_design(designs)</code></pre>
 <p>The data.frame <code>simulations</code> records results from running these designs many times—equivalent here to implementing many independent studies from a large population of possible studies. The figure shows a scatterplot of the estimand versus the estimate for each run of the study. We facet by whether we condition on significance, nonsignificance, or nothing at all.</p>
-<pre><code>## `summarise()` regrouping output by &#39;N&#39; (override with `.groups` argument)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;N&#39;. You can override using the `.groups` argument.</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
 <img src="/blog/2019-01-08_Significance_Filter_files/figure-html/unnamed-chunk-4-1.png" alt="Scatterplots of estimates against estimands (ranging between 0 and 1) for N = 20 and N = 200. Thick lines show mean values. If vertical and horizontal thick lines cross on the 45 degree line then estimates correspond to estimands on average." width="672" />
 <p class="caption">

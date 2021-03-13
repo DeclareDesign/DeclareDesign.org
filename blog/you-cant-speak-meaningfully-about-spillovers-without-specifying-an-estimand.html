@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>You can&amp;rsquo;t speak meaningfully about spillovers without specifying an estimand - DeclareDesign</title>
@@ -123,7 +123,7 @@
 <p>There are many different estimands that can take account of spillover effects, if there are any, but that correspond to the usual average treatment effects estimand when there are no spillovers. For instance, we can define the difference for a unit when it—and only it—is treated, compared to a situation in which no unit is treated. In potential outcomes notation that could be written, for unit 3, say, as:</p>
 <p><span class="math display">\[\tau_3 = Y(0,0,1,0,0,\dots) -  Y(0,0,0,0,0,\dots)\]</span></p>
 <p>One could then define a population estimand that is the average of all these differences over a population. Note that these differences specify different counterfactual assignment vectors for each individual. In the absence of spillovers, this estimand is equivalent to the usual average treatment effect. In the presence of spillovers, this estimand is well defined, whereas the usual average treatment effect estimand is not.</p>
-<p>There are many other possibilities. For example, the difference in outcomes when no units are treated and all units are treated. Or the difference between not being treated when all others are, and being treated when all others are. Or, the difference a change in your own condition would make given that others are assigned to the value that they actually have (see e.g. <span class="citation">Sävje, Aronow, and Hudgens (2017)</span>). In fact, with <span class="math inline">\(n\)</span> units and binary assignments, we can define <span class="math inline">\(2^n\times2^n\)</span> simple comparisons for each unit.</p>
+<p>There are many other possibilities. For example, the difference in outcomes when no units are treated and all units are treated. Or the difference between not being treated when all others are, and being treated when all others are. Or, the difference a change in your own condition would make given that others are assigned to the value that they actually have (see e.g. <span class="citation">Sävje, Aronow, and Hudgens (<a href="#ref-savje2017average" role="doc-biblioref">2017</a>)</span>). In fact, with <span class="math inline">\(n\)</span> units and binary assignments, we can define <span class="math inline">\(2^n\times2^n\)</span> simple comparisons for each unit.</p>
 <p>Below, we declare a design that allows for the possibility of spillovers. Diagnosing the design shows how severe the problem of spillovers can be for estimation. Modifying the design lets us explore different types of solutions.</p>
 </div>
 <div id="how-spillovers-make-defining-and-estimating-average-effects-hard" class="section level2">
@@ -135,25 +135,24 @@ N_i_group &lt;- 3
 sd_i &lt;- 0.2
 gamma &lt;- 2
 
-population &lt;- declare_population(G = add_level(N = N_groups,
+model &lt;- declare_model(G = add_level(N = N_groups,
                                                n = N_i_group),
                                  i = add_level(N = n, I = 1:N, zeros = 0, ones = 1))
 
 dgp &lt;- function(i, Z, G, n) (sum(Z[G == G[i]])/n[i])^gamma + rnorm(1,0,sd_i)
 
-estimand &lt;- declare_estimand(Treat_one = mean(
+inquiry &lt;- declare_inquiry(Treat_one = mean(
                  sapply(I, function(i) dgp(i, I==i, G, n) - dgp(i, zeros, G, n))
                  ))
 
 assign    &lt;- declare_assignment(prob = .5)
 
-reveal_Y  &lt;- declare_reveal(Y = sapply(1:N, function(i) dgp(i, Z, G, n)),
-                           handler = fabricate)
+measurement  &lt;- declare_measurement(Y = sapply(1:N, function(i) dgp(i, Z, G, n)))
 
 estimator &lt;- declare_estimator(Y ~ Z,  model = lm_robust,
-                               label = &quot;naive&quot;, estimand = &quot;Treat_one&quot;)
+                               label = &quot;naive&quot;, inquiry = &quot;Treat_one&quot;)
 
-spillover_design &lt;- population + estimand + assign + reveal_Y + estimator</code></pre>
+spillover_design &lt;- model + inquiry + assign + measurement + estimator</code></pre>
 <p>The most complex part of this design declaration involves the specification of the estimand. We define a helper function, <code>dgp</code>, which reports an individual’s outcome given the full treatment assignment vector. We then apply that function to each unit separately and take the average.</p>
 <p>This design produces data that looks like this:</p>
 <pre class="r"><code>draw_data(spillover_design)</code></pre>
@@ -298,7 +297,7 @@ spillover_design &lt;- population + estimand + assign + reveal_Y + estimator</co
 <div id="whether-a-sparser-sample-helps-depends-on-the-estimand-of-interest" class="section level2">
 <h2>Whether a sparser sample helps depends on the estimand of interest</h2>
 <p>There are multiple solutions to this kind of problem. How well they work depends, however, on how well we understand the structure of spillover effects in the first place.</p>
-<p>One approach is to alter assignment strategies (see, e.g., <span class="citation">Bowers et al. (2018)</span>). An even simpler one is to employ a sparser sample. This approach seems to go against one of the few near-universal principles of research design: study as many units as possible.</p>
+<p>One approach is to alter assignment strategies (see, e.g., <span class="citation">Bowers et al. (<a href="#ref-bowers2018models" role="doc-biblioref">2018</a>)</span>). An even simpler one is to employ a sparser sample. This approach seems to go against one of the few near-universal principles of research design: study as many units as possible.</p>
 <p>But here there may be some wisdom to it. Although more units generally means greater precision, there may be a cost to this when there are risks of spillovers. If a larger study means treating more units, and this means more units interfere with each other, you might end up with a spuriously precise, biased estimate.</p>
 <p>Here is an alternative design that implements the original data and analysis strategies on a sample of one subject per group:</p>
 <pre class="r"><code>sparse_design &lt;- insert_step(spillover_design, after = &quot;Treat_one&quot;,
@@ -361,7 +360,7 @@ spillover_design &lt;- population + estimand + assign + reveal_Y + estimator</co
 <p>However, how good this solution is also depends on what exactly the estimand is. What if the estimand were the average difference in outcomes between a world in which no unit is treated and one in which all units are treated?</p>
 <p>We answer this question by declaring a new design that adds in the new estimand and links it to the estimator.</p>
 <p>We first define the steps:</p>
-<pre class="r"><code>new_estimand  &lt;- declare_estimand(Treat_all = mean(
+<pre class="r"><code>new_estimand  &lt;- declare_inquiry(Treat_all = mean(
                   sapply(I, function(i) dgp(i,ones,G,n) - dgp(i, zeros, G,n))
                   ))
 

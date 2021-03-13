@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Use change scores or control for pre-treatment outcomes? Depends on the true data generating process - DeclareDesign</title>
@@ -122,21 +122,20 @@
 
 prepost &lt;- 
   
-  declare_population(N = 100, 
-                     u = rnorm(N) / 2, 
-                     e1 = rnorm(N), 
-                     e2 = rnorm(N), 
-                     Y1 = u + e1) + 
+  declare_model(N = 100, 
+                u = rnorm(N) / 2, 
+                e1 = rnorm(N), 
+                e2 = rnorm(N), 
+                Y1 = u + e1,
+                potential_outcomes(Y2 ~ Z + u + e2)
+  ) + 
   
-  declare_assignment(prob = r * pnorm(u) + (1 - r) * .5, simple = TRUE) +
+  declare_assignment(Z = simple_ra(N, prob = r * pnorm(u) + (1 - r) * .5), legacy = FALSE) +
   
-  declare_potential_outcomes(Y2 ~ Z + u + e2) + 
+  declare_inquiry(ate = mean(Y2_Z_1 - Y2_Z_0)) +
   
-  declare_estimand(ate = mean(Y2_Z_1 - Y2_Z_0)) +
-  
-  declare_reveal(outcome_variables = Y2) +
-  
-  declare_step(D = Y2 - Y1, handler = fabricate) +
+  declare_measurement(Y2 = reveal_outcomes(Y2 ~ Z),
+                      D = Y2 - Y1) +
   
   declare_estimator(Y2 ~ Z, model = lm_robust, estimand = &quot;ate&quot;, 
                     label = &quot;Naive&quot;) +
@@ -159,7 +158,7 @@ diagnosis       &lt;- diagnose_design(prepost_designs)</code></pre>
 <div id="what-drives-the-tradeoff" class="section level1">
 <h1>What drives the tradeoff?</h1>
 <p>We can take a closer look by decomposing RMSE into bias and variance.</p>
-<p>Regardless of the value of <code>r</code>, change scores exhibit much less bias than conditioning. Units that are higher in the unobserved variable <span class="math inline">\(u\)</span> are higher in <span class="math inline">\(Y_2\)</span> and also more likely to be assigned to <span class="math inline">\(Z\)</span>. Putting <span class="math inline">\(Y_1\)</span> on the righthand side, however, does not solve this confounding, for reasons explained in <span class="citation">Allison (1990)</span> — in short, the regression model with <span class="math inline">\(Y_1\)</span> on the righthand side assumes that <span class="math inline">\(Y_1\)</span> is uncorrelated with the error term, which it is not.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Regardless of the value of <code>r</code>, change scores exhibit much less bias than conditioning. Units that are higher in the unobserved variable <span class="math inline">\(u\)</span> are higher in <span class="math inline">\(Y_2\)</span> and also more likely to be assigned to <span class="math inline">\(Z\)</span>. Putting <span class="math inline">\(Y_1\)</span> on the righthand side, however, does not solve this confounding, for reasons explained in <span class="citation">Allison (<a href="#ref-allison1990change" role="doc-biblioref">1990</a>)</span> — in short, the regression model with <span class="math inline">\(Y_1\)</span> on the righthand side assumes that <span class="math inline">\(Y_1\)</span> is uncorrelated with the error term, which it is not.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>Differencing always does well here in terms of bias because it removes the shock, <span class="math inline">\(u\)</span>, that is associated with treatment assignment: <span class="math inline">\(D = Y_2 - Y_1 = Z + u + e_2- u - e_1 = Z + e_2 - e_1\)</span>.<br />
 The naive approach does poorly here in terms of bias as it does nothing to account for confounding. Controlling for the pretest only partially removes the bias, which can remain quite substantial at high value of <code>r</code>.</p>
 <p>The bias advantage for change scores is smaller at lower values of <code>r</code> and can be outweighed by the additional variance it introduces into the estimates. Change scores difference out <span class="math inline">\(u\)</span> at a cost of taking on both the <span class="math inline">\(e_1\)</span> and <span class="math inline">\(e_2\)</span> errors. In this design, <span class="math inline">\(Var(Y_2 | Z) = Var(u + e_2) = 1.25\)</span> whereas <span class="math inline">\(Var(Y_2 - Y_1 | Z) = Var(u + e_1 - u - e_2) = Var(e_1 - e_2) = 2\)</span>. Much noisier.</p>
@@ -168,7 +167,7 @@ The naive approach does poorly here in terms of bias as it does nothing to accou
 <div id="takeaway" class="section level1">
 <h1>Takeaway</h1>
 <p>The takeaway is that with non-experimental designs you cannot have a general preference over these two approaches to taking account of baseline data. You need to use knowledge about how data is generated to determine the right approach. The type of confounding matters, as does the size of different types of errors. If you can speculate about these then diagnosis can help select a strategy (though even after diagnosis, how you choose can depend in part on how you weigh bias and error).</p>
-<p>For experimental designs (represented here by the cases of r = 0), the choice between the two approaches is much clearer: don’t use change scores, control. The risk of bias is neglibile (see <span class="citation">Lin (2013)</span> on this point) and the estimates will be far more precise.</p>
+<p>For experimental designs (represented here by the cases of r = 0), the choice between the two approaches is much clearer: don’t use change scores, control. The risk of bias is neglibile (see <span class="citation">Lin (<a href="#ref-lin2013agnostic" role="doc-biblioref">2013</a>)</span> on this point) and the estimates will be far more precise.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>

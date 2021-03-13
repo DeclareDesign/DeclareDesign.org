@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>The trouble with &amp;lsquo;controlling for blocks&amp;rsquo; - DeclareDesign</title>
@@ -119,31 +119,29 @@
 <p>First, we declare a design that has three equally-sized blocks, with block-specific effects (<code>tau</code>) and assignment probabilities (<code>prob</code>). We will use three answer strategies: simple regression of the outcome on the treatment indicator (Naive Pooled), a regression of the outcome on the treatment indicator and block fixed effects (Least Squares Dummy Variables), and a sample-weighted average of the within-block difference-in-means (Blocked DIM). We will use a design where the noise is quite small relative to the error to clarify that that the problem is not about precision.</p>
 <p>Here’s the design declaration:</p>
 <pre class="r"><code># Model ------------------------------------------------------------------------
-U &lt;- declare_population(block = add_level(N = 3,
-                                          prob = c(.5, .7, .9),
-                                          tau = c(4, 2, 0)),
-                        indiv = add_level(N = 100, e = rnorm(N)))
-
-Y &lt;- declare_potential_outcomes(Y_Z_0 = e,
-                                Y_Z_1 = e + tau)
-
+U &lt;- declare_model(block = add_level(N = 3,
+                                     prob = c(.5, .7, .9),
+                                     tau = c(4, 2, 0)),
+                   indiv = add_level(N = 100, e = rnorm(N), 
+                                     Y_Z_0 = e,
+                                     Y_Z_1 = e + tau))
 # Inquiry ----------------------------------------------------------------------
-Q &lt;- declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0))
+Q &lt;- declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0))
 
 # Data Strategy ----------------------------------------------------------------
-Z &lt;- declare_assignment(blocks = block, block_prob = c(.5, .7, .9))
-R &lt;- declare_reveal(Y, Z)
+Z &lt;- declare_assignment(Z = block_ra(blocks = block, block_prob = c(.5, .7, .9)), legacy = FALSE)
+R &lt;- declare_measurement(Y = reveal_outcomes(Y ~ Z))
 
 # Answer Strategy --------------------------------------------------------------
-A0 &lt;- declare_estimator(Y ~ Z, estimand = Q,  
+A0 &lt;- declare_estimator(Y ~ Z, inquiry = Q,  
                         model =  lm_robust, label = &quot;A0: Naive (Pooled)&quot;)
-A1 &lt;- declare_estimator(Y ~ Z + block, estimand = Q,  
+A1 &lt;- declare_estimator(Y ~ Z + block, inquiry = Q,  
                         model =  lm_robust, label = &quot;A1: LSDV&quot;)
-A2 &lt;- declare_estimator(Y ~ Z, blocks = block, estimand = Q,  
+A2 &lt;- declare_estimator(Y ~ Z, blocks = block, inquiry = Q,  
                         model =  difference_in_means, label = &quot;A2: Blocked DIM&quot;)
 
 # Design -----------------------------------------------------------------------
-design &lt;- U + Y + Z + Q + R + A0 + A1 + A2</code></pre>
+design &lt;- U + Z + Q + R + A0 + A1 + A2</code></pre>
 <p>Diagnosis of this design lets us see how these different strategies perform:</p>
 <pre class="r"><code>diagnose_design(design, sims = sims)</code></pre>
 <table style="width:100%;">
@@ -237,11 +235,11 @@ A2(one_draw)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">A1: LSDV</td>
-<td align="right">2.533</td>
+<td align="right">2.483</td>
 </tr>
 <tr class="even">
 <td align="left">A2: Blocked DIM</td>
-<td align="right">1.951</td>
+<td align="right">1.914</td>
 </tr>
 </tbody>
 </table>
@@ -258,7 +256,6 @@ A2(one_draw)</code></pre>
   # divide by the sum of the weights
   mutate(sample_weight = sample_weight/sum(sample_weight),
          fe_weight = fe_weight/sum(fe_weight))</code></pre>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -275,7 +272,7 @@ A2(one_draw)</code></pre>
 <tr class="odd">
 <td align="left">1</td>
 <td align="right">4</td>
-<td align="right">4.17</td>
+<td align="right">4.06</td>
 <td align="right">100</td>
 <td align="right">0.5</td>
 <td align="right">0.33</td>
@@ -301,7 +298,7 @@ A2(one_draw)</code></pre>
 </tr>
 </tbody>
 </table>
-<p>This table helps explain the bias: one-third of the sample has an ATE estimate of 4.17, one-third has an ATE estimate of 1.66, and one-third an estimate of 0.02. Yet, the fixed effects estimator attributes those block-level estimated effects weights of 45%, 38%, and 16%, respectively: it exaggerates the true average effect by overweighting blocks with large effects and underweighting blocks with small effects.</p>
+<p>This table helps explain the bias: one-third of the sample has an ATE estimate of 4.06, one-third has an ATE estimate of 1.66, and one-third an estimate of 0.02. Yet, the fixed effects estimator attributes those block-level estimated effects weights of 45%, 38%, and 16%, respectively: it exaggerates the true average effect by overweighting blocks with large effects and underweighting blocks with small effects.</p>
 <p>To finish the example, see that we can recover the fixed effects and block DIM estimates from the within block estimates, just by choosing a different weighting strategy.</p>
 <pre class="r"><code>within_block %&gt;%
   summarize(LDSV = weighted.mean(block_ATE_est, fe_weight),
@@ -316,33 +313,33 @@ A2(one_draw)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">LSDV</td>
-<td align="right">2.533</td>
+<td align="right">2.483</td>
 </tr>
 <tr class="even">
 <td align="left">Blocked_DIM</td>
-<td align="right">1.951</td>
+<td align="right">1.914</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="a-horserace-between-different-approaches" class="section level1">
 <h1>A horserace between different approaches</h1>
-<p>In addition to block-wise difference-in-means, there are many other solutions that have been proposed to the problem outlined above. One might use a saturated regression <span class="citation">(Lin 2013)</span>, inverse propensity-weighted (IPW) regression, IPW with fixed effects, fixed effects regression with units reweighted by the inverse variance of assignment in their block, or a Horvitz-Thompson estimator. A recent contribution by <span class="citation">Gibbons, Serrato, and Urbancic (2018)</span> suggests two new estimators (“interaction-weighted” and “regression-weighted” estimators) and provides a package to estimate them (<code>bfe</code>).</p>
+<p>In addition to block-wise difference-in-means, there are many other solutions that have been proposed to the problem outlined above. One might use a saturated regression <span class="citation">(Lin <a href="#ref-lin2013agnostic" role="doc-biblioref">2013</a>)</span>, inverse propensity-weighted (IPW) regression, IPW with fixed effects, fixed effects regression with units reweighted by the inverse variance of assignment in their block, or a Horvitz-Thompson estimator. A recent contribution by <span class="citation">Gibbons, Serrato, and Urbancic (<a href="#ref-gibbons2014broken" role="doc-biblioref">2018</a>)</span> suggests two new estimators (“interaction-weighted” and “regression-weighted” estimators) and provides a package to estimate them (<code>bfe</code>).</p>
 <p>Less clear, however, is how these different approaches compare against each other.</p>
 <p>We can address this question for any design using design diagnosis. We add the different estimation approaches to our design:</p>
-<pre class="r"><code>A3 &lt;- declare_estimator(Y ~ Z, covariates = ~ block, estimand = Q,
+<pre class="r"><code>A3 &lt;- declare_estimator(Y ~ Z, covariates = ~ block, inquiry = Q,
                         model = lm_lin,
                         label = &quot;A3: Interaction (Lin)&quot;)
-A4 &lt;- declare_estimator(Y ~ Z, estimand = Q,
+A4 &lt;- declare_estimator(Y ~ Z, inquiry = Q,
                         model = lm_robust, weight = 1/Z_cond_prob,
                         label = &quot;A4: IPW&quot;)
-A5 &lt;- declare_estimator(Y ~ Z, fixed_effects = ~block, estimand = Q,
+A5 &lt;- declare_estimator(Y ~ Z, fixed_effects = ~block, inquiry = Q,
                         model = lm_robust, weight = 1/Z_cond_prob,
                         label = &quot;A5: IPW + FE&quot;)
-A6 &lt;- declare_estimator(Y ~ Z, fixed_effects = ~block, estimand = Q,
+A6 &lt;- declare_estimator(Y ~ Z, fixed_effects = ~block, inquiry = Q,
                         model = lm_robust, weight = 1/(Z_cond_prob*(1-Z_cond_prob)),
                         label = &quot;A6: Var weight + FE&quot;)
-A7 &lt;- declare_estimator(Y ~ Z, estimand = Q, blocks = block, simple = FALSE,
+A7 &lt;- declare_estimator(Y ~ Z, inquiry = Q, blocks = block, simple = FALSE,
                         model = horvitz_thompson, condition_prs = prob,
                         label = &quot;A7: Horvitz-Thompson&quot;)
 IWE &lt;- function(data) {
@@ -353,9 +350,9 @@ RWE &lt;- function(data) {
           M &lt;- EstimateRWE(&quot;Y&quot;, &quot;Z&quot;, &quot;block&quot;, controls = NULL, data = data)
           data.frame(term = &quot;Z&quot;, estimate = M$swe.est, std.error = M$swe.var^.5)}
 
-A8 &lt;- declare_estimator(handler = label_estimator(IWE), estimand = Q,
+A8 &lt;- declare_estimator(handler = label_estimator(IWE), inquiry = Q,
                         label = &quot;A8: IWE&quot;)
-A9 &lt;- declare_estimator(handler = label_estimator(RWE), estimand = Q,
+A9 &lt;- declare_estimator(handler = label_estimator(RWE), inquiry = Q,
                         label = &quot;A9: RWE&quot;)
 
 # Augmented Design ---------------------------------------------------------------
@@ -366,7 +363,7 @@ design &lt;- design + A3 + A4 + A5 + A6 + A7 #+ A8 + A9</code></pre>
 <pre class="r"><code>simulations %&gt;%
   group_by(estimator_label) %&gt;%
   summarize(SE_bias = mean(std.error - sd(estimate)),
-            ATE_bias = mean(estimate - estimand), .groups = &quot;drop&quot;) %&gt;%
+            ATE_bias = mean(estimate - estimand)) %&gt;%
   ggplot(aes(x = ATE_bias, y = SE_bias)) +
   geom_point() +
   geom_hline(yintercept = 0, size = .1, linetype = &quot;dashed&quot;) +
@@ -388,7 +385,7 @@ design &lt;- design + A3 + A4 + A5 + A6 + A7 #+ A8 + A9</code></pre>
 <!-- * Countries have a reform at different points in a time series. You want to estimate the generalized difference-in-differences between countries that have or have not yet had the reform (See: @goodmanbackon2018). --></li>
 </ul>
 <p>In all these cases there is what looks at first glance to be equal assignment propensities across units but on closer inspection assignment propensities in fact depend on group size in some way.</p>
-<p>See <span class="citation">Gibbons, Serrato, and Urbancic (2018)</span> for many examples in economics research and assessments of the implications of ignoring this issue.</p>
+<p>See <span class="citation">Gibbons, Serrato, and Urbancic (<a href="#ref-gibbons2014broken" role="doc-biblioref">2018</a>)</span> for many examples in economics research and assessments of the implications of ignoring this issue.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
@@ -407,7 +404,7 @@ design &lt;- design + A3 + A4 + A5 + A6 + A7 #+ A8 + A9</code></pre>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>This is a well known problem. See, for instance, <span class="citation">Angrist (1998)</span>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>This is a well known problem. See, for instance, <span class="citation">Angrist (<a href="#ref-angrist1998estimating" role="doc-biblioref">1998</a>)</span>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>Functions in <code>DeclareDesign</code> create functions that take dataframes and return dataframes or statistics. Thus, we could also have taken one draw of the data using <code>one_draw &lt;- U() %&gt;% Y %&gt;% Z %&gt;% R</code>. The first five variables were created by <code>U()</code>: <code>block</code> indicates the block to which the unit belongs, <code>prob</code> indicates the probability of assignment to treatment, <code>tau</code> indicates the block-level treatment effect, <code>indiv</code> indicates the individual ID, and <code>e</code> is the error term. The function <code>Y()</code> appends the potential outcomes, <code>Y_Z_0</code> and <code>Y_Z_1</code>, by taking <code>e</code> and adding <code>tau</code> in treatment. The function <code>Z()</code> appends two variables: <code>Z</code> is a vector of treatment assignments, block-randomized as a function of the block probabilities, while <code>Z_cond_prob</code> indicates the probability that a given unit is observed in the condition to which they were actually assigned. <code>R()</code> reveals the potential outcomes corresponding to the assignment.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>With great power comes great responsibility - DeclareDesign</title>
@@ -111,7 +111,7 @@
 <p>We usually think that the bigger the study the better. And so huge studies often rightly garner great publicity. But the ability to generate more precise results also comes with a risk. If study designs are at risk of bias and readers (or publicists!) employ a <a href="https://andrewgelman.com/2011/09/10/the-statistical-significance-filter/">statistical significance filter</a>, then big data might not remove threats of bias and might actually make things worse.</p>
 <div id="motivating-example-exercise-and-mental-health" class="section level1">
 <h1>Motivating Example: Exercise and Mental Health</h1>
-<p>A recent <a href="https://doi.org/10.1016/S2215-0366(18)30227-X">study in the Lancet</a> by <span class="citation">Chekroud et al. (2018)</span> used information on 1.2 million individuals to describe the “association” between physical exercise and mental health, finding that even after controlling for demographics and health indicators like body mass index (BMI), people who exercise more have better mental health.</p>
+<p>A recent <a href="https://doi.org/10.1016/S2215-0366(18)30227-X">study in the Lancet</a> by <span class="citation">Chekroud et al. (<a href="#ref-chekroud2018association" role="doc-biblioref">2018</a>)</span> used information on 1.2 million individuals to describe the “association” between physical exercise and mental health, finding that even after controlling for demographics and health indicators like body mass index (BMI), people who exercise more have better mental health.</p>
 <p>The study is huge. It is also observational in the sense that the decision to take the treatment (exercise) may reflect a huge array of features about people, both observable and unobservable, that may also relate to mental health. This makes it difficult to make causal claims and the authors of the Lancet study are careful to use descriptive language like “association” (rather than “causes” or “produces”) in the article. Though when discussing and promoting work like this causal claims often slip in pretty quickly. See <a href="https://twitter.com/annemscheel/status/1029006357603786752">this thread</a> from <a href="https://twitter.com/annemscheel">@annemscheel</a> on how the authors shift directly into causal language when giving policy recommendations.</p>
 <p>You might think that the size of the study protects the authors and gives them leeway to make bolder claims. But in fact the opposite might be the case.</p>
 <p>To illustrate, let’s suppose (perhaps ungenerously) that the goal of the study is not descriptive but is in fact causal. We will declare a design that involves estimating a treatment effect in an observational study (i.e., the researcher did not assign subjects to exercise or not). We should say, of course, that even in an experimental study, some design or analysis choices could also lead to bias, so the problem described here applies to any research design that is prone to bias.</p>
@@ -120,27 +120,26 @@
 
 big_data_design &lt;- 
   
-  declare_population(
+  declare_model(
     N = N,                # sample size -- we will allow this to grow
     u = rnorm(N),         # unobserved heterogeneity affects outcome and assignment
     e = rnorm(N, sd = 4), # idiosyncratic error
-    Z = rbinom(N, size = 1, prob = pnorm(u)) # treatment assignment depends on u
-    ) +
-  
-  # outcomes depend on U and e (but not Z!)
-  declare_potential_outcomes(Y ~ u + e) +
+    Z = rbinom(N, size = 1, prob = pnorm(u)), # treatment assignment depends on u
+    potential_outcomes(Y ~ u + e) # outcomes depend on U and e (but not Z!)
+  ) +
   
   # reveal outcomes on the basis of realized treatment
-  declare_reveal(Y, Z) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   
   # true effect is 0
-  declare_estimand(ATE = 0) +
+  declare_inquiry(ATE = 0) +
   
   # use difference-in-means to estimate effect
-  declare_estimator(Y ~ Z, model = difference_in_means, estimand = &quot;ATE&quot;)
+  declare_estimator(Y ~ Z, model = difference_in_means, inquiry = &quot;ATE&quot;)
 
 # we want to know about bias and power
-diags &lt;- declare_diagnosands(select = c(&quot;bias&quot;, &quot;power&quot;))</code></pre>
+diags &lt;- declare_diagnosands(bias = mean(estimate - estimand),
+                             power = mean(p.value &lt;= 0.05))</code></pre>
 <p>Given one design we can easily make a sequence of designs with bigger and bigger <code>N</code>:</p>
 <pre class="r"><code>designs &lt;- redesign(big_data_design, N = seq(100, 6000, by = 500))</code></pre>
 <p>We diagnose the sequence of designs in one go:</p>

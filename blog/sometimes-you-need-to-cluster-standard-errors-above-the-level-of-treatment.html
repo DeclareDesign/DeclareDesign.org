@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Sometimes you need to cluster standard errors above the level of treatment - DeclareDesign</title>
@@ -122,18 +122,21 @@
 <p>Here is a full declaration of the design.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <pre class="r"><code>design_1 &lt;- 
   
-  declare_population(
+  declare_model(
     schools    = add_level(N = 20, u_b = rnorm(N)), 
     classrooms = add_level(N =  5, u_c = rnorm(N)), 
-    students   = add_level(N =  5, u_i = rnorm(N))) + 
+    students   = add_level(
+      N =  5, 
+      u_i = rnorm(N),
+      potential_outcomes(Y ~  Z + (u_i + u_b + u_c))
+    )
+  ) + 
   
-  declare_potential_outcomes(Y ~  Z + (u_i + u_b + u_c)) +
+  declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0)) +
   
-  declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) +
+  declare_assignment(Z = cluster_ra(clusters = classrooms), legacy = FALSE) +
   
-  declare_assignment(clusters = classrooms) +
-  
-  declare_reveal(Y, Z) + 
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) + 
   
   declare_estimator(Y ~ Z, estimand = &quot;ATE&quot;, model = lm_robust, 
                     label = &quot;No clustering&quot;) +
@@ -156,9 +159,17 @@
 <div id="a-case-in-which-it-makes-sense-to-cluster-errors-above-the-level-of-treatment-assignment" class="section level1">
 <h1>A case in which it makes sense to cluster errors <em>above</em> the level of treatment assignment</h1>
 <p>So does this mean you should only ever account for error correlation at the same level the treatment is assigned? Not always. Consider the following similar design, in which there are heterogenous treatment effects that depend on higher-level shocks (in this case at the school level), whereas treatment is still assigned at the lower level of classrooms.</p>
-<pre class="r"><code>new_potential_outcomes &lt;- declare_potential_outcomes(Y ~ u_i + u_b*Z)
+<pre class="r"><code>new_model &lt;- declare_model(
+  schools    = add_level(N = 20, u_b = rnorm(N)), 
+  classrooms = add_level(N =  5, u_c = rnorm(N)), 
+  students   = add_level(
+    N =  5, 
+    u_i = rnorm(N),
+    potential_outcomes(Y ~ u_i + u_b*Z)
+  )
+)
 
-design_2 &lt;- replace_step(design_1, step = 2, new_potential_outcomes)</code></pre>
+design_2 &lt;- replace_step(design_1, step = 1, new_model)</code></pre>
 <p>This kind of design might describe a situation in which individuals in different areas are selected at random to participate in area-level workshops; or one in which clusters of voters are assigned to get information about the political representative in their area before an election, and so on.</p>
 <p>The distribution of estimates of uncertainty now looks like this:</p>
 <p><img src="/blog/2018-12-18-cluster-level_files/figure-html/std.error_plot2-1.png" width="672" /></p>
@@ -168,10 +179,10 @@ design_2 &lt;- replace_step(design_1, step = 2, new_potential_outcomes)</code></
 <div id="not-such-a-concern-if-your-focus-is-on-sample-average-treatment-effects" class="section level1">
 <h1>Not such a concern if your focus is on sample average treatment effects</h1>
 <p>A key feature of the last design is that the group-level treatment effects are stochastic, and so each simulation takes a draw of blocks from a large population of blocks. Thus, even though the <em>assignment</em> is not clustered by block, the units in each blocks are themselves clusters from a <em>sampling</em> process.</p>
-<p>This resonates with results in <span class="citation">Abadie et al. (2017)</span> (<a href="https://economics.mit.edu/files/13927">here</a>) which highlights the distinct sampling and assignment rationales for clustering. Here clustering at the assignment level does not account for the clustered sampling into the study. To illustrate this last point we make a small change to the design to remove this cluster-sampling feature. We draw a single dataset, and suppose that we are dealing with a finite population.</p>
+<p>This resonates with results in <span class="citation">Abadie et al. (<a href="#ref-abadie2017should" role="doc-biblioref">2017</a>)</span> (<a href="https://economics.mit.edu/files/13927">here</a>) which highlights the distinct sampling and assignment rationales for clustering. Here clustering at the assignment level does not account for the clustered sampling into the study. To illustrate this last point we make a small change to the design to remove this cluster-sampling feature. We draw a single dataset, and suppose that we are dealing with a finite population.</p>
 <pre class="r"><code>fixed_data &lt;- draw_data(design_2)</code></pre>
 <p>We then splice this new fixed data into the previous design to make a new design.</p>
-<pre class="r"><code>design_3 &lt;- replace_step(design_2, 1, declare_population(data = fixed_data))</code></pre>
+<pre class="r"><code>design_3 &lt;- replace_step(design_2, 1, declare_model(data = fixed_data))</code></pre>
 <p>Because we are holding the population data fixed, we are no longer sampling 20 clusters from the set of possible clusters. This restricts the variance of the sampling distribution to that generated by the assignment.</p>
 <p>Now the distribution of estimates of uncertainty look like this:</p>
 <p><img src="/blog/2018-12-18-cluster-level_files/figure-html/std.error_plot3-1.png" width="672" /></p>

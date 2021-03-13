@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Randomization does not justify t-tests. How worried should I be? - DeclareDesign</title>
@@ -108,9 +108,9 @@
           
 
 
-<p><span class="citation">Deaton and Cartwright (2017)</span> provide multiple arguments against claims that randomized trials should be thought of as a kind of gold standard of scientific evidence. One striking argument they make is that randomization does not justify the statistical tests that researchers typically use. They are right in that. Even if researchers can claim that their estimates of uncertainty are justified by randomization, their habitual use of those estimates to conduct <em>t</em>-tests are not. To get a handle on how severe the problem is we replicate the results in <span class="citation">Deaton and Cartwright (2017)</span> and then use a wider set of diagnosands to probe more deeply. Our investigation suggests that what at first seems like a big problem might not in fact be so great if your hypotheses are what they often are for experimentalists—sharp and sample-focused.</p>
-<p>More specifically, <span class="citation">Deaton and Cartwright (2017)</span> argue that that “spurious significance […] arises when the distribution of treatment effects contains outliers or, more generally, is not symmetric.” They back up the claim with simulation results from a case with heterogeneous asymmetrically distributed treatment effects that center on 0. In fact however, both the sharp null of no effect and the null of no average effect in a given sample are false in this example and so the worry about over-rejecting does not apply to these hypotheses.</p>
-<p>A bit more generally, <em>under the sharp null of no effect</em> the distribution of treatment effects in simple trials (with 50% assignment probabilities) will be perfectly symmetrical even if the distribution of potential outcomes is arbitrarily skewed and so the concern <span class="citation">Deaton and Cartwright (2017)</span> point to doesn’t arise in the first place.</p>
+<p><span class="citation">Deaton and Cartwright (<a href="#ref-deaton2017understanding" role="doc-biblioref">2017</a>)</span> provide multiple arguments against claims that randomized trials should be thought of as a kind of gold standard of scientific evidence. One striking argument they make is that randomization does not justify the statistical tests that researchers typically use. They are right in that. Even if researchers can claim that their estimates of uncertainty are justified by randomization, their habitual use of those estimates to conduct <em>t</em>-tests are not. To get a handle on how severe the problem is we replicate the results in <span class="citation">Deaton and Cartwright (<a href="#ref-deaton2017understanding" role="doc-biblioref">2017</a>)</span> and then use a wider set of diagnosands to probe more deeply. Our investigation suggests that what at first seems like a big problem might not in fact be so great if your hypotheses are what they often are for experimentalists—sharp and sample-focused.</p>
+<p>More specifically, <span class="citation">Deaton and Cartwright (<a href="#ref-deaton2017understanding" role="doc-biblioref">2017</a>)</span> argue that that “spurious significance […] arises when the distribution of treatment effects contains outliers or, more generally, is not symmetric.” They back up the claim with simulation results from a case with heterogeneous asymmetrically distributed treatment effects that center on 0. In fact however, both the sharp null of no effect and the null of no average effect in a given sample are false in this example and so the worry about over-rejecting does not apply to these hypotheses.</p>
+<p>A bit more generally, <em>under the sharp null of no effect</em> the distribution of treatment effects in simple trials (with 50% assignment probabilities) will be perfectly symmetrical even if the distribution of potential outcomes is arbitrarily skewed and so the concern <span class="citation">Deaton and Cartwright (<a href="#ref-deaton2017understanding" role="doc-biblioref">2017</a>)</span> point to doesn’t arise in the first place.</p>
 <p>The most important take away though might be that it’s hard to think through when the use of <em>t</em>-tests is or is not appropriate. But design diagnosis can tip you off to whether this likely a problem in your case.</p>
 <div id="the-deaton-and-cartwright-example" class="section level1">
 <h1>The Deaton and Cartwright Example</h1>
@@ -118,11 +118,10 @@
 <pre class="r"><code>N = 50
 
 dc_design &lt;-
-  declare_population(N = N, u = rlnorm(N) - exp(.5)) +
-  declare_potential_outcomes(Y_Z_0 = 0, Y_Z_1 = u) +
-  declare_estimand(SPATE = 0, SATE = mean(Y_Z_1 - Y_Z_0)) +
-  declare_assignment(prob = .5) +
-  declare_reveal(Y, Z) +
+  declare_model(N = N, u = rlnorm(N) - exp(.5), Y_Z_0 = 0, Y_Z_1 = u) +
+  declare_inquiry(SPATE = 0, SATE = mean(Y_Z_1 - Y_Z_0)) +
+  declare_assignment(Z = complete_ra(N), legacy = FALSE) +
+  declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   declare_estimator(Y ~ Z, estimand = c(&quot;SPATE&quot;, &quot;SATE&quot;)) </code></pre>
 <p>The key thing in this design is that the treatment effects have a very skewed distribution (distribution log normal, though recentered on 0).</p>
 <p>Let’s look at the power of this design over a range of N’s. Power is a key diagnosand here because Deaton and Cartwright’s position is that, since the true average treatment effect is 0, the power should be 0.05—that is, you should only reject a true null 5% of the time if you are using a 5% significance cutoff.</p>
@@ -245,8 +244,8 @@ dc_design &lt;-
 <div id="there-is-no-skew-when-sharp-nulls-are-true" class="section level2">
 <h2>There is no skew when <em>sharp</em> nulls are true</h2>
 <p>For the record, we can do the same analysis when the sharp null is in fact true. This just requires replacing the potential outcomes step (step 2) in the design.</p>
-<pre class="r"><code>dc_sharp &lt;- replace_step(dc_design, 2, 
-                         declare_potential_outcomes(Y_Z_0 = u, Y_Z_1 = u))
+<pre class="r"><code>dc_sharp &lt;- replace_step(dc_design, 1, 
+                         declare_model(N = N, u = rlnorm(N) - exp(.5), Y_Z_0 = u, Y_Z_1 = u))
 diagnose_design(dc_sharp)</code></pre>
 <table>
 <colgroup>

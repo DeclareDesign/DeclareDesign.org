@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Home Page on A Hugo website</title>
+    <title>A Hugo website</title>
     <link>/</link>
-    <description>Recent content in Home Page on A Hugo website</description>
+    <description>Recent content on A Hugo website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 08 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
@@ -89,7 +89,7 @@ Pilot studies are often used to get a guess of the average effect size, which is
       
       <guid>/blog/declaredesign-holiday-hiatus.html</guid>
       <description> We’ll be back on January 7 – Happy New Year!
-library(DeclareDesign) library(ggplot2) pop &amp;lt;- declare_population( N = 14, X = c(&amp;quot;H&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;P&amp;quot;, &amp;quot;P&amp;quot;, &amp;quot;Y&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;H&amp;quot;, &amp;quot;O&amp;quot;, &amp;quot;L&amp;quot;, &amp;quot;I&amp;quot;, &amp;quot;D&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;Y&amp;quot;, &amp;quot;S&amp;quot;), position = N:1, index = match(X, LETTERS) ) ggplot(data = pop(), aes(index, position, color = X)) + geom_text(aes(label = X)) + theme_bw() + theme(legend.position = &amp;quot;none&amp;quot;, axis.title = element_blank()) </description>
+library(DeclareDesign) library(ggplot2) pop &amp;lt;- declare_model( N = 14, X = c(&amp;quot;H&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;P&amp;quot;, &amp;quot;P&amp;quot;, &amp;quot;Y&amp;quot;, &amp;quot; &amp;quot;, &amp;quot;H&amp;quot;, &amp;quot;O&amp;quot;, &amp;quot;L&amp;quot;, &amp;quot;I&amp;quot;, &amp;quot;D&amp;quot;, &amp;quot;A&amp;quot;, &amp;quot;Y&amp;quot;, &amp;quot;S&amp;quot;), position = N:1, index = match(X, LETTERS) ) ggplot(data = pop(), aes(index, position, color = X)) + geom_text(aes(label = X)) + theme_bw() + theme(legend.position = &amp;quot;none&amp;quot;, axis.title = element_blank()) </description>
     </item>
     
     <item>
@@ -248,7 +248,7 @@ Our very first blog post is not here but over at the World Bank Development Impa
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about.html</guid>
-      <description>The DeclareDesign project is directed by Graeme Blair (UCLA), Jasper Cooper (UCSD), Alexander Coppock (Yale University), and Macartan Humphreys (Columbia University and WZB).
+      <description>The DeclareDesign project was founded by Graeme Blair (UCLA), Jasper Cooper (UCSD), Alexander Coppock (Yale University), and Macartan Humphreys (Columbia University and WZB).
 Project contributors DeclareDesign has benefited from the contributions of many researchers and coders. We recognize key contributors in addition to the principal investigators to each component:
 DeclareDesign for R: Neal Fultz
 estimatr for R: Luke Sonnet
@@ -267,12 +267,12 @@ randomizr for Stata: John Ternovski</description>
     </item>
     
     <item>
-      <title>Model-Inquiry-Data Strategy-Answer Strategy (MIDA)</title>
+      <title>Getting Started with DeclareDesign</title>
       <link>/getting-started.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/getting-started.html</guid>
-      <description>The idea motivating DeclareDesign is that the core analytic features of research designs can be declared in a complete manner and saved as an object. Once properly declared, a design can easily be shared, modified, improved, and used. A design contains the information needed to implement key parts of data generation and subsequent analysis. It also contains enough information to allow researchers or third parties to query it and determine whether it can support the claims it makes.</description>
+      <description>DeclareDesign is a system for describing research designs in code and simulating them in order to understand their properties. Because DeclareDesign employs a consistent grammar of designs, you can focus on the intellectually challenging part – designing good research studies – without having to code up simulations from scratch. DeclareDesign is based on the Model-Inquiry-Data Strategy-Answer Strategy (MIDA) framework for describing designs and a declare-diagnose-redesign workflow for improving research designs before implementing them.</description>
     </item>
     
     <item>

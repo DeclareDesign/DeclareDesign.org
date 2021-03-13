@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Should a pilot study change your study design decisions? - DeclareDesign</title>
@@ -132,10 +132,12 @@
 <pre class="r"><code>designer &lt;- 
   function(sample_size = 50, true_effect_size = 0, sd_y = 1) {
   design &lt;- 
-    declare_population(N = sample_size, u = rnorm(N, sd = sd_y)) +
-    declare_potential_outcomes(Y ~ true_effect_size * Z + u) +
-    declare_assignment(m = sample_size / 2) +
-    declare_reveal(Y, Z) +
+    declare_model(
+      N = sample_size, 
+      u = rnorm(N, sd = sd_y),
+      potential_outcomes(Y ~ true_effect_size * Z + u)) +
+    declare_assignment(Z = complete_ra(N), legacy = FALSE) +
+    declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
     declare_estimator(Y ~ Z, model = difference_in_means, label = &quot;dim&quot;) +
     declare_estimator(handler = label_estimator(sd_estimator), label = &quot;sd_estimator&quot;)
 }</code></pre>
@@ -167,7 +169,7 @@ diagnosis_study &lt;- diagnose_design(study_designs, sims = sims)</code></pre>
 <div id="how-about-estimating-the-standard-deviation-of-the-outcome" class="section level1">
 <h1>How about estimating the standard deviation of the outcome?</h1>
 <p>Now, let’s look at the second approach. Here, instead of using our pilot study to estimate the effect size for a power calculation, we estimate the <strong>standard deviation of the outcome</strong> and use this to calculate the main study’s minimum detectable effect. The decision we want to make is: is this MDE small enough to be able to rule out substantively important effects?</p>
-<p>We calculate the minimum detectable effect size using the approximation from <span class="citation">(Gelman and Hill 2006, pg. 441)</span>, 2.8 times the estimated standard error. We estimate the standard error using Equation 3.6 from <span class="citation">Gerber and Green (2012)</span>.</p>
+<p>We calculate the minimum detectable effect size using the approximation from <span class="citation">(Gelman and Hill <a href="#ref-gelman2006data" role="doc-biblioref">2006</a>, pg. 441)</span>, 2.8 times the estimated standard error. We estimate the standard error using Equation 3.6 from <span class="citation">Gerber and Green (<a href="#ref-gerber2012field" role="doc-biblioref">2012</a>)</span>.</p>
 <pre class="r"><code>simulations_pilot &lt;-
   simulations_pilot %&gt;%
   mutate(se_hat_full_study = sqrt( sd_y_0_hat^2 / 250  + sd_y_1_hat^2 / 250),

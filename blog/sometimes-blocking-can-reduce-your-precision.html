@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="generator" content="Hugo 0.79.1" />
+<meta name="generator" content="Hugo 0.81.0" />
 
 
   <title>Sometimes blocking can reduce your precision - DeclareDesign</title>
@@ -109,9 +109,9 @@
 
 
 <p>You can often improve the precision of your randomized controlled trial with blocking: first gather similar units together into groups, then run experiments inside each little group, then average results across experiments. Block random assignment (sometimes called stratified random assignment) can be great—increasing precision with blocking is like getting extra sample size for free. Blocking works because it’s like controlling for a pre-treatment covariate in the “Data Strategy” rather than in the “Answer Strategy.” But sometimes it does more harm than good.</p>
-<p>The standard experimental guidance is to block if you can in order to improve precision. (If for some reason you don’t have access to the pre-treatment covariates before the experiment is conducted, don’t fret, as the precision gains you would get from blocking on the front end can largely be made up by controlling on the back end.) In fact, even if you make blocks <em>at random</em>, you do as well as you would do under complete random assignment. For a textbook explanation of the benefits of blocking, see <span class="citation">Gerber and Green (2012)</span> (Section 3.6.1).</p>
+<p>The standard experimental guidance is to block if you can in order to improve precision. (If for some reason you don’t have access to the pre-treatment covariates before the experiment is conducted, don’t fret, as the precision gains you would get from blocking on the front end can largely be made up by controlling on the back end.) In fact, even if you make blocks <em>at random</em>, you do as well as you would do under complete random assignment. For a textbook explanation of the benefits of blocking, see <span class="citation">Gerber and Green (<a href="#ref-gerber2012field" role="doc-biblioref">2012</a>)</span> (Section 3.6.1).</p>
 <p>But is it possible to make things <em>worse</em>? Can you make a blocking that results in less precision than you would get from complete random assignment design?</p>
-<p>The answer is yes. But you have to try really hard. If you organize units into groups that are internally unusually heterogeneous you can make things worse. For a formal analysis, see <span class="citation">Imai (2008)</span>.</p>
+<p>The answer is yes. But you have to try really hard. If you organize units into groups that are internally unusually heterogeneous you can make things worse. For a formal analysis, see <span class="citation">Imai (<a href="#ref-imai2008variance" role="doc-biblioref">2008</a>)</span>.</p>
 <div id="some-intuition" class="section level1">
 <h1>Some intuition</h1>
 <p>Why does blocking usually work? Under most circumstances, blocking works because it limits the <em>types</em> of assignment that might result from randomization Blocking works well when it rules out “bad” random assignments in favor of “good” random assignments.</p>
@@ -127,16 +127,20 @@ library(tidyverse)
 
 N = 100
 
-population &lt;- declare_population(N = N, X = sort(rnorm(N)), u = rnorm(N))
-potentials &lt;- declare_potential_outcomes(Y ~ Z - X * Z + u/10)
-estimand   &lt;- declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0))
-blocking   &lt;- declare_step(fabricate, couples = rep(1:(N/2), each = 2))
-assignment &lt;- declare_assignment(prob = .5, blocks = couples)
-reveal     &lt;- declare_reveal(Y)
-estimator  &lt;- declare_estimator(Y ~ Z)
+model &lt;- declare_model(
+  N = N, 
+  X = sort(rnorm(N)), 
+  u = rnorm(N), 
+  potential_outcomes(Y ~ Z - X * Z + u/10)
+)
+inquiry     &lt;- declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0))
+blocking    &lt;- declare_step(fabricate, couples = rep(1:(N/2), each = 2))
+assignment  &lt;- declare_assignment(Z = block_ra(blocks = couples), legacy = FALSE)
+measurement &lt;- declare_measurement(Y = reveal_outcomes(Y ~ Z))
+estimator   &lt;- declare_estimator(Y ~ Z)
 
-design_likes &lt;-  population + potentials + estimand +
-                 blocking + assignment + reveal + estimator</code></pre>
+design_likes &lt;-  model + inquiry +
+                 blocking + assignment + measurement + estimator</code></pre>
 <p>The design here built in the assumption that couples are similar by putting people together if they have adjacent values of a prognostic (and, let’s assume, unobservable) variable, <span class="math inline">\(X\)</span>. In this design we have assumed an average effect of 1, but heterogeneity of effects that depends on <span class="math inline">\(X\)</span>.</p>
 <p>But what if we are wrong about couples being similar? Let’s now assume that couples contain maximally <em>dissimilar</em> people. We’ll make a new design that differs from the last design by assuming a matching in which the lowest person on <span class="math inline">\(X\)</span> couples with the highest person on <span class="math inline">\(X\)</span>, the second lowest with the second highest, and so on.</p>
 <pre class="r"><code>design_opposites &lt;-  replace_step(design_likes,
@@ -145,7 +149,8 @@ design_likes &lt;-  population + potentials + estimand +
 <p>We also want to compare both of these to a design with no blocking. To do this we will take <code>design_likes</code> and make a new design that just replaces the assignment step with one that does not use the blocks:</p>
 <pre class="r"><code>design_no_blocks &lt;-  replace_step(design_likes,
                                   assignment,
-                                  declare_assignment(prob = .5))</code></pre>
+                                  declare_assignment(Z = complete_ra(N), legacy = FALSE)
+)</code></pre>
 <p>We can simulate all three designs in one go and graph the distribution of estimated effects for each design—that is the distribution of estimated effects that you might get if you ran the experiment many times.</p>
 <pre class="r"><code>simulate_design(design_likes, design_no_blocks, design_opposites) %&gt;%
   ggplot(aes(estimate)) +
@@ -158,7 +163,7 @@ design_likes &lt;-  population + potentials + estimand +
 <p>So blocking here will tend to work well if indeed couples are similar on dimensions that are correlated with potential outcomes. But the gains from blocking really depend on the assumption of couples being similar. If in fact “opposites attract,” then blocking on couple can do more harm than good.</p>
 <p>We can confirm the graphical intuition by directly calculating the true standard error of each approach.</p>
 <pre class="r"><code>diagnose_design(design_likes, design_no_blocks, design_opposites,
-                diagnosands = declare_diagnosands(select = sd_estimate))</code></pre>
+                diagnosands = declare_diagnosands(sd_estimate = sd(estimate)))</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -185,8 +190,8 @@ design_likes &lt;-  population + potentials + estimand +
 </div>
 <div id="size" class="section level1">
 <h1>Size</h1>
-<p>As discussed in <span class="citation">Moore (2012)</span> and <span class="citation">Imai, King, and Stuart (2008)</span>, “bad blocking” is often only a problem in small samples and can go away if the sample size is sufficiently large.</p>
-<p>How small small is will depend on the background model and specifics of the estimand <span class="citation">(Imai 2008)</span>. For any given model, however, <code>DeclareDesign</code> makes it easy to answer that kind of question. Here we do the same diagnosis as above but with larger designs with <span class="math inline">\(N\)</span>s of 250 and 2500.</p>
+<p>As discussed in <span class="citation">Moore (<a href="#ref-moore2012multivariate" role="doc-biblioref">2012</a>)</span> and <span class="citation">Imai, King, and Stuart (<a href="#ref-imai2008misunderstandings" role="doc-biblioref">2008</a>)</span>, “bad blocking” is often only a problem in small samples and can go away if the sample size is sufficiently large.</p>
+<p>How small small is will depend on the background model and specifics of the estimand <span class="citation">(Imai <a href="#ref-imai2008variance" role="doc-biblioref">2008</a>)</span>. For any given model, however, <code>DeclareDesign</code> makes it easy to answer that kind of question. Here we do the same diagnosis as above but with larger designs with <span class="math inline">\(N\)</span>s of 250 and 2500.</p>
 <pre class="r"><code>diagnose_design(Like_blocks_250  = redesign(design_likes,     N = 250),
                 No_blocks_250    = redesign(design_no_blocks, N = 250),
                 Opposites_250    = redesign(design_opposites, N = 250),
