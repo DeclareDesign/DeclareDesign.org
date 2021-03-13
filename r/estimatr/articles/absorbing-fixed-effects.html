@@ -191,13 +191,13 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 170.93104 174.35906 181.62416 176.82061 179.04334 302.3390
-##        lm_robust  77.73545  79.98315  87.21573  81.60376  83.88206 211.2229
-##  lm_robust + fes  48.67444  50.07117  54.65835  51.47535  53.49383 196.1875
-##  neval cld
-##     50   c
-##     50  b 
-##     50 a</code></pre>
+##  base + sandwich 173.59942 178.79030 182.46206 179.95119 183.96744 246.7747
+##        lm_robust  78.74952  83.07214  85.91293  83.93579  85.61361 150.3086
+##  lm_robust + fes  49.72067  51.21729  54.58193  52.65847  54.18382 127.5319
+##  neval
+##     50
+##     50
+##     50</code></pre>
 <p>Speed gains are <em>considerably</em> greater with HC1 standard errors. This is because we need to get the hat matrix for HC2, HC3, and CR2 standard errors, which requires inverting that large matrix of dummies we previously avoided doing. HC0, HC1, CR0, and CRstata standard errors do not require this inversion.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># With HC1</span>
@@ -220,14 +220,14 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr        min         lq      mean     median        uq      max
-##  base + sandwich 172.133623 175.350561 180.29867 177.607503 180.28535 303.4387
-##        lm_robust  60.063977  62.903084  65.83982  65.458936  68.11375  72.3259
-##  lm_robust + fes   6.995149   7.855346  14.21658   8.248272   8.82978 145.4120
-##  neval cld
-##     50   c
-##     50  b 
-##     50 a</code></pre>
+##             expr        min         lq       mean     median        uq
+##  base + sandwich 173.870327 178.834624 184.007511 181.887561 186.90588
+##        lm_robust  63.417208  66.158211  69.048561  68.825791  71.04749
+##  lm_robust + fes   7.808578   8.416053   9.185791   8.891483   9.50105
+##        max neval
+##  240.54516    50
+##   80.99112    50
+##   13.55752    50</code></pre>
 </div>
   </div>
 
