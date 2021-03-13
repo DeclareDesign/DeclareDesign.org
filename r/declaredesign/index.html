@@ -101,40 +101,54 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>To install the latest stable release of <strong>DeclareDesign</strong>, please ensure that you are running version 3.3 or later of R and run the following code:</p>
+<p>To install the latest stable release of <strong>DeclareDesign</strong>, please ensure that you are running version 3.5 or later of R and run the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"DeclareDesign"</span><span class="op">)</span></code></pre></div>
-<p>To install the latest development release of all of the packages, please ensure that you are running version 3.4 or later of R and run the following code:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"DeclareDesign"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span>,
-                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"http://R.declaredesign.org"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>Designs are declared by adding together design elements. Here’s a minimal example that describes a 100 unit randomized controlled trial with a binary outcome. Half the units are assigned to treatment and the remainder to control. The true value of the average treatment effect is 0.05 and it will be estimated with the difference-in-means estimator. The diagnosis shows that the study is unbiased but underpowered.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://declaredesign.org">DeclareDesign</a></span><span class="op">)</span>
 
 <span class="va">design</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="reference/declare_population.html">declare_population</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="reference/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">N</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.05</span> <span class="op">*</span> <span class="va">Z</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="reference/declare_estimand.html">declare_estimand</a></span><span class="op">(</span>ATE <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="reference/declare_population.html">declare_population</a></span><span class="op">(</span>
+    N <span class="op">=</span> <span class="fl">100</span>,
+    <span class="fu">potential_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">N</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.05</span> <span class="op">*</span> <span class="va">Z</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu">declare_inquiry</span><span class="op">(</span>ATE <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>m <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span><span class="op">)</span>
+  <span class="fu"><a href="reference/declare_measurement.html">declare_measurement</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="reference/reveal_outcomes.html">reveal_outcomes</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span>, model <span class="op">=</span> <span class="va">lm_robust</span><span class="op">)</span>
 
 <span class="va">diagnosands</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="reference/diagnosand_handler.html">declare_diagnosands</a></span><span class="op">(</span>bias <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">-</span> <span class="va">estimand</span><span class="op">)</span>,
                       power <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">p.value</span> <span class="op">&lt;=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">diagnosis</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/diagnose_design.html">diagnose_design</a></span><span class="op">(</span><span class="va">design</span>, diagnosands <span class="op">=</span> <span class="va">diagnosands</span><span class="op">)</span>
-<span class="va">diagnosis</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## </span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co">## Research design diagnosis based on 500 simulations. Diagnosand estimates with bootstrapped standard errors in parentheses (100 replicates).</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co">## </span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">##  Design Label Estimand Label Estimator Label Term N Sims   Bias  Power</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co">##        design            ATE       estimator    Z    500  -0.00   0.08</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co">##                                                          (0.00) (0.01)</span></span></code></pre></div>
+<span class="va">diagnosis</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/diagnose_design.html">diagnose_design</a></span><span class="op">(</span><span class="va">design</span>, diagnosands <span class="op">=</span> <span class="va">diagnosands</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">diagnosis</span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Inquiry</th>
+<th align="left">Estimator</th>
+<th align="right">Bias</th>
+<th align="right">SE(Bias)</th>
+<th align="right">Power</th>
+<th align="right">SE(Power)</th>
+<th align="right">n sims</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">ATE</td>
+<td align="left">estimator</td>
+<td align="right">-0.004</td>
+<td align="right">0.004</td>
+<td align="right">0.076</td>
+<td align="right">0.011</td>
+<td align="right">500</td>
+</tr></tbody>
+</table>
 </div>
 <div id="companion-software" class="section level2">
 <h2 class="hasAnchor">
@@ -166,9 +180,7 @@
 <p>Each of these <code>declare_*()</code> functions returns a <em>function</em>.</p>
 <ol>
 <li>
-<code><a href="reference/declare_population.html">declare_population()</a></code> (describes dimensions and distributions over the variables in the population)</li>
-<li>
-<code><a href="reference/declare_potential_outcomes.html">declare_potential_outcomes()</a></code> (takes population or sample and adds potential outcomes produced by interventions)</li>
+<code>declare_model()</code> (describes dimensions and distributions over the variables in the population)</li>
 <li>
 <code><a href="reference/declare_sampling.html">declare_sampling()</a></code> (takes a population and selects a sample)</li>
 <li>
@@ -176,9 +188,9 @@
 <li>
 <code><a href="reference/declare_measurement.html">declare_measurement()</a></code> (adds measured variables)</li>
 <li>
-<code><a href="reference/declare_estimand.html">declare_estimand()</a></code> (takes potential outcomes and calculates a quantity of interest)</li>
+<code>declare_inquiry()</code> (takes data and returns an estimand, the answer to an inquiry)</li>
 <li>
-<code><a href="reference/declare_estimator.html">declare_estimator()</a></code> (takes data produced by sampling and assignment and returns estimates)</li>
+<code><a href="reference/declare_estimator.html">declare_estimator()</a></code> (takes data produced by sampling, assignment, and measurement and returns estimates)</li>
 </ol>
 <p>To <em>declare a design</em>, connect the components of your design with the + operator.</p>
 <p>Once you have declared your design, there are four core post-design-declaration commands used to modify or diagnose your design:</p>
@@ -190,15 +202,12 @@
 <li>
 <code><a href="reference/draw_functions.html">draw_estimates()</a></code> (takes a design a returns a single simulation of estimates)</li>
 <li>
-<code><a href="reference/draw_functions.html">draw_estimands()</a></code> (takes a design a returns a single simulation of estimands)</li>
+<code>draw_inquiries()</code> (takes a design a returns a single simulation of estimands)</li>
 </ol>
 <p>A few other features:</p>
 <ol>
 <li>A designer is a function that takes parameters (e.g., <code>N</code>) and returns a design. <code><a href="reference/expand_design.html">expand_design()</a></code> is a function of a designer and parameters that returns a design.</li>
 <li>You can change the features of the design to be diagnosed with <code><a href="reference/diagnosand_handler.html">declare_diagnosands()</a></code>.</li>
-<li>
-<code><a href="reference/reveal_outcomes.html">reveal_outcomes()</a></code> implements a general switching equation, which allows you to reveal outcomes from potential outcomes and a treatment assignment.</li>
-<li>You can provide custom functions to any <code>declare_*</code> step, as described in the <a href="/r/declaredesign/articles/custom_functions.html">custom functions vignette</a>.</li>
 </ol>
 <hr>
 <p>This project is generously supported by a grant from the <a href="http://www.arnoldfoundation.org">Laura and John Arnold Foundation</a> and seed funding from <a href="http://egap.org">EGAP</a>.</p>
