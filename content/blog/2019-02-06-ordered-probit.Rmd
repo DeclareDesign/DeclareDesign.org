@@ -47,7 +47,7 @@ Surprisingly, perhaps, we find no real difference between the model-based ordina
 We call the `zelig` library, set some parameters, and define a function to take data in and return results.
 
 ```{r, echo = TRUE, message = FALSE}
-library(zeligverse)
+library(Zelig)
 
 # This helper function implements an ordered probit model using zelig; calculates 
 # quantities of interest and return tidy output
@@ -119,10 +119,10 @@ diagnose_design(ordered_probit_design)
 ```{r, echo = FALSE}
 if(do_diagnosis) {
   diagnosis <- diagnose_design(ordered_probit_design, sims = sims)
-  write_rds(diagnosis, path = "rfiles/19_oprobit.rds")
+  write_rds(diagnosis, file = "rfiles/19_oprobit.rds")
 }
 
-diagnosis <- read_rds(path = "rfiles/19_oprobit.rds")
+diagnosis <- read_rds(file = "rfiles/19_oprobit.rds")
 kable(reshape_diagnosis(diagnosis)[,-(1:2)])
 ```
 

@@ -1,4 +1,4 @@
 Package: newwebsite
 Title: What the Package Does (One Line, Title Case)
 Depends: Zelig, ddpkgdowntemplate, checkpoint, blogdown, pkgdown, DeclareDesign, fabricatr, estimatr, randomizr, DesignLibrary, tidyverse
-Remotes: DeclareDesign/ddpkgdowntemplate, IQSS/Zelig
+Remotes: DeclareDesign/ddpkgdowntemplate, IQSS/Zelig, IQSS/ZeligChoice
