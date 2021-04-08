@@ -234,6 +234,9 @@
                                  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="va">diagnoses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html">diagnose_designs</a></span><span class="op">(</span><span class="va">binary_iv_design</span>, <span class="va">iv_nonrelevant</span>, <span class="va">iv_nonrandom</span>, 
                               <span class="va">iv_nonexcl</span>, <span class="va">iv_defiers</span>, <span class="va">iv_het</span>, sims <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></code></pre></div>
+<pre><code>## 1 coefficient  not defined because the design matrix is rank deficient
+## 
+## 1 coefficient  not defined because the design matrix is rank deficient</code></pre>
 <p>We highlight a few takeaways. Firstly, our estimates are unbiased when all assumption hold. We show that violating any of the first three assumptions yields biased estimates.</p>
 <table class="table">
 <thead><tr class="header">
