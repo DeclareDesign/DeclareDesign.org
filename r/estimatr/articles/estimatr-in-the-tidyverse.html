@@ -162,7 +162,7 @@
 </h1>
 <p>Once a regression fit is a data.frame, you can use any of the <code>dplyr</code> “verbs” for data manipulation, like <code>mutate</code>,<code>filter</code>, <code>select</code>, <code>summarise</code>, <code>group_by</code>, and <code>arrange</code> (more on this <a href="https://dplyr.tidyverse.org">here</a>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 
 <span class="co"># lm_robust and filter</span>
 <span class="va">fit</span> <span class="op">%&gt;%</span> <span class="va">tidy</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">==</span> <span class="st">"Agriculture"</span><span class="op">)</span></code></pre></div>
@@ -271,72 +271,72 @@
 <tr class="odd">
 <td align="left">1</td>
 <td align="left">(Intercept)</td>
-<td align="right">51.8246066</td>
-<td align="right">4.7832746</td>
-<td align="right">10.834546</td>
+<td align="right">59.2106556</td>
+<td align="right">6.0187662</td>
+<td align="right">9.837673</td>
 <td align="right">0.0000000</td>
-<td align="right">42.1845501</td>
-<td align="right">61.4646631</td>
+<td align="right">47.0806294</td>
+<td align="right">71.3406819</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">1</td>
 <td align="left">Catholic</td>
-<td align="right">0.0797860</td>
-<td align="right">0.0396390</td>
-<td align="right">2.012817</td>
-<td align="right">0.0502782</td>
-<td align="right">-0.0001011</td>
-<td align="right">0.1596731</td>
+<td align="right">0.1390241</td>
+<td align="right">0.0360423</td>
+<td align="right">3.857245</td>
+<td align="right">0.0003705</td>
+<td align="right">0.0663856</td>
+<td align="right">0.2116627</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="odd">
 <td align="left">1</td>
 <td align="left">Agriculture</td>
-<td align="right">0.2633691</td>
-<td align="right">0.0916256</td>
-<td align="right">2.874404</td>
-<td align="right">0.0062133</td>
-<td align="right">0.0787097</td>
-<td align="right">0.4480285</td>
+<td align="right">0.1188931</td>
+<td align="right">0.1123133</td>
+<td align="right">1.058584</td>
+<td align="right">0.2955663</td>
+<td align="right">-0.1074595</td>
+<td align="right">0.3452457</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
 <td align="left">(Intercept)</td>
-<td align="right">57.4005025</td>
-<td align="right">5.5906439</td>
-<td align="right">10.267243</td>
+<td align="right">60.7616381</td>
+<td align="right">3.5519129</td>
+<td align="right">17.106737</td>
 <td align="right">0.0000000</td>
-<td align="right">46.1333000</td>
-<td align="right">68.6677050</td>
+<td align="right">53.6032280</td>
+<td align="right">67.9200481</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="odd">
 <td align="left">2</td>
 <td align="left">Catholic</td>
-<td align="right">0.1393374</td>
-<td align="right">0.0363447</td>
-<td align="right">3.833772</td>
-<td align="right">0.0003980</td>
-<td align="right">0.0660894</td>
-<td align="right">0.2125854</td>
+<td align="right">0.0489396</td>
+<td align="right">0.0409029</td>
+<td align="right">1.196483</td>
+<td align="right">0.2379155</td>
+<td align="right">-0.0334947</td>
+<td align="right">0.1313740</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
 <td align="left">Agriculture</td>
-<td align="right">0.1432918</td>
-<td align="right">0.1118242</td>
-<td align="right">1.281402</td>
-<td align="right">0.2067647</td>
-<td align="right">-0.0820752</td>
-<td align="right">0.3686587</td>
+<td align="right">0.1000962</td>
+<td align="right">0.0626195</td>
+<td align="right">1.598483</td>
+<td align="right">0.1170928</td>
+<td align="right">-0.0261051</td>
+<td align="right">0.2262975</td>
 <td align="right">44</td>
 <td align="left">Fertility</td>
 </tr>
@@ -350,9 +350,9 @@
 <pre><code>## # A tibble: 3 x 2
 ##   term        boot_se
 ##   &lt;chr&gt;         &lt;dbl&gt;
-## 1 (Intercept)  5.10  
-## 2 Agriculture  0.0945
-## 3 Catholic     0.0387</code></pre>
+## 1 (Intercept)  5.32  
+## 2 Agriculture  0.0994
+## 3 Catholic     0.0360</code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># To visualize the sampling distribution</span>
 
