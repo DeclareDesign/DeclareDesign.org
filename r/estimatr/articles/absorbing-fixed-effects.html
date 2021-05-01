@@ -191,13 +191,13 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 166.41515 172.75143 184.98780 177.27635 195.76074 284.3439
-##        lm_robust  74.62479  78.13942  87.34444  80.47561  83.40440 194.0540
-##  lm_robust + fes  47.32516  49.08578  57.46704  50.79584  52.94018 178.2187
+##  base + sandwich 199.03734 208.87970 233.22079 218.64906 229.87104 859.7418
+##        lm_robust  82.93688  87.55839 107.56588  91.78359 102.01828 715.5633
+##  lm_robust + fes  53.95889  56.76049  89.05456  58.83914  70.69983 730.0785
 ##  neval cld
-##     50   c
-##     50  b 
-##     50 a</code></pre>
+##     50   b
+##     50  a 
+##     50  a</code></pre>
 <p>Speed gains are <em>considerably</em> greater with HC1 standard errors. This is because we need to get the hat matrix for HC2, HC3, and CR2 standard errors, which requires inverting that large matrix of dummies we previously avoided doing. HC0, HC1, CR0, and CRstata standard errors do not require this inversion.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># With HC1</span>
@@ -220,10 +220,10 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr      min         lq       mean     median         uq       max
-##  base + sandwich 164.7494 171.708542 195.047306 177.131655 190.996264 403.81998
-##        lm_robust  59.4118  62.607668  70.349127  64.561699  68.344518 135.76147
-##  lm_robust + fes   7.0520   7.491451   8.718112   7.956053   9.508427  13.94074
+##             expr       min        lq      mean    median        uq       max
+##  base + sandwich 192.98727 215.41407 274.28915 222.67713 231.71269 873.13310
+##        lm_robust  66.92982  71.57093  80.17781  76.29638  87.65695 104.71391
+##  lm_robust + fes  12.50486  13.84861  17.06926  14.70128  18.81440  28.42094
 ##  neval cld
 ##     50   c
 ##     50  b 
