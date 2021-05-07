@@ -126,7 +126,7 @@ get_diagnosands(diagnosis) %>%
   ggplot(aes(N_clusters, value, group = diagnosand, color = diagnosand)) +
   geom_point() + geom_line() +
   theme(legend.position = "bottom", strip.background = element_blank()) +
-  facet_grid(cluster_size ~ estimator_label, labeller = label_both)
+  facet_grid(cluster_size ~ estimator, labeller = label_both)
 ```
 
 ## Power 
@@ -139,7 +139,7 @@ ggplot(aes(N_clusters, power)) +
   geom_point() + geom_line() +
   geom_hline(yintercept = 0.05, linetype = "dashed") +
   theme(strip.background = element_blank()) +
-  facet_grid(cluster_size ~ estimator_label, labeller = label_both)
+  facet_grid(cluster_size ~ estimator, labeller = label_both)
 ```
 
 ## Coverage
@@ -152,7 +152,7 @@ ggplot(aes(N_clusters, coverage)) +
   geom_point() + geom_line() +
   geom_hline(yintercept = 0.95, linetype = "dashed") +
   theme(strip.background = element_blank()) +
-  facet_grid(cluster_size ~ estimator_label, labeller = label_both)
+  facet_grid(cluster_size ~ estimator, labeller = label_both)
 ```
 
 # Take aways

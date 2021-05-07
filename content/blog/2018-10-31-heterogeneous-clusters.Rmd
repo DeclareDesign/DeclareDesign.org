@@ -81,20 +81,20 @@ cluster_sims <- read_rds("rfiles/8_difference-in-means-biased.rds")
 ```
 
 
-In the plot below we show the distribution of possible estimates from different possible random assignments. The true treatment effect is 1. We see bias (of size `r round(mean(filter(cluster_sims, estimator_label == "dim")$estimate - 1), 3)`) from the fact that the distribution is clearly not centered at 1. Very large effects (approx. 3) are estimated in those cases where both of the large clusters get assigned to control (and so all treated outcomes are around 3, right mode) whereas the estimated effects (approx. 0) when both are assigned to treatment are not so small in comparison (left mode), producing right skew. The HT estimator, in contrast, does fine on bias in this example and also has a tighter distribution.
+In the plot below we show the distribution of possible estimates from different possible random assignments. The true treatment effect is 1. We see bias (of size `r round(mean(filter(cluster_sims, estimator == "dim")$estimate - 1), 3)`) from the fact that the distribution is clearly not centered at 1. Very large effects (approx. 3) are estimated in those cases where both of the large clusters get assigned to control (and so all treated outcomes are around 3, right mode) whereas the estimated effects (approx. 0) when both are assigned to treatment are not so small in comparison (left mode), producing right skew. The HT estimator, in contrast, does fine on bias in this example and also has a tighter distribution.
 
 ```{r, eval = FALSE, message = FALSE}
 simulate_design(cluster_design) %>%
   ggplot(aes(estimate)) + 
   geom_histogram(bins = 30) + 
   geom_vline(xintercept = 1, linetype = "dashed") +
-  facet_wrap( ~ estimator_label)
+  facet_wrap( ~ estimator)
 ```
 
 
 ```{r, echo = FALSE, eval = TRUE, echo = FALSE}
 cluster_sims_summary <- cluster_sims %>% 
-  group_by(estimator_label) %>% 
+  group_by(estimator) %>% 
   summarize(mean_estimate = mean(estimate),
             estimand = mean(estimand)) %>%
   gather(diagnosand, value, mean_estimate, estimand)
@@ -103,7 +103,7 @@ cluster_sims %>%
   ggplot(aes(estimate)) + 
   geom_histogram(bins = 30) + 
   geom_vline(data = cluster_sims_summary, aes(color = diagnosand, xintercept = value)) +
-  facet_wrap( ~ estimator_label)
+  facet_wrap( ~ estimator)
 ```
 
 # Scale matters
@@ -114,7 +114,7 @@ The problem in this design, we saw, arises when all the large units get assigned
 simulate_design(redesign(cluster_design, N_clusters = 120)) %>%
   ggplot(aes(estimate)) + 
   geom_histogram(bins = 30) + 
-  facet_wrap( ~ estimator_label)
+  facet_wrap( ~ estimator)
 ```
 
   
@@ -128,7 +128,7 @@ write_rds(simulation_df, file = "rfiles/8_difference-in-means-biased2.rds")
 cluster_sims2 <- read_rds("rfiles/8_difference-in-means-biased2.rds") 
 
 cluster_sims2_summary <- cluster_sims2 %>% 
-  group_by(estimator_label) %>% 
+  group_by(estimator) %>% 
   summarize(mean_estimate = mean(estimate),
             estimand = mean(estimand)) %>%
   gather(diagnosand, value, mean_estimate, estimand)
@@ -137,10 +137,10 @@ cluster_sims2 %>%
   ggplot(aes(estimate)) + 
   geom_histogram(bins = 30) + 
   geom_vline(data = cluster_sims2_summary, aes(color = diagnosand, xintercept = value)) +
-  facet_wrap( ~ estimator_label) 
+  facet_wrap( ~ estimator) 
 ```
 
-In this case the bias is of size `r round(mean(filter(cluster_sims2, estimator_label == "dim")$estimate - 1), 3)`, which is a big reduction.
+In this case the bias is of size `r round(mean(filter(cluster_sims2, estimator == "dim")$estimate - 1), 3)`, which is a big reduction.
 
 # Block on cluster size to address this risk
 
@@ -164,14 +164,14 @@ saveRDS(matched_simulation_df, file = "rfiles/8_difference-in-means-matched.rds"
 simulate_design(matched_cluster_design) %>%
   ggplot(aes(estimate)) + 
   geom_histogram(bins = 30) + 
-  facet_wrap( ~ estimator_label)
+  facet_wrap( ~ estimator)
 ```
 
 ```{r, echo = FALSE, eval = TRUE, echo = FALSE}
 matched_cluster_sims <- readRDS("rfiles/8_difference-in-means-matched.rds") 
 
 matched_cluster_sims_summary <- matched_cluster_sims %>% 
-  group_by(estimator_label) %>% 
+  group_by(estimator) %>% 
   summarize(mean_estimate = mean(estimate),
             estimand = mean(estimand)) %>%
   gather(diagnosand, value, mean_estimate, estimand)
@@ -180,7 +180,7 @@ matched_cluster_sims %>%
   ggplot(aes(estimate)) + 
   geom_histogram(bins = 30) +
   geom_vline(data = matched_cluster_sims_summary, aes(color = diagnosand, xintercept = value)) +
-  facet_wrap( ~ estimator_label) 
+  facet_wrap( ~ estimator) 
 ```
 
 # Extension: The problem is aggravated by sampling (but there is a solution in that case also!)

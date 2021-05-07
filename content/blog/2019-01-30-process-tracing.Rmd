@@ -157,7 +157,7 @@ simulate_design(design) %>%
   geom_vline(aes(xintercept = as.numeric(estimand)), linetype = "dashed") +
   scale_x_continuous(limits = c(-.1,1.1), 
                      breaks = seq(0,1,.2)) + 
-  facet_grid(test ~ estimator_label) + 
+  facet_grid(test ~ estimator) + 
   theme_bw() +
   theme(strip.background = element_blank())
 ```
@@ -171,7 +171,7 @@ if(do_diagnosis){
 diagnosis <- read_rds("rfiles/20_pt_1.rds") 
 
 custom_diags <- get_simulations(diagnosis) %>%
-  group_by(estimator_label) %>%
+  group_by(estimator) %>%
   summarize(bias = mean(posterior_H - estimand),
             rmse = sqrt(mean((posterior_H - estimand)^2)),
             mean_post = mean(posterior_H),
@@ -188,7 +188,7 @@ get_simulations(diagnosis) %>%
   geom_vline(aes(xintercept = as.numeric(estimand)), linetype = "dashed") +
   scale_x_continuous(limits = c(-.1,1.1), 
                      breaks = seq(0,1,.2)) + 
-  facet_grid(test ~ estimator_label) + 
+  facet_grid(test ~ estimator) + 
   theme_bw() +
   theme(strip.background = element_blank())
 ```
@@ -266,11 +266,11 @@ if(do_diagnosis){
 simulations <- read_rds("rfiles/20_pt_2.rds") 
 
 simulations %>% 
-  group_by(rho_H, estimator_label) %>% 
+  group_by(rho_H, estimator) %>% 
   summarize(rmse = sqrt(mean((posterior_H - estimand)^2))) %>% 
   ungroup() %>% 
   mutate(rho = as.numeric(rho_H)) %>% 
-  ggplot(aes(rho, rmse, color = estimator_label, group = estimator_label)) +
+  ggplot(aes(rho, rmse, color = estimator, group = estimator)) +
   geom_point() + geom_line() + theme_bw() +
   scale_y_continuous(limits = c(.35,.5))
 

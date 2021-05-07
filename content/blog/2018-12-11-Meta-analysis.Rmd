@@ -172,7 +172,7 @@ diagnosis_3 <- read_rds("rfiles/13_bayes_3b.rds")
 
 get_diagnosands(diagnosis_3) %>%
   mutate(bias = bias + rnorm(nrow(get_diagnosands(diagnosis_3)), 0, .003)) %>%
-  ggplot(aes(J, bias, group = estimator_label, color = estimator_label)) +
+  ggplot(aes(J, bias, group = estimator, color = estimator)) +
   geom_hline(yintercept = 0, size = .5, linetype = "dashed") +
   geom_point() + geom_line() +
   theme(legend.position = "bottom", strip.background = element_blank()) +
@@ -185,7 +185,7 @@ And the RMSE (expected error) looks like this:
 ```{r, echo = FALSE}
 get_diagnosands(diagnosis_3) %>%
   mutate(rmse = rmse + rnorm(nrow(get_diagnosands(diagnosis_3)), 0, .003)) %>%
-  ggplot(aes(J, rmse, group = estimator_label, color = estimator_label)) +
+  ggplot(aes(J, rmse, group = estimator, color = estimator)) +
   geom_point() + geom_line() +
   theme(legend.position = "bottom", strip.background = element_blank()) +
   facet_grid(~ estimand_label)

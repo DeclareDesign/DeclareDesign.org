@@ -89,7 +89,7 @@ We can simulate all three designs in one go and graph the distribution of estima
 simulate_design(design_likes, design_no_blocks, design_opposites) %>%
   ggplot(aes(estimate)) +
     geom_histogram(bins = 30) +
-    facet_wrap( ~ design_label) +
+    facet_wrap( ~ design) +
     theme_bw() +
     theme(strip.background = element_blank())
 ```
@@ -104,7 +104,7 @@ write_rds(simulation_df, path = "rfiles/3_bad_blocks_1.rds")
 read_rds("rfiles/3_bad_blocks_1.rds") %>%
     ggplot(aes(estimate)) +
     geom_histogram(bins = 30) +
-    facet_wrap( ~ design_label) +
+    facet_wrap( ~ design) +
     theme_bw() +
     theme(strip.background = element_blank())
 ```

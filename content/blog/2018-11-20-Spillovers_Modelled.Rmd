@@ -112,17 +112,17 @@ write_rds(diagnosis, file = "rfiles/11_model_spillovers_1.rds")
 ```{r, echo = FALSE, eval = TRUE}
 diagnosis <- read_rds("rfiles/11_model_spillovers_1.rds")
 get_simulations(diagnosis) %>% 
-  group_by(estimator_label, inquiry_label) %>% 
+  group_by(estimator, inquiry) %>% 
   mutate(
     mean_estimate = mean(estimate),
     mean_estimand = mean(estimand)) %>% 
   ungroup() %>% 
-  mutate(estimator_label =
-           factor(estimator_label, levels = c("naive","saturated"),
+  mutate(estimator =
+           factor(estimator, levels = c("naive","saturated"),
                   ordered = TRUE)) %>%
   ggplot(aes(estimate)) +
   geom_histogram(bins = 30) +
-  facet_wrap( ~ inquiry_label + estimator_label) + 
+  facet_wrap( ~ inquiry + estimator) + 
   
   geom_vline(aes(xintercept = mean_estimate), linetype = "dashed", color = "blue") +
   geom_vline(aes(xintercept = mean_estimand), color = "red") +
@@ -135,11 +135,11 @@ Power for all estimates now looks like this:
 
 ```{r, echo = FALSE}
 get_diagnosands(diagnosis) %>% 
-  ggplot(aes(x = estimator_label, y = power, color = estimator_label)) +
-  geom_hline(aes(yintercept = power, color = estimator_label), alpha = .3, linetype = "dashed") +
+  ggplot(aes(x = estimator, y = power, color = estimator)) +
+  geom_hline(aes(yintercept = power, color = estimator), alpha = .3, linetype = "dashed") +
   scale_y_continuous(labels = scales::percent, breaks = seq(.4,1,.1), limits = c(0.35,1)) +
   geom_point() + 
-  facet_wrap( ~ inquiry_label) +
+  facet_wrap( ~ inquiry) +
   scale_color_brewer(palette = "Set1", guide = FALSE) +
   theme_bw() + dd_theme
 ```
@@ -195,13 +195,13 @@ diagnosis <- read_rds("rfiles/11_model_spillovers_3.rds")
 
 ```{r, echo = FALSE}
 get_diagnosands(diagnosis) %>% 
-  filter(estimator_label!="naive") %>% 
-#  mutate(estimator_label = factor(estimand_label, levels = c("naive", "saturated"))) %>%
+  filter(estimator!="naive") %>% 
+#  mutate(estimator = factor(estimand_label, levels = c("naive", "saturated"))) %>%
   ggplot(aes(x = estimand_label, y = power, color = estimand_label)) +
   geom_hline(aes(yintercept = power, color = estimand_label), alpha = .3, linetype = "dashed") +
   scale_y_continuous(labels = scales::percent, breaks = seq(.4,1,.1)) +
   geom_point() + 
-  facet_wrap( ~  design_label) +
+  facet_wrap( ~  design) +
   scale_color_brewer(palette = "Set1", guide = FALSE) +
   theme_bw() + dd_theme
 ```

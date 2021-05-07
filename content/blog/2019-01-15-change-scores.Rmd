@@ -90,7 +90,7 @@ Diagnosis reveals that the change score approach dominates the condition-on-pret
 ```{r, echo = TRUE}
 get_diagnosands(diagnosis) %>%
   ggplot(aes(as.numeric(as.character(r)), rmse)) +
-  geom_line(aes(color = estimator_label)) +
+  geom_line(aes(color = estimator)) +
   theme_bw() + xlab("r")
 ```
 
@@ -140,7 +140,7 @@ The bias advantage for change scores is smaller at lower values of `r` and can b
 diagnosis$diagnosands_df %>%
   gather(key, value, bias, sd_estimate) %>%
   ggplot(aes(as.numeric(as.character(r)), value)) +
-  geom_line(aes(color = estimator_label)) +
+  geom_line(aes(color = estimator)) +
   facet_wrap(~key) +
   theme_bw() + xlab("r")
 ```

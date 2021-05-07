@@ -94,7 +94,7 @@ diagnosands <- get_diagnosands(diagnosis)
 diagnosands %>% 
 ggplot() +
   geom_vline(aes(xintercept=sd(ests$estimate)^2), linetype="dashed") +
-  stat_density(aes(x=std.error^2, colour=estimator_label), geom="line", position="identity",
+  stat_density(aes(x=std.error^2, colour=estimator), geom="line", position="identity",
                   data = ests, size = 0.75) +
   theme_bw() + theme(legend.position = "bottom") +
   guides(colour = guide_legend(nrow = 2,byrow = TRUE), 
@@ -104,7 +104,7 @@ ggplot() +
   annotate(geom = "text", x = sd(ests$estimate)^2 - .005, y = 75, label = "Actual Var(estimates)", angle = 90)
 ```
 
-The first thing that jumps out is the bias in the approach that assumes no error correlation: the average standard error (squared) is `r round(diagnosands$mean_se[diagnosands$estimator_label == "No clustering"]^2,2)`, which is well below the variance of the estimates across our repeated samples. That's the anti-conservative bias that worries people when you fail to cluster standard errors for clustered treatments. It can be quite extreme, as here.
+The first thing that jumps out is the bias in the approach that assumes no error correlation: the average standard error (squared) is `r round(diagnosands$mean_se[diagnosands$estimator == "No clustering"]^2,2)`, which is well below the variance of the estimates across our repeated samples. That's the anti-conservative bias that worries people when you fail to cluster standard errors for clustered treatments. It can be quite extreme, as here.
 
 By contrast, the approaches that allow for cluster- and block-level correlation in errors approximate the variance in the sampling distribution of the estimates nicely, and on average are about equal to the true variance of the estimates. You will notice though that the distribution of estimates of uncertainty exhibit a lot more variance when you cluster at the block level. What this means is that in this design clustering at too high a level makes it more likely that you will get the estimates of uncertainty wrong (even if you will be right on average).
 
@@ -148,7 +148,7 @@ diagnosands <- get_diagnosands(diagnosis)
 
 ggplot() +
   geom_vline(aes(xintercept=sd(ests$estimate)^2), linetype="dashed") +
-  stat_density(aes(x=std.error^2, colour=estimator_label),
+  stat_density(aes(x=std.error^2, colour=estimator),
                   geom="line",
                   position="identity",
                   data = ests, 
@@ -202,7 +202,7 @@ diagnosands  <- get_diagnosands(diagnosis)
 ggplot() +
   geom_vline(aes(xintercept=var(ests$estimate)),
              linetype="dashed") +
-  stat_density(aes(x=std.error^2, colour=estimator_label),
+  stat_density(aes(x=std.error^2, colour=estimator),
                   geom="line",
                   position="identity",
                   data = ests, 

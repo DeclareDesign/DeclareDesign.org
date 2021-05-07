@@ -97,7 +97,7 @@ Diagnosis yields:
 
 ```{r, echo = FALSE, eval = TRUE}
 diagnosis <- read_rds("rfiles/controlling_pretreatment_2.rds")
-kable(diagnosis$diagnosands[, c("estimator_label", "bias")], digits = 2)
+kable(diagnosis$diagnosands[, c("estimator", "bias")], digits = 2)
 ```
 
 We still observe bias. To see where this bias is coming from, let us draw data from this design and plot the relationship between $Z$ and $Y$. Doing so lets us see how $Z$ and $Y$ relate to to each other for different values of $X$.

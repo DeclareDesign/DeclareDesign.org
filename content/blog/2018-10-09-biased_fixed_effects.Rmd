@@ -209,14 +209,14 @@ simulations <- read_rds("rfiles/fe_simulations.rds")
 
 ```{r, warning = FALSE, message = FALSE}
 simulations %>%
-  group_by(estimator_label) %>%
+  group_by(estimator) %>%
   summarize(SE_bias = mean(std.error - sd(estimate)),
             ATE_bias = mean(estimate - estimand)) %>%
   ggplot(aes(x = ATE_bias, y = SE_bias)) +
   geom_point() +
   geom_hline(yintercept = 0, size = .1, linetype = "dashed") +
   geom_vline(xintercept = 0, size = .1, linetype = "dashed") +
-  geom_text_repel(aes(label = estimator_label), box.padding = .65,
+  geom_text_repel(aes(label = estimator), box.padding = .65,
                   point.padding = .5, segment.alpha = .5)
 ```
 
