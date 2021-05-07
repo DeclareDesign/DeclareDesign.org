@@ -202,14 +202,12 @@
   mu <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
   Sigma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>
 <span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 5 x 2</span><span>
-#&gt;      Y_1    Y_2
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span>  0.918  1.86 
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span>  1.96   2.29 
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span>  5.97   1.17 
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span>  3.87   0.165
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span> -</span><span style='color: #BB0000;'>3.39</span><span>  -</span><span style='color: #BB0000;'>0.938</span><span></div><div class='input'>
+</div><div class='output co'>#&gt;          Y_1        Y_2
+#&gt; 1  0.9176093  1.8645566
+#&gt; 2  1.9578052  2.2880898
+#&gt; 3  5.9679291  1.1697457
+#&gt; 4  3.8747084  0.1653347
+#&gt; 5 -3.3949159 -0.9381202</div><div class='input'>
 <span class='co'># equivalently, you can provide a prefix for the variable names</span>
 <span class='co'># (easier if you have many variables)</span>
 <span class='fu'>draw_multivariate</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span>
@@ -217,14 +215,12 @@
   mu <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
   Sigma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>3</span>, <span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>
 <span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 5 x 2</span><span>
-#&gt;       Y_1    Y_2
-#&gt;     </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> -</span><span style='color: #BB0000;'>5.15</span><span>   -</span><span style='color: #BB0000;'>0.892</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> -</span><span style='color: #BB0000;'>0.048</span><span style='color: #BB0000;text-decoration: underline;'>8</span><span>  2.38 
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> -</span><span style='color: #BB0000;'>2.97</span><span>   -</span><span style='color: #BB0000;'>0.856</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> -</span><span style='color: #BB0000;'>0.835</span><span>  -</span><span style='color: #BB0000;'>1.80</span><span> 
-#&gt; </span><span style='color: #BCBCBC;'>5</span><span>  3.57    2.71 </div><div class='input'>
+</div><div class='output co'>#&gt;           Y_1        Y_2
+#&gt; 1 -5.15030297 -0.8920808
+#&gt; 2 -0.04880929  2.3829329
+#&gt; 3 -2.96783075 -0.8560439
+#&gt; 4 -0.83464494 -1.8046956
+#&gt; 5  3.57069613  2.7110318</div><div class='input'>
 <span class='co'># within fabricate</span>
 <span class='fu'><a href='fabricate.html'>fabricate</a></span><span class='op'>(</span>
   N <span class='op'>=</span> <span class='fl'>100</span>,
@@ -443,7 +439,7 @@ Y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/MASS/m
 #&gt; 98  098 -4.7117331 -0.318811044
 #&gt; 99  099  4.2133672  1.022434179
 #&gt; 100 100 -2.1712793 -0.144604090</div><div class='input'>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
