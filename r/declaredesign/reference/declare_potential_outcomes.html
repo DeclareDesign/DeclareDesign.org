@@ -143,7 +143,7 @@
   label <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
-<span class='fu'>potential_outcomes.formula</span><span class='op'>(</span>
+<span class='fu'>potential_outcomes_internal.formula</span><span class='op'>(</span>
   <span class='va'>formula</span>,
   conditions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>,
   assignment_variables <span class='op'>=</span> <span class='st'>"Z"</span>,
@@ -152,7 +152,7 @@
   label <span class='op'>=</span> <span class='va'>outcome_variable</span>
 <span class='op'>)</span>
 
-<span class='fu'>potential_outcomes.NULL</span><span class='op'>(</span>
+<span class='fu'>potential_outcomes_internal.NULL</span><span class='op'>(</span>
   formula <span class='op'>=</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"Not provided"</span><span class='op'>)</span>,
   <span class='va'>...</span>,
   <span class='va'>data</span>,
@@ -224,20 +224,20 @@
 #&gt;          0      100 character
 #&gt; 
 #&gt; Added variable: U 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.03   0.19 0.13 2.69 0.93         0      100
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.75  -0.09 -0.09 2.42 1.09         0      100
 #&gt; 
 #&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ 0.5 * Z + U) -------
 #&gt; 
 #&gt; Formula: Y ~ 0.5 * Z + U 
 #&gt; 
 #&gt; Added variable: Y_Z_0 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.03   0.19 0.13 2.69 0.93         0      100
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.75  -0.09 -0.09 2.42 1.09         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_1 
 #&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.53   0.69 0.63 3.19 0.93         0      100
+#&gt;  -2.25   0.41 0.41 2.92 1.09         0      100
 #&gt; </div><div class='input'>  
 <span class='co'># As separate variables</span>
 <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
@@ -255,18 +255,18 @@
 #&gt;          0      100 character
 #&gt; 
 #&gt; Added variable: U 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -3.07   0.09 0.08 2.8 1.05         0      100
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -2.36   0.05 0.01 1.76 0.98         0      100
 #&gt; 
 #&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y_Z_0 = U, Y_Z_1 = U + 0.5) 
 #&gt; 
 #&gt; Added variable: Y_Z_0 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -3.07   0.09 0.08 2.8 1.05         0      100
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -2.36   0.05 0.01 1.76 0.98         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_1 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -2.57   0.59 0.58 3.3 1.05         0      100
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -1.86   0.55 0.51 2.26 0.98         0      100
 #&gt; </div><div class='input'><span class='co'># (notice the naming structure: outcome_assignment_condition: Y_Z_1)  </span>
 
   
@@ -285,20 +285,20 @@
 #&gt;          0      100 character
 #&gt; 
 #&gt; Added variable: U 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -1.85  -0.15 -0.06 1.95 0.85         0      100
+#&gt;   min median mean  max   sd N_missing N_unique
+#&gt;  -3.6   0.14 0.03 1.99 0.97         0      100
 #&gt; 
 #&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y2 ~ 0.5 * Z + U) ------
 #&gt; 
 #&gt; Formula: Y2 ~ 0.5 * Z + U 
 #&gt; 
 #&gt; Added variable: Y2_Z_0 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -1.85  -0.15 -0.06 1.95 0.85         0      100
+#&gt;   min median mean  max   sd N_missing N_unique
+#&gt;  -3.6   0.14 0.03 1.99 0.97         0      100
 #&gt; 
 #&gt; Added variable: Y2_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.35   0.35 0.44 2.45 0.85         0      100
+#&gt;   min median mean  max   sd N_missing N_unique
+#&gt;  -3.1   0.64 0.53 2.49 0.97         0      100
 #&gt; </div><div class='input'>  
 <span class='co'># You can change the name of the assignment_variable</span>
 <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
@@ -315,20 +315,20 @@
 #&gt;          0      100 character
 #&gt; 
 #&gt; Added variable: U 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -2.03   0.12  0.1 2.1 0.98         0      100
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.07   0.06 -0.04 2.48 0.91         0      100
 #&gt; 
 #&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ 0.5 * D + U, assignment_variable = "D") 
 #&gt; 
 #&gt; Formula: Y ~ 0.5 * D + U 
 #&gt; 
 #&gt; Added variable: Y_D_0 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -2.03   0.12  0.1 2.1 0.98         0      100
+#&gt;    min median  mean  max   sd N_missing N_unique
+#&gt;  -2.07   0.06 -0.04 2.48 0.91         0      100
 #&gt; 
 #&gt; Added variable: Y_D_1 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -1.53   0.62  0.6 2.6 0.98         0      100
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -1.57   0.56 0.46 2.98 0.91         0      100
 #&gt; </div><div class='input'>  
 
 <span class='co'># `conditions` defines the "range" of the potential outcomes function</span>
@@ -348,7 +348,7 @@
 #&gt; 
 #&gt; Added variable: age 
 #&gt;  min median  mean max    sd N_missing N_unique
-#&gt;   18     39 40.11  65 14.83         0       44
+#&gt;   18   43.5 42.22  65 13.18         0       46
 #&gt; 
 #&gt; Step 2 (potential outcomes): declare_potential_outcomes(formula = Y ~ 0.05 + 0.25 * Z + 0.01 *     age * Z, conditions = 1:4) 
 #&gt; 
@@ -356,19 +356,19 @@
 #&gt; 
 #&gt; Added variable: Y_Z_1 
 #&gt;   min median mean  max   sd N_missing N_unique
-#&gt;  0.48   0.69  0.7 0.95 0.15         0       44
+#&gt;  0.48   0.74 0.72 0.95 0.13         0       46
 #&gt; 
 #&gt; Added variable: Y_Z_2 
-#&gt;   min median mean  max  sd N_missing N_unique
-#&gt;  0.91   1.33 1.35 1.85 0.3         0       44
+#&gt;   min median mean  max   sd N_missing N_unique
+#&gt;  0.91   1.42 1.39 1.85 0.26         0       46
 #&gt; 
 #&gt; Added variable: Y_Z_3 
-#&gt;   min median mean  max   sd N_missing N_unique
-#&gt;  1.34   1.97    2 2.75 0.44         0       44
+#&gt;   min median mean  max  sd N_missing N_unique
+#&gt;  1.34    2.1 2.07 2.75 0.4         0       46
 #&gt; 
 #&gt; Added variable: Y_Z_4 
 #&gt;   min median mean  max   sd N_missing N_unique
-#&gt;  1.77   2.61 2.65 3.65 0.59         0       44
+#&gt;  1.77   2.79 2.74 3.65 0.53         0       46
 #&gt; </div><div class='input'>
 <span class='co'># Multiple assignment variables can be specified in `conditions`. For example,</span>
 <span class='co'># in a 2x2 factorial potential outcome:</span>
@@ -388,8 +388,8 @@
 #&gt;          0      100 character
 #&gt; 
 #&gt; Added variable: age 
-#&gt;  min median  mean max    sd N_missing N_unique
-#&gt;   18     46 43.02  65 14.29         0       39
+#&gt;  min median mean max    sd N_missing N_unique
+#&gt;   18   40.5 39.2  65 13.29         0       42
 #&gt; 
 #&gt; Step 2 (potential outcomes): declare_potential_outcomes(formula = Y ~ 0.05 + 0.25 * Z1 + 0.01 *     age * Z2, conditions = list(Z1 = 0:1, Z2 = 0:1)) 
 #&gt; 
@@ -407,11 +407,11 @@
 #&gt; 
 #&gt; Added variable: Y_Z1_0_Z2_1 
 #&gt;   min median mean max   sd N_missing N_unique
-#&gt;  0.23   0.51 0.48 0.7 0.14         0       39
+#&gt;  0.23   0.46 0.44 0.7 0.13         0       42
 #&gt; 
 #&gt; Added variable: Y_Z1_1_Z2_1 
 #&gt;   min median mean  max   sd N_missing N_unique
-#&gt;  0.48   0.76 0.73 0.95 0.14         0       39
+#&gt;  0.48    0.7 0.69 0.95 0.13         0       42
 #&gt; </div><div class='input'>
 </div></pre>
   </div>

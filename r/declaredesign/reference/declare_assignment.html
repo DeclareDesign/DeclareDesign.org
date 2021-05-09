@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Declare assignment procedure — declare_assignment • DeclareDesign</title>
+<title>Declare Data Strategy: Assignment — declare_assignment • DeclareDesign</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Declare assignment procedure — declare_assignment" />
-<meta property="og:description" content="Declare assignment procedure" />
+<meta property="og:title" content="Declare Data Strategy: Assignment — declare_assignment" />
+<meta property="og:description" content="Declare Data Strategy: Assignment" />
 
 
 
@@ -128,23 +128,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Declare assignment procedure</h1>
+    <h1>Declare Data Strategy: Assignment</h1>
     <small class="dont-index">Source: <a href='https://github.com/DeclareDesign/DeclareDesign/blob/master/R/declare_assignment.R'><code>R/declare_assignment.R</code></a></small>
     <div class="hidden name"><code>declare_assignment.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Declare assignment procedure</p>
+    <p>Declare Data Strategy: Assignment</p>
     </div>
 
     <pre class="usage"><span class='fu'>declare_assignment</span><span class='op'>(</span><span class='va'>...</span>, handler <span class='op'>=</span> <span class='va'>assignment_handler</span>, label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>assignment_handler</span><span class='op'>(</span>
-  <span class='va'>data</span>,
-  <span class='va'>...</span>,
-  assignment_variable <span class='op'>=</span> <span class='st'>"Z"</span>,
-  append_probabilities_matrix <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+<span class='fu'>assignment_handler</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>...</span>, legacy <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,499 +161,224 @@
       <td><p>A data.frame.</p></td>
     </tr>
     <tr>
-      <th>assignment_variable</th>
-      <td><p>Name for assignment variable (quoted). Defaults to "Z". Argument to be used with default handler.</p></td>
-    </tr>
-    <tr>
-      <th>append_probabilities_matrix</th>
-      <td><p>Should the condition probabilities matrix be appended to the data? Defaults to FALSE.  Argument to be used with default handler.</p></td>
+      <th>legacy</th>
+      <td><p>Use the legacy randomizr functionality. This will be disabled in future; please use legacy = FALSE.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An assignment declaration, which is a function that takes a data.frame as an argument and returns a data.frame with additional columns appended including an assignment variable and (optionally) probabilities of assignment.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>declare_assignment</code> can work with any assignment_function that takes data and returns data. The default handler is <code>conduct_ra</code> from the <code>randomizr</code> package. This allows quick declaration of many assignment schemes that involve simple or complete random assignment with blocks and clusters.
-The arguments to <code>conduct_ra</code> can include <code>N</code>, <code>block_var</code>, <code>clust_var</code>, <code>m</code>, <code>m_each</code>, <code>prob</code>, <code>prob_each</code>, <code>block_m</code>, <code>block_m_each</code>, <code>block_prob</code>, <code>block_prob_each</code>, <code>num_arms</code>, and <code>conditions</code>.
-The arguments you need to specify are different for different designs. For details see the help files for <code>complete_ra</code>, <code>block_ra</code>, <code>cluster_ra</code>, or <code>block_and_cluster_ra</code>.</p>
-<p>By default, <code>declare_assignment</code> declares a simple random assignment with probability 0.5.</p>
-<p>Custom assignment handlers should augment the data frame with an appropriate column for the assignment(s).</p>
+    <p>A function that takes a data.frame as an argument and returns a data.frame with assignment columns appended.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
+<span class='co'># setting up a design stub</span>
+<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
+  classrooms <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>,
+  individuals <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span><span class='fl'>20</span>, female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>N</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span> <span class='op'>+</span> <span class='cn'>NULL</span>
 
-<span class='co'># let's work with the beginnings of a design</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span>
-<span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>,
-                   female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>N</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span>,
-                   U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='co'># building in treatment effect heterogeneity for fun</span>
-  <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='fl'>0.5</span> <span class='op'>*</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='fl'>0.2</span> <span class='op'>*</span> <span class='va'>female</span> <span class='op'>+</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>Z</span> <span class='op'>*</span> <span class='va'>female</span> <span class='op'>+</span> <span class='va'>U</span><span class='op'>)</span>
-
-
-<span class='co'># Declare simple (or "Bernoulli", or "coin flip) random assignment</span>
-
-<span class='va'>design_with_assignment</span> <span class='op'>&lt;-</span> <span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_assignment</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fl'>0.5</span>, simple <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='draw_functions.html'>draw_data</a></span><span class='op'>(</span><span class='va'>design_with_assignment</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    ID female           U       Y_Z_0      Y_Z_1 Z Z_cond_prob           Y
-#&gt; 1 001      0  0.02633195  0.02633195  0.5263319 0         0.5  0.02633195
-#&gt; 2 002      1 -0.91035071 -0.71035071 -0.1103507 1         0.5 -0.11035071
-#&gt; 3 003      0 -1.10299506 -1.10299506 -0.6029951 0         0.5 -1.10299506
-#&gt; 4 004      1  0.16071244  0.36071244  0.9607124 1         0.5  0.96071244
-#&gt; 5 005      1  0.01555982  0.21555982  0.8155598 0         0.5  0.21555982
-#&gt; 6 006      0  0.29092774  0.29092774  0.7909277 1         0.5  0.79092774</div><div class='input'>
 <span class='co'># Declare assignment of m units to treatment</span>
-<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_assignment</span><span class='op'>(</span>m <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_assignment</span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span>N <span class='op'>=</span> <span class='va'>N</span>, m <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Design Summary
 #&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
+#&gt; Step 1 (model): declare_model(classrooms = add_level(10), individuals = add_level(20,     female = rbinom(N, 1, 0.5))) 
 #&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: female 
-#&gt;     0    1
-#&gt;    59   41
-#&gt;  0.59 0.41
-#&gt; 
-#&gt; Added variable: U 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.43   0.17 0.07 3.03 1.04         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ 0.5 * Z + 0.2 * female + 0.1 *     Z * female + U) 
-#&gt; 
-#&gt; Formula: Y ~ 0.5 * Z + 0.2 * female + 0.1 * Z * female + U 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.23   0.22 0.16 3.23 1.04         0      100
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.71   0.78  0.7 3.83 1.04         0      100
-#&gt; 
-#&gt; Step 3 (assignment): declare_assignment(m = 50) --------------------------------
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;   0.5
-#&gt;   100
-#&gt;  1.00
-#&gt; 
-#&gt; Step 4 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
-#&gt; 
-#&gt; Added variable: Y 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.23   0.51 0.43 3.83 1.09         0      100
-#&gt; </div><div class='input'>
-<span class='co'># Declare assignment of exactly half of the  units to treatment</span>
-<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_assignment</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
-#&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: female 
-#&gt;     0    1
-#&gt;    49   51
-#&gt;  0.49 0.51
-#&gt; 
-#&gt; Added variable: U 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.89  -0.04 -0.02 2.79 1.09         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ 0.5 * Z + 0.2 * female + 0.1 *     Z * female + U) 
-#&gt; 
-#&gt; Formula: Y ~ 0.5 * Z + 0.2 * female + 0.1 * Z * female + U 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median mean  max  sd N_missing N_unique
-#&gt;  -2.69   0.05 0.08 2.99 1.1         0      100
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.09   0.62 0.64 3.59 1.11         0      100
-#&gt; 
-#&gt; Step 3 (assignment): declare_assignment(prob = 0.5) ----------------------------
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;   0.5
-#&gt;   100
-#&gt;  1.00
-#&gt; 
-#&gt; Step 4 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
-#&gt; 
-#&gt; Added variable: Y 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -2.53   0.33 0.35 3.2 1.11         0      100
-#&gt; </div><div class='input'>
-<span class='co'># Declare blocked assignment</span>
-<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_assignment</span><span class='op'>(</span>blocks <span class='op'>=</span> <span class='va'>female</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
-#&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: female 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: U 
-#&gt;   min median  mean  max   sd N_missing N_unique
-#&gt;  -3.2  -0.07 -0.09 1.55 0.95         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ 0.5 * Z + 0.2 * female + 0.1 *     Z * female + U) 
-#&gt; 
-#&gt; Formula: Y ~ 0.5 * Z + 0.2 * female + 0.1 * Z * female + U 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;  min median mean  max   sd N_missing N_unique
-#&gt;   -3   0.04 0.01 1.75 0.93         0      100
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;   min median mean  max   sd N_missing N_unique
-#&gt;  -2.4    0.6 0.56 2.35 0.92         0      100
-#&gt; 
-#&gt; Step 3 (assignment): declare_assignment(blocks = female) -----------------------
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;   0.5
-#&gt;   100
-#&gt;  1.00
-#&gt; 
-#&gt; Step 4 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
-#&gt; 
-#&gt; Added variable: Y 
-#&gt;   min median mean  max   sd N_missing N_unique
-#&gt;  -2.4   0.44 0.28 2.04 0.96         0      100
-#&gt; </div><div class='input'>
-<span class='co'># Declare assignment specifying assignment probability for each block</span>
-<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_assignment</span><span class='op'>(</span>block_prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span><span class='op'>)</span>, blocks <span class='op'>=</span> <span class='va'>female</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N)) 
-#&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: female 
-#&gt;     0    1
-#&gt;    46   54
-#&gt;  0.46 0.54
-#&gt; 
-#&gt; Added variable: U 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.47  -0.15    0 2.68 1.11         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ 0.5 * Z + 0.2 * female + 0.1 *     Z * female + U) 
-#&gt; 
-#&gt; Formula: Y ~ 0.5 * Z + 0.2 * female + 0.1 * Z * female + U 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.47  -0.13 0.11 2.88 1.12         0      100
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.97   0.43 0.66 3.48 1.13         0      100
-#&gt; 
-#&gt; Step 3 (assignment): declare_assignment(block_prob = c(1/3, 2/3), blocks = female) 
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     0    1
-#&gt;    48   52
-#&gt;  0.48 0.52
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;  0.333333333333333 0.666666666666667
-#&gt;                 34                66
-#&gt;               0.34              0.66
-#&gt; 
-#&gt; Step 4 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
-#&gt; 
-#&gt; Added variable: Y 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.47   0.34  0.4 3.11 1.17         0      100
-#&gt; </div><div class='input'>
-<span class='co'># Declare factorial assignment (Approach 1): Use complete random assignment </span>
-<span class='co'># to assign Z1 and then use Z1 as a block to assign Z2.</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>,
-                   U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z1</span> <span class='op'>+</span> <span class='va'>Z2</span> <span class='op'>+</span> <span class='va'>Z1</span><span class='op'>*</span><span class='va'>Z2</span> <span class='op'>+</span> <span class='va'>U</span>, 
-                             conditions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>Z1 <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>, Z2 <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span> 
-
-
-<span class='va'>design</span> <span class='op'>+</span>
-  <span class='fu'>declare_assignment</span><span class='op'>(</span>assignment_variable <span class='op'>=</span> <span class='st'>"Z1"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>declare_assignment</span><span class='op'>(</span>blocks <span class='op'>=</span> <span class='va'>Z1</span>, assignment_variable <span class='op'>=</span> <span class='st'>"Z2"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, U = rnorm(N)) -----------------
-#&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: U 
-#&gt;    min median  mean max   sd N_missing N_unique
-#&gt;  -2.13  -0.12 -0.09   2 0.92         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ Z1 + Z2 + Z1 * Z2 + U, conditions = list(Z1 = 0:1,     Z2 = 0:1)) 
-#&gt; 
-#&gt; Formula: Y ~ Z1 + Z2 + Z1 * Z2 + U 
-#&gt; 
-#&gt; Added variable: Y_Z1_0_Z2_0 
-#&gt;    min median  mean max   sd N_missing N_unique
-#&gt;  -2.13  -0.12 -0.09   2 0.92         0      100
-#&gt; 
-#&gt; Added variable: Y_Z1_1_Z2_0 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -1.13   0.88 0.91   3 0.92         0      100
-#&gt; 
-#&gt; Added variable: Y_Z1_0_Z2_1 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -1.13   0.88 0.91   3 0.92         0      100
-#&gt; 
-#&gt; Added variable: Y_Z1_1_Z2_1 
-#&gt;   min median mean max   sd N_missing N_unique
-#&gt;  0.87   2.88 2.91   5 0.92         0      100
-#&gt; 
-#&gt; Step 3 (assignment): declare_assignment(assignment_variable = "Z1") ------------
-#&gt; 
-#&gt; Added variable: Z1 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z1_cond_prob 
-#&gt;   0.5
-#&gt;   100
-#&gt;  1.00
-#&gt; 
-#&gt; Step 4 (assignment): declare_assignment(blocks = Z1, assignment_variable = "Z2") 
-#&gt; 
-#&gt; Added variable: Z2 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z2_cond_prob 
-#&gt;   0.5
-#&gt;   100
-#&gt;  1.00
-#&gt; 
-#&gt; Step 5 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = c("Z1", "Z2"), label = "Autogenerated by ") 
-#&gt; 
-#&gt; Added variable: Y 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.12   0.98 1.16 4.92 1.45         0      100
-#&gt; </div><div class='input'>
-
-
-<span class='co'># Declare factorial assignment (Approach 2): </span>
-<span class='co'>#   Assign to four conditions and then split into separate factors. </span>
-
-<span class='va'>design</span> <span class='op'>+</span>
-  <span class='fu'>declare_assignment</span><span class='op'>(</span>conditions <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'><a href='declare_step.html'>declare_step</a></span><span class='op'>(</span><span class='va'>fabricate</span>, Z1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Z</span> <span class='op'>%in%</span> <span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>, Z2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Z</span> <span class='op'>%in%</span> <span class='fl'>3</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, U = rnorm(N)) -----------------
-#&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: U 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.11  -0.08 -0.03 2.07 0.93         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ Z1 + Z2 + Z1 * Z2 + U, conditions = list(Z1 = 0:1,     Z2 = 0:1)) 
-#&gt; 
-#&gt; Formula: Y ~ Z1 + Z2 + Z1 * Z2 + U 
-#&gt; 
-#&gt; Added variable: Y_Z1_0_Z2_0 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.11  -0.08 -0.03 2.07 0.93         0      100
-#&gt; 
-#&gt; Added variable: Y_Z1_1_Z2_0 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.11   0.92 0.97 3.07 0.93         0      100
-#&gt; 
-#&gt; Added variable: Y_Z1_0_Z2_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.11   0.92 0.97 3.07 0.93         0      100
-#&gt; 
-#&gt; Added variable: Y_Z1_1_Z2_1 
-#&gt;   min median mean  max   sd N_missing N_unique
-#&gt;  0.89   2.92 2.97 5.07 0.93         0      100
-#&gt; 
-#&gt; Step 3 (assignment): declare_assignment(conditions = 1:4) ----------------------
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     1    2    3    4
-#&gt;    25   25   25   25
-#&gt;  0.25 0.25 0.25 0.25
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;  0.25
-#&gt;   100
-#&gt;  1.00
-#&gt; 
-#&gt; Step 4 (custom): declare_step(fabricate, Z1 = as.numeric(Z %in% 2:3), Z2 = as.numeric(Z %in%     3:4)) 
-#&gt; 
-#&gt; Added variable: Z1 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z2 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; </div><div class='input'>
-
-
-<span class='co'># Declare clustered assignment</span>
-
-<span class='va'>clustered_design</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>
-    classrooms <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span><span class='fl'>25</span>, cluster_shock <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, sd <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>,
-    students <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span><span class='fl'>5</span>, individual_shock <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, sd <span class='op'>=</span> <span class='fl'>1.0</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='fl'>0.5</span><span class='op'>*</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='va'>cluster_shock</span> <span class='op'>+</span> <span class='va'>individual_shock</span><span class='op'>)</span>
-
-<span class='va'>clustered_design</span> <span class='op'>+</span> <span class='fu'>declare_assignment</span><span class='op'>(</span>clusters <span class='op'>=</span> <span class='va'>classrooms</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(classrooms = add_level(25, cluster_shock = rnorm(N,     sd = 0.5)), students = add_level(5, individual_shock = rnorm(N,     sd = 1))) 
-#&gt; 
-#&gt; N = 125 
+#&gt; N = 200 
 #&gt; 
 #&gt; Added variable: classrooms 
 #&gt;  N_missing N_unique     class
-#&gt;          0       25 character
+#&gt;          0       10 character
 #&gt; 
-#&gt; Added variable: cluster_shock 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -0.79   -0.3 -0.2 0.58 0.43         0       25
-#&gt; 
-#&gt; Added variable: students 
+#&gt; Added variable: individuals 
 #&gt;  N_missing N_unique     class
-#&gt;          0      125 character
+#&gt;          0      200 character
 #&gt; 
-#&gt; Added variable: individual_shock 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.56  -0.22 -0.18 2.41 0.96         0      125
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    93  107
+#&gt;  0.47 0.54
 #&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ 0.5 * Z + cluster_shock + individual_shock) 
-#&gt; 
-#&gt; Formula: Y ~ 0.5 * Z + cluster_shock + individual_shock 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median  mean max   sd N_missing N_unique
-#&gt;  -3.07  -0.48 -0.37 2.6 1.05         0      125
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;    min median mean max   sd N_missing N_unique
-#&gt;  -2.57   0.02 0.13 3.1 1.05         0      125
-#&gt; 
-#&gt; Step 3 (assignment): declare_assignment(clusters = classrooms) -----------------
+#&gt; Step 2 (assignment): declare_assignment(Z = complete_ra(N = N, m = 100)) -------
 #&gt; 
 #&gt; Added variable: Z 
 #&gt;     0    1
-#&gt;    65   60
-#&gt;  0.52 0.48
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;   0.5
-#&gt;   125
-#&gt;  1.00
-#&gt; 
-#&gt; Step 4 (reveal): reveal_outcomes(outcome_variables = "Y", assignment_variables = "Z",     label = "Autogenerated by ") 
-#&gt; 
-#&gt; Added variable: Y 
-#&gt;    min median  mean max   sd N_missing N_unique
-#&gt;  -3.07  -0.22 -0.13 3.1 1.06         0      125
+#&gt;   100  100
+#&gt;  0.50 0.50
 #&gt; </div><div class='input'>
-   
-<span class='co'># Declare assignment using custom handler</span>
-
-<span class='va'>custom_assignment</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>assignment_variable</span> <span class='op'>=</span> <span class='st'>"X"</span><span class='op'>)</span> <span class='op'>{</span>
- <span class='va'>data</span><span class='op'>[</span>, <span class='va'>assignment_variable</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>,
-                                       size <span class='op'>=</span> <span class='fl'>1</span>,
-                                       prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
- <span class='va'>data</span>
- <span class='op'>}</span>
- 
- <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>6</span><span class='op'>)</span> <span class='op'>+</span> 
-   <span class='fu'>declare_assignment</span><span class='op'>(</span>handler <span class='op'>=</span> <span class='va'>custom_assignment</span>, assignment_variable <span class='op'>=</span> <span class='st'>"X"</span><span class='op'>)</span>
+<span class='co'># Declare assignment specifying varying block probabilities</span>
+<span class='va'>design</span> <span class='op'>+</span> 
+  <span class='fu'>declare_assignment</span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>block_ra</span><span class='op'>(</span>blocks <span class='op'>=</span> <span class='va'>female</span>, 
+                                  block_prob <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Design Summary
 #&gt; 
-#&gt; Step 1 (population): declare_population(N = 6) ---------------------------------
+#&gt; Step 1 (model): declare_model(classrooms = add_level(10), individuals = add_level(20,     female = rbinom(N, 1, 0.5))) 
 #&gt; 
-#&gt; N = 6 
+#&gt; N = 200 
 #&gt; 
-#&gt; Added variable: ID 
+#&gt; Added variable: classrooms 
 #&gt;  N_missing N_unique     class
-#&gt;          0        6 character
+#&gt;          0       10 character
 #&gt; 
-#&gt; Step 2 (assignment): declare_assignment(assignment_variable = "X", handler = custom_assignment) 
+#&gt; Added variable: individuals 
+#&gt;  N_missing N_unique     class
+#&gt;          0      200 character
 #&gt; 
-#&gt; Added variable: X 
+#&gt; Added variable: female 
 #&gt;     0    1
-#&gt;     3    3
+#&gt;    95  105
+#&gt;  0.47 0.53
+#&gt; 
+#&gt; Step 2 (assignment): declare_assignment(Z = block_ra(blocks = female, block_prob = c(1/3,     2/3))) 
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    98  102
+#&gt;  0.49 0.51
+#&gt; </div><div class='input'>
+<span class='co'># Declare assignment of clusters with probability 1/4</span>
+<span class='va'>design</span> <span class='op'>+</span> <span class='fu'>declare_assignment</span><span class='op'>(</span>
+  Z <span class='op'>=</span> <span class='fu'>cluster_ra</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>4</span>, clusters <span class='op'>=</span> <span class='va'>classrooms</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (model): declare_model(classrooms = add_level(10), individuals = add_level(20,     female = rbinom(N, 1, 0.5))) 
+#&gt; 
+#&gt; N = 200 
+#&gt; 
+#&gt; Added variable: classrooms 
+#&gt;  N_missing N_unique     class
+#&gt;          0       10 character
+#&gt; 
+#&gt; Added variable: individuals 
+#&gt;  N_missing N_unique     class
+#&gt;          0      200 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    90  110
+#&gt;  0.45 0.55
+#&gt; 
+#&gt; Step 2 (assignment): declare_assignment(Z = cluster_ra(prob = 1/4, clusters = classrooms)) 
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;   140   60
+#&gt;  0.70 0.30
+#&gt; </div><div class='input'> 
+<span class='co'># Declare factorial assignment (Approach 1): </span>
+<span class='co'>#   Use complete random assignment to assign Z1 </span>
+<span class='co'>#   then block on Z1 to assign Z2. </span>
+<span class='va'>design</span> <span class='op'>+</span> 
+   <span class='fu'>declare_assignment</span><span class='op'>(</span>Z1 <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span>N <span class='op'>=</span> <span class='va'>N</span>, m <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>,
+                      Z2 <span class='op'>=</span> <span class='fu'>block_ra</span><span class='op'>(</span>blocks <span class='op'>=</span> <span class='va'>Z1</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (model): declare_model(classrooms = add_level(10), individuals = add_level(20,     female = rbinom(N, 1, 0.5))) 
+#&gt; 
+#&gt; N = 200 
+#&gt; 
+#&gt; Added variable: classrooms 
+#&gt;  N_missing N_unique     class
+#&gt;          0       10 character
+#&gt; 
+#&gt; Added variable: individuals 
+#&gt;  N_missing N_unique     class
+#&gt;          0      200 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;   104   96
+#&gt;  0.52 0.48
+#&gt; 
+#&gt; Step 2 (assignment): declare_assignment(Z1 = complete_ra(N = N, m = 100), Z2 = block_ra(blocks = Z1)) 
+#&gt; 
+#&gt; Added variable: Z1 
+#&gt;     0    1
+#&gt;   100  100
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z2 
+#&gt;     0    1
+#&gt;   100  100
 #&gt;  0.50 0.50
 #&gt; </div><div class='input'>   
+<span class='co'># Declare factorial assignment (Approach 2): </span>
+<span class='co'>#   Assign to four conditions and then split into Z1 and Z2 </span>
+<span class='va'>design</span> <span class='op'>+</span>  
+  <span class='fu'>declare_assignment</span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span>N <span class='op'>=</span> <span class='va'>N</span>, conditions <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span>,
+                     Z1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Z</span> <span class='op'>%in%</span> <span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>, 
+                     Z2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Z</span> <span class='op'>%in%</span> <span class='fl'>3</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (model): declare_model(classrooms = add_level(10), individuals = add_level(20,     female = rbinom(N, 1, 0.5))) 
+#&gt; 
+#&gt; N = 200 
+#&gt; 
+#&gt; Added variable: classrooms 
+#&gt;  N_missing N_unique     class
+#&gt;          0       10 character
+#&gt; 
+#&gt; Added variable: individuals 
+#&gt;  N_missing N_unique     class
+#&gt;          0      200 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    90  110
+#&gt;  0.45 0.55
+#&gt; 
+#&gt; Step 2 (assignment): declare_assignment(Z = complete_ra(N = N, conditions = 1:4),     Z1 = as.numeric(Z %in% 2:3), Z2 = as.numeric(Z %in% 3:4)) 
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     1    2    3    4
+#&gt;    50   50   50   50
+#&gt;  0.25 0.25 0.25 0.25
+#&gt; 
+#&gt; Added variable: Z1 
+#&gt;     0    1
+#&gt;   100  100
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Added variable: Z2 
+#&gt;     0    1
+#&gt;   100  100
+#&gt;  0.50 0.50
+#&gt; </div><div class='input'>   
+<span class='co'># Declare assignment using functions outside randomizr package:</span>
+<span class='va'>design</span> <span class='op'>+</span> 
+  <span class='fu'>declare_assignment</span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>N</span>, size <span class='op'>=</span> <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fl'>0.35</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (model): declare_model(classrooms = add_level(10), individuals = add_level(20,     female = rbinom(N, 1, 0.5))) 
+#&gt; 
+#&gt; N = 200 
+#&gt; 
+#&gt; Added variable: classrooms 
+#&gt;  N_missing N_unique     class
+#&gt;          0       10 character
+#&gt; 
+#&gt; Added variable: individuals 
+#&gt;  N_missing N_unique     class
+#&gt;          0      200 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;   109   91
+#&gt;  0.55 0.46
+#&gt; 
+#&gt; Step 2 (assignment): declare_assignment(Z = rbinom(n = N, size = 1, prob = 0.35)) 
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;   135   65
+#&gt;  0.68 0.33
+#&gt; </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

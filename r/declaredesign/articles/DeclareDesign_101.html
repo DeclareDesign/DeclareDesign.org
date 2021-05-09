@@ -235,7 +235,8 @@ REP
 <p>We want a function that takes this dataset, implements a random assignment, adds it to the dataset, and then returns the new dataset containing the random assignment.</p>
 <p>You could write your own function to do that but you can also use one of the <code>declare_*</code> functions in <code>DeclareDesign</code> that are designed to write functions. Each one of these functions is a kind of <em>function factory</em>: it takes a set of parameters about your research design like the number of units and the random assignment probability as <em>inputs</em>, and returns a <em>function</em> as an output. Here is an example of a <code>declare_assignment</code> step.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">simple_random_assignment_step</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">simple_random_assignment_step</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The big idea here is that the object we created, <code>simple_random_assignment_step</code>, is not a particular assignment, it is a <em>function</em> that conducts assignment when called. You can run the function on data:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">simple_random_assignment_step</span><span class="op">(</span><span class="va">voter_file</span><span class="op">)</span> </code></pre></div>
@@ -262,9 +263,6 @@ precinct
 <th style="text-align:right;">
 Z
 </th>
-<th style="text-align:right;">
-Z_cond_prob
-</th>
 </tr></thead>
 <tbody>
 <tr>
@@ -286,9 +284,6 @@ REP
 <td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;">
-0.4
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -308,9 +303,6 @@ DEM
 </td>
 <td style="text-align:right;">
 0
-</td>
-<td style="text-align:right;">
-0.4
 </td>
 </tr>
 <tr>
@@ -332,9 +324,6 @@ GRN
 <td style="text-align:right;">
 1
 </td>
-<td style="text-align:right;">
-0.6
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -355,9 +344,6 @@ DEM
 <td style="text-align:right;">
 0
 </td>
-<td style="text-align:right;">
-0.4
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -377,9 +363,6 @@ REP
 </td>
 <td style="text-align:right;">
 0
-</td>
-<td style="text-align:right;">
-0.4
 </td>
 </tr>
 </tbody>
@@ -412,7 +395,7 @@ REP
 </tr>
 <tr class="odd">
 <td>Inquiry</td>
-<td><code><a href="../reference/declare_estimand.html">declare_estimand()</a></code></td>
+<td><code><a href="../reference/declare_inquiry.html">declare_estimand()</a></code></td>
 <td>define research question</td>
 </tr>
 <tr class="even">
@@ -427,7 +410,7 @@ REP
 </tr>
 <tr class="even">
 <td></td>
-<td><code><a href="../reference/reveal_outcomes.html">reveal_outcomes()</a></code></td>
+<td><code>reveal_outcomes()</code></td>
 <td>link potential outcomes to revealed outcomes via assignment</td>
 </tr>
 <tr class="odd">
@@ -598,13 +581,10 @@ REP
 <div id="model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#model" class="anchor"></a>Model</h3>
-<p>The model defines the structure of the world, both its size and background characteristics as well as how interventions in the world determine outcomes. In <code>DeclareDesign</code>, we split the model into two functions: <code>declare_population</code> and <code>declare_potential_outcomes</code>.</p>
-<div id="population" class="section level4">
-<h4 class="hasAnchor">
-<a href="#population" class="anchor"></a>Population</h4>
-<p>The population defines the number of units in the population, any multilevel structure to the data, and its background characteristics. We can define the population in several ways. In some cases, you may start a design with data on the population. When that happens, we do not need to simulate it. We can simply declare the data as our population:</p>
+<p>The model defines the structure of the world, both its size and background characteristics as well as how interventions in the world determine outcomes.</p>
+<p>The model defines the number of units in the population, any multilevel structure to the data, and its background characteristics. We can define the population in several ways. In some cases, you may start a design with data on the population. When that happens, we do not need to simulate it. We can simply declare the data as our population:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/declare_population.html">declare_population</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">voter_file</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">voter_file</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <caption>
 Draw from a fixed population
@@ -714,9 +694,9 @@ REP
 </tr>
 </tbody>
 </table>
-<p>When we do not have complete data on the population, we simulate it. Relying on the data simulation functions from our <code>fabricatr</code> package, <code>declare_population</code> asks about the size and variables of the population. For instance, if we want a function that generates a dataset with 100 units and a random variable <code>U</code> we write:</p>
+<p>When we do not have complete data on the population, we simulate it. Relying on the data simulation functions from our <code>fabricatr</code> package, <code>declare_model</code> asks about the size and variables of the population. For instance, if we want a function that generates a dataset with 100 units and a random variable <code>U</code> we write:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/declare_population.html">declare_population</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>When we run this population function, we will get a different 100-unit dataset each time, as shown here.</p>
 <table class="table table">
 <caption>
@@ -949,7 +929,7 @@ U
 <p>The <code>fabricatr</code> package can simulate many different types of data, including various types of categorical variables or different types of data structures, such as panel or multilevel structures. You can read the <code>fabricatr</code> <a href="https://declaredesign.org/r/fabricatr/">website</a> vignette to get started simulating data.</p>
 <p>As an example of a two-level hierarchical data structure, here is a declaration for 100 households with a random number of individuals within each household. This two-level structure could be declared as:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/declare_population.html">declare_population</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>
   households <span class="op">=</span> <span class="fu">add_level</span><span class="op">(</span>
     N <span class="op">=</span> <span class="fl">100</span>,
     individuals_per_hh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="va">N</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -961,26 +941,28 @@ U
 <span class="op">)</span></code></pre></div>
 <p>As always, you can exit our built-in way of doing things and bring in your own code. This is useful for complex designs, or when you have already written code for your design and you want to use it directly. Here is an example of a custom population declaration:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">complex_population_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">N_units</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R"><span class="va">complex_model_function</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">N_units</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N_units</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
-<span class="fu"><a href="../reference/declare_population.html">declare_population</a></span><span class="op">(</span>
-  handler <span class="op">=</span> <span class="va">complex_population_function</span>, N_units <span class="op">=</span> <span class="fl">100</span>
+<span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>
+  handler <span class="op">=</span> <span class="va">complex_model_function</span>, N_units <span class="op">=</span> <span class="fl">100</span>
 <span class="op">)</span></code></pre></div>
-</div>
 <div id="potential-outcomes" class="section level4">
 <h4 class="hasAnchor">
 <a href="#potential-outcomes" class="anchor"></a>Potential outcomes</h4>
 <p>Defining potential outcomes is as easy as a single expression per potential outcome. Potential outcomes may depend on background characteristics, other potential outcomes, or other R functions.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>
   Y_Z_0 <span class="op">=</span> <span class="va">U</span>, 
   Y_Z_1 <span class="op">=</span> <span class="va">Y_Z_0</span> <span class="op">+</span> <span class="fl">0.25</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">design</span> <span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/declare_population.html">declare_population</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span><span class="op">)</span>
+  <span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>
+    N <span class="op">=</span> <span class="fl">100</span>,
+    U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>,
+    <span class="fu">potential_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">+</span> <span class="cn">NULL</span>
 
 <span class="fu"><a href="../reference/draw_functions.html">draw_data</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></code></pre></div>
 <table class="table table">
@@ -1074,18 +1056,18 @@ Y_Z_1
 </tr>
 </tbody>
 </table>
-<p>The <code>declare_potential_outcomes</code> function also includes an alternative interface for defining potential outcomes that uses R’s formula syntax. The formula syntax lets you specify “regression-like” outcome equations. One downside is that it mildly obscures how the names of the eventual potential outcomes columns are named. We build the names of the potential outcomes columns the outcome name (here <code>Y</code> on the left-hand side of the formula) and from the <code>assignment_variables</code> argument (here <code>Z</code>).</p>
+<p>The <code>potential_outcomes</code> formula syntax lets you specify “regression-like” outcome equations. One downside is that it mildly obscures how the names of the eventual potential outcomes columns are named. We build the names of the potential outcomes columns the outcome name (here <code>Y</code> on the left-hand side of the formula) and from the <code>assignment_variables</code> argument (here <code>Z</code>).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span>, assignment_variables <span class="op">=</span> <span class="va">Z</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, <span class="fu">potential_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span>, assignment_variables <span class="op">=</span> <span class="va">Z</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Either way of creating potential outcomes works; one may be easier or harder to code up in a given research design setting.</p>
 </div>
 </div>
 <div id="inquiry" class="section level3">
 <h3 class="hasAnchor">
 <a href="#inquiry" class="anchor"></a>Inquiry</h3>
-<p>To define your inquiry, declare your estimand. Estimands are typically summaries of the data produced in <code>declare_population</code> and <code>declare_potential_outcomes</code>. Here we define the average treatment effect as follows:</p>
+<p>To define your inquiry, declare your estimand. Estimands are typically summaries of the data produced in <code>declare_model</code>. Here we define the average treatment effect as follows:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/declare_estimand.html">declare_estimand</a></span><span class="op">(</span>PATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>PATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Notice that we defined the PATE (the <em>population</em> average treatment effect), but said nothing special related to the population – it looks like we just defined the average treatment effect. This is because <em>order matters</em>. If we want to define a SATE (the <em>sample</em> average treatment effect), we would have to do so after sampling has occurred. We will see how to do this in a moment.</p>
 </div>
 <div id="data-strategy" class="section level3">
@@ -1097,7 +1079,7 @@ Y_Z_1
 <a href="#sampling" class="anchor"></a>Sampling</h4>
 <p>The sampling step relies on the <code>randomizr</code> package to conduct random sampling. Here we define a procedure for drawing a 50-unit sample from the population:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/declare_sampling.html">declare_sampling</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_sampling.html">declare_sampling</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fu">complete_rs</span><span class="op">(</span><span class="va">N</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>When we draw data from our simple design at this point, it will have fewer rows: it will have shrunk from 100 units in the population to a data frame of 50 units representing the sample. The new data frame also includes a variable indicating the probability of being included in the sample. In this case, every unit in the population had an equal inclusion probability of 0.5.</p>
 <table class="table table">
 <caption>
@@ -1119,50 +1101,10 @@ Y_Z_0
 Y_Z_1
 </th>
 <th style="text-align:right;">
-S_inclusion_prob
+S
 </th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-1
-</td>
-<td style="text-align:left;">
-001
-</td>
-<td style="text-align:right;">
-0.86
-</td>
-<td style="text-align:right;">
-0.86
-</td>
-<td style="text-align:right;">
-1.11
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-3
-</td>
-<td style="text-align:left;">
-003
-</td>
-<td style="text-align:right;">
-0.62
-</td>
-<td style="text-align:right;">
-0.62
-</td>
-<td style="text-align:right;">
-0.87
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-</tr>
 <tr>
 <td style="text-align:left;">
 5
@@ -1171,24 +1113,24 @@ S_inclusion_prob
 005
 </td>
 <td style="text-align:right;">
-1.02
+-0.59
 </td>
 <td style="text-align:right;">
-1.02
+-0.59
 </td>
 <td style="text-align:right;">
-1.27
+-0.34
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-6
+7
 </td>
 <td style="text-align:left;">
-006
+007
 </td>
 <td style="text-align:right;">
 0.86
@@ -1200,15 +1142,15 @@ S_inclusion_prob
 1.11
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-8
+9
 </td>
 <td style="text-align:left;">
-008
+009
 </td>
 <td style="text-align:right;">
 -0.43
@@ -1220,7 +1162,47 @@ S_inclusion_prob
 -0.18
 </td>
 <td style="text-align:right;">
-0.5
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+010
+</td>
+<td style="text-align:right;">
+-0.94
+</td>
+<td style="text-align:right;">
+-0.94
+</td>
+<td style="text-align:right;">
+-0.69
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+12
+</td>
+<td style="text-align:left;">
+012
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+1.25
+</td>
+<td style="text-align:right;">
+1
 </td>
 </tr>
 </tbody>
@@ -1232,10 +1214,10 @@ S_inclusion_prob
 <a href="#assignment" class="anchor"></a>Assignment</h4>
 <p>The default handler for <code>declare_assignment</code> also relies on the <code>randomizr</code> package for random assignment. Here, we define an assignment procedure that allocates subjects to treatment with probability 0.5. One subtlety is that by default, <code>declare_assignment</code> conducts complete random assignment (exactly <span class="math inline">\(m\)</span> of <span class="math inline">\(N\)</span> units assigned to treatment, where <span class="math inline">\(m\)</span> = <code>prob</code> * <span class="math inline">\(N\)</span>).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<p>After treatments are assigned, some <em>potential</em> outcomes are <em>revealed</em>. Treated units reveal their treated potential outcomes and untreated units reveal their untreated potential outcomes. The <code>reveal_outcomes</code> function performs this switching operation.</p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>After treatments are assigned, some <em>potential</em> outcomes are <em>revealed</em>. Treated units reveal their treated potential outcomes and untreated units reveal their untreated potential outcomes. The <code>reveal_outcomes</code> function performs this switching operation within a <code>declare_measurement</code> call.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/reveal_outcomes.html">reveal_outcomes</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">Z</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/declare_measurement.html">declare_measurement</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="fu">reveal_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Adding these two declarations to the design results in a data frame with an additional indicator <code>Z</code> for the assignment as well as its corresponding probability of assignment. Again, here the assignment probabilities are constant, but in other designs they are not and this is crucial information for the analysis stage. The outcome variable <code>Y</code> is composed of each unit’s potential outcomes depending on its treatment status.</p>
 <table class="table table">
 <caption>
@@ -1255,45 +1237,16 @@ Y_Z_0
 Y_Z_1
 </th>
 <th style="text-align:right;">
-S_inclusion_prob
+S
 </th>
 <th style="text-align:right;">
 Z
-</th>
-<th style="text-align:right;">
-Z_cond_prob
 </th>
 <th style="text-align:right;">
 Y
 </th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-001
-</td>
-<td style="text-align:right;">
--0.86
-</td>
-<td style="text-align:right;">
--0.86
-</td>
-<td style="text-align:right;">
--0.61
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
--0.61
-</td>
-</tr>
 <tr>
 <td style="text-align:left;">
 003
@@ -1308,42 +1261,36 @@ Y
 1.17
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
 1
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1.17
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-004
-</td>
-<td style="text-align:right;">
--0.72
-</td>
-<td style="text-align:right;">
--0.72
-</td>
-<td style="text-align:right;">
--0.47
-</td>
-<td style="text-align:right;">
-0.5
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-0.5
+0.92
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+005
 </td>
 <td style="text-align:right;">
--0.72
+0.69
+</td>
+<td style="text-align:right;">
+0.69
+</td>
+<td style="text-align:right;">
+0.94
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.94
 </td>
 </tr>
 <tr>
@@ -1360,16 +1307,13 @@ Y
 0.70
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
-0
+1
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0.45
+0.70
 </td>
 </tr>
 <tr>
@@ -1386,16 +1330,36 @@ Y
 0.40
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-0.5
+0.15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+010
 </td>
 <td style="text-align:right;">
-0.15
+0.80
+</td>
+<td style="text-align:right;">
+0.80
+</td>
+<td style="text-align:right;">
+1.05
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.05
 </td>
 </tr>
 </tbody>
@@ -1425,13 +1389,10 @@ Y_Z_0
 Y_Z_1
 </th>
 <th style="text-align:right;">
-S_inclusion_prob
+S
 </th>
 <th style="text-align:right;">
 Z
-</th>
-<th style="text-align:right;">
-Z_cond_prob
 </th>
 <th style="text-align:right;">
 Y
@@ -1443,28 +1404,25 @@ Y_binary
 <tbody>
 <tr>
 <td style="text-align:left;">
-001
+004
 </td>
 <td style="text-align:right;">
--1.1
+-1.71
 </td>
 <td style="text-align:right;">
--1.1
+-1.71
 </td>
 <td style="text-align:right;">
--0.86
-</td>
-<td style="text-align:right;">
-0.5
+-1.46
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
--0.86
+-1.46
 </td>
 <td style="text-align:right;">
 0
@@ -1472,86 +1430,77 @@ Y_binary
 </tr>
 <tr>
 <td style="text-align:left;">
-006
-</td>
-<td style="text-align:right;">
-3.1
-</td>
-<td style="text-align:right;">
-3.1
-</td>
-<td style="text-align:right;">
-3.38
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-3.38
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-008
-</td>
-<td style="text-align:right;">
-1.9
-</td>
-<td style="text-align:right;">
-1.9
-</td>
-<td style="text-align:right;">
-2.11
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.5
+009
 </td>
 <td style="text-align:right;">
 1.86
 </td>
 <td style="text-align:right;">
+1.86
+</td>
+<td style="text-align:right;">
+2.11
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.11
+</td>
+<td style="text-align:right;">
 1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-012
+011
 </td>
 <td style="text-align:right;">
--1.6
+0.96
 </td>
 <td style="text-align:right;">
--1.6
+0.96
 </td>
 <td style="text-align:right;">
--1.32
-</td>
-<td style="text-align:right;">
-0.5
+1.21
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-0.5
+0
 </td>
 <td style="text-align:right;">
--1.32
+0.96
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+015
+</td>
+<td style="text-align:right;">
+-0.21
+</td>
+<td style="text-align:right;">
+-0.21
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.04
 </td>
 <td style="text-align:right;">
 0
@@ -1559,28 +1508,25 @@ Y_binary
 </tr>
 <tr>
 <td style="text-align:left;">
-013
+016
 </td>
 <td style="text-align:right;">
--0.3
+-1.14
 </td>
 <td style="text-align:right;">
--0.3
+-1.14
 </td>
 <td style="text-align:right;">
--0.05
+-0.89
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
--0.30
+-1.14
 </td>
 <td style="text-align:right;">
 0
@@ -1612,13 +1558,10 @@ Y_Z_0
 Y_Z_1
 </th>
 <th style="text-align:right;">
-S_inclusion_prob
+S
 </th>
 <th style="text-align:right;">
 Z
-</th>
-<th style="text-align:right;">
-Z_cond_prob
 </th>
 <th style="text-align:right;">
 Y
@@ -1630,51 +1573,22 @@ Y
 001
 </td>
 <td style="text-align:right;">
-1.680
+1.68
 </td>
 <td style="text-align:right;">
-1.680
+1.68
 </td>
 <td style="text-align:right;">
 1.93
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-1.930
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-002
-</td>
-<td style="text-align:right;">
-0.057
-</td>
-<td style="text-align:right;">
-0.057
-</td>
-<td style="text-align:right;">
-0.31
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0.057
+1.93
 </td>
 </tr>
 <tr>
@@ -1682,25 +1596,45 @@ Y
 003
 </td>
 <td style="text-align:right;">
--1.280
+-1.28
 </td>
 <td style="text-align:right;">
--1.280
+-1.28
 </td>
 <td style="text-align:right;">
 -1.03
 </td>
 <td style="text-align:right;">
-0.5
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+-1.28
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+004
+</td>
+<td style="text-align:right;">
+-0.13
+</td>
+<td style="text-align:right;">
+-0.13
+</td>
+<td style="text-align:right;">
+0.12
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
--1.030
+0.12
 </td>
 </tr>
 <tr>
@@ -1708,51 +1642,45 @@ Y
 005
 </td>
 <td style="text-align:right;">
-0.613
+0.61
 </td>
 <td style="text-align:right;">
-0.613
+0.61
 </td>
 <td style="text-align:right;">
 0.86
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0.863
+0.86
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-006
+007
 </td>
 <td style="text-align:right;">
--1.241
+-0.71
 </td>
 <td style="text-align:right;">
--1.241
+-0.71
 </td>
 <td style="text-align:right;">
--0.99
-</td>
-<td style="text-align:right;">
-0.5
+-0.46
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
--0.991
+-0.46
 </td>
 </tr>
 </tbody>
@@ -1798,25 +1726,25 @@ outcome
 Z
 </td>
 <td style="text-align:right;">
-0.13
+0.92
 </td>
 <td style="text-align:right;">
-0.27
+0.29
 </td>
 <td style="text-align:right;">
-0.5
+3.2
 </td>
 <td style="text-align:right;">
-0.62
+0.003
 </td>
 <td style="text-align:right;">
--0.4
+0.34
 </td>
 <td style="text-align:right;">
-0.67
+1.5
 </td>
 <td style="text-align:right;">
-48
+40
 </td>
 <td style="text-align:left;">
 Y
@@ -1896,23 +1824,24 @@ Y
 <a href="#building-a-design-from-design-steps" class="anchor"></a>Building a design from design steps</h2>
 <p>In the last section, we defined a set of individual research steps. We draw one version of them together here:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">population</span> <span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/declare_population.html">declare_population</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span> 
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>
+    N <span class="op">=</span> <span class="fl">100</span>, 
+    U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>, 
+    <span class="fu">potential_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span><span class="op">)</span>
+  <span class="op">)</span>
 
-<span class="va">potential_outcomes</span> <span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span><span class="op">)</span> 
-
-<span class="va">estimand</span> <span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/declare_estimand.html">declare_estimand</a></span><span class="op">(</span>PATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span> 
+<span class="va">inquiry</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="../reference/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>PATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span> 
 
 <span class="va">sampling</span> <span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/declare_sampling.html">declare_sampling</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> 
+  <span class="fu"><a href="../reference/declare_sampling.html">declare_sampling</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fu">complete_rs</span><span class="op">(</span><span class="va">N</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">assignment</span> <span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> 
+  <span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">reveal</span> <span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/reveal_outcomes.html">reveal_outcomes</a></span><span class="op">(</span>outcome_variables <span class="op">=</span> <span class="va">Y</span>, assignment_variables <span class="op">=</span> <span class="va">Z</span><span class="op">)</span> 
+<span class="va">measurement</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="../reference/declare_measurement.html">declare_measurement</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="fu">reveal_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span><span class="op">)</span><span class="op">)</span> 
 
 <span class="va">estimator</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="../reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
@@ -1921,31 +1850,29 @@ Y
 <p>To construct a research design <em>object</em> that we can operate on — diagnose it, redesign it, draw data from it, etc. — we add them together with the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator, just as <code>%&gt;%</code> makes <code>dplyr</code> pipelines or <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> creates <code>ggplot</code> objects.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">design</span> <span class="op">&lt;-</span> 
-  <span class="va">population</span> <span class="op">+</span> <span class="va">potential_outcomes</span> <span class="op">+</span> <span class="va">estimand</span> <span class="op">+</span> 
-  <span class="va">sampling</span> <span class="op">+</span> <span class="va">assignment</span> <span class="op">+</span> <span class="va">reveal</span> <span class="op">+</span> <span class="va">estimator</span></code></pre></div>
+  <span class="va">model</span> <span class="op">+</span> <span class="va">inquiry</span> <span class="op">+</span> <span class="va">sampling</span> <span class="op">+</span> <span class="va">assignment</span> <span class="op">+</span> <span class="va">measurement</span> <span class="op">+</span> <span class="va">estimator</span></code></pre></div>
 <p>We will usually declare designs more compactly, concatenating steps directly with <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code>:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">design</span> <span class="op">&lt;-</span> 
-  <span class="fu"><a href="../reference/declare_population.html">declare_population</a></span><span class="op">(</span>N <span class="op">=</span> <span class="fl">100</span>, U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/declare_estimand.html">declare_estimand</a></span><span class="op">(</span>PATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/declare_sampling.html">declare_sampling</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/reveal_outcomes.html">reveal_outcomes</a></span><span class="op">(</span>outcome_variables <span class="op">=</span> <span class="va">Y</span>, assignment_variables <span class="op">=</span> <span class="va">Z</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
-    <span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span>, model <span class="op">=</span> <span class="va">difference_in_means</span>, estimand <span class="op">=</span> <span class="st">"PATE"</span>
-  <span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>
+    N <span class="op">=</span> <span class="fl">100</span>, 
+    U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>,
+    <span class="fu">potential_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="fl">0.25</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>PATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_sampling.html">declare_sampling</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fu">complete_rs</span><span class="op">(</span><span class="va">N</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_measurement.html">declare_measurement</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="fu">reveal_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span>, model <span class="op">=</span> <span class="va">difference_in_means</span>, estimand <span class="op">=</span> <span class="st">"PATE"</span><span class="op">)</span></code></pre></div>
 <div id="order-matters" class="section level3">
 <h3 class="hasAnchor">
 <a href="#order-matters" class="anchor"></a>Order matters</h3>
 <p>When defining a design, the order in which steps are included in the design via the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator matters. Think of the order of your design as the temporal order in which steps take place. Here, since the estimand comes before sampling and assignment, it is a <em>population</em> estimand, the population average treatment effect.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">population</span> <span class="op">+</span> <span class="va">potential_outcomes</span> <span class="op">+</span> <span class="va">estimand</span> <span class="op">+</span> 
-  <span class="va">sampling</span> <span class="op">+</span> <span class="va">assignment</span> <span class="op">+</span> <span class="va">reveal</span> <span class="op">+</span> <span class="va">estimator</span></code></pre></div>
-<p>We could define our estimand as a <em>sample</em> average treatment effect by putting <code>estimand</code> after <code>sampling</code>:</p>
+<code class="sourceCode R"><span class="va">model</span> <span class="op">+</span> <span class="va">inquiry</span> <span class="op">+</span> <span class="va">sampling</span> <span class="op">+</span> <span class="va">assignment</span> <span class="op">+</span> <span class="va">measurement</span> <span class="op">+</span> <span class="va">estimator</span></code></pre></div>
+<p>We could define our estimand as a <em>sample</em> average treatment effect by putting <code>inquiry</code> after <code>sampling</code>:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">population</span> <span class="op">+</span> <span class="va">potential_outcomes</span> <span class="op">+</span> <span class="va">sampling</span> <span class="op">+</span>
-  <span class="va">estimand</span> <span class="op">+</span> <span class="va">assignment</span> <span class="op">+</span> <span class="va">reveal</span> <span class="op">+</span> <span class="va">estimator</span></code></pre></div>
+<code class="sourceCode R"><span class="va">model</span> <span class="op">+</span> <span class="va">sampling</span> <span class="op">+</span> <span class="va">inquiry</span> <span class="op">+</span> <span class="va">assignment</span> <span class="op">+</span> <span class="va">measurement</span> <span class="op">+</span> <span class="va">estimator</span></code></pre></div>
 </div>
 </div>
 <div id="simulating-a-research-design" class="section level2">
@@ -1973,13 +1900,10 @@ Y_Z_0
 Y_Z_1
 </th>
 <th style="text-align:right;">
-S_inclusion_prob
+S
 </th>
 <th style="text-align:right;">
 Z
-</th>
-<th style="text-align:right;">
-Z_cond_prob
 </th>
 <th style="text-align:right;">
 Y
@@ -1991,25 +1915,22 @@ Y
 002
 </td>
 <td style="text-align:right;">
-0.076
+0.94
 </td>
 <td style="text-align:right;">
-0.076
+0.94
 </td>
 <td style="text-align:right;">
-0.33
+1.19
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0.076
+0.94
 </td>
 </tr>
 <tr>
@@ -2017,25 +1938,22 @@ Y
 005
 </td>
 <td style="text-align:right;">
-0.595
+-0.43
 </td>
 <td style="text-align:right;">
-0.595
+-0.43
 </td>
 <td style="text-align:right;">
-0.84
+-0.18
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
-0.595
+-0.43
 </td>
 </tr>
 <tr>
@@ -2043,25 +1961,22 @@ Y
 006
 </td>
 <td style="text-align:right;">
--0.431
+-1.13
 </td>
 <td style="text-align:right;">
--0.431
+-1.13
 </td>
 <td style="text-align:right;">
--0.18
+-0.88
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
--0.431
+-1.13
 </td>
 </tr>
 <tr>
@@ -2069,25 +1984,22 @@ Y
 007
 </td>
 <td style="text-align:right;">
--1.133
+-2.24
 </td>
 <td style="text-align:right;">
--1.133
+-2.24
 </td>
 <td style="text-align:right;">
--0.88
+-1.99
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
--1.133
+-2.24
 </td>
 </tr>
 <tr>
@@ -2095,25 +2007,22 @@ Y
 008
 </td>
 <td style="text-align:right;">
--2.237
+0.52
 </td>
 <td style="text-align:right;">
--2.237
+0.52
 </td>
 <td style="text-align:right;">
--1.99
+0.77
 </td>
 <td style="text-align:right;">
-0.5
+1
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-0.5
-</td>
-<td style="text-align:right;">
--2.237
+0.52
 </td>
 </tr>
 </tbody>
@@ -2121,14 +2030,14 @@ Y
 <p><code>draw_data</code> runs all of the “data steps” in a design, which are both from the model (population and potential outcomes) and from the data strategy (sampling, assignment, and measurement).</p>
 <p>To simulate the estimands from a single run of the design, we use <code>draw_estimands</code>. This runs two operations at once: it draws the data, and calculates the estimands at the point defined by the design. For example, in our design, the estimand comes just after the potential outcomes. In this design, <code>draw_estimands</code> will run the first two steps and then calculate the estimands from the <code>estimand</code> function we declared:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/draw_functions.html">draw_estimands</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/draw_functions.html">draw_inquiries</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <caption>
 Estimands calculated from simulated data.
 </caption>
 <thead><tr>
 <th style="text-align:left;">
-estimand_label
+inquiry
 </th>
 <th style="text-align:right;">
 estimand
@@ -2179,7 +2088,7 @@ df
 outcome
 </th>
 <th style="text-align:left;">
-estimand_label
+inquiry
 </th>
 </tr></thead>
 <tbody><tr>
@@ -2187,25 +2096,25 @@ estimand_label
 Z
 </td>
 <td style="text-align:right;">
-0.63
+0.57
 </td>
 <td style="text-align:right;">
-0.32
+0.28
 </td>
 <td style="text-align:right;">
 2
 </td>
 <td style="text-align:right;">
-0.054
+0.046
 </td>
 <td style="text-align:right;">
--0.011
+0.009
 </td>
 <td style="text-align:right;">
-1.3
+1.1
 </td>
 <td style="text-align:right;">
-44
+47
 </td>
 <td style="text-align:left;">
 Y
@@ -2260,25 +2169,25 @@ df
 0.25
 </td>
 <td style="text-align:right;">
-0.10
+0.418
 </td>
 <td style="text-align:right;">
 0.31
 </td>
 <td style="text-align:right;">
-0.33
+1.34
 </td>
 <td style="text-align:right;">
-0.74
+0.185
 </td>
 <td style="text-align:right;">
--0.52
+-0.21
 </td>
 <td style="text-align:right;">
-0.73
+1.04
 </td>
 <td style="text-align:right;">
-43
+48
 </td>
 </tr>
 <tr>
@@ -2289,22 +2198,22 @@ df
 0.25
 </td>
 <td style="text-align:right;">
-0.30
+0.447
 </td>
 <td style="text-align:right;">
-0.30
+0.35
 </td>
 <td style="text-align:right;">
-0.99
+1.29
 </td>
 <td style="text-align:right;">
-0.33
+0.205
 </td>
 <td style="text-align:right;">
--0.31
+-0.25
 </td>
 <td style="text-align:right;">
-0.91
+1.15
 </td>
 <td style="text-align:right;">
 47
@@ -2318,25 +2227,25 @@ df
 0.25
 </td>
 <td style="text-align:right;">
-0.24
+0.233
 </td>
 <td style="text-align:right;">
-0.32
+0.27
 </td>
 <td style="text-align:right;">
-0.73
+0.87
 </td>
 <td style="text-align:right;">
-0.47
+0.391
 </td>
 <td style="text-align:right;">
--0.42
+-0.31
 </td>
 <td style="text-align:right;">
-0.89
+0.78
 </td>
 <td style="text-align:right;">
-40
+46
 </td>
 </tr>
 <tr>
@@ -2347,25 +2256,25 @@ df
 0.25
 </td>
 <td style="text-align:right;">
+-0.044
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+<td style="text-align:right;">
+-0.19
+</td>
+<td style="text-align:right;">
+0.853
+</td>
+<td style="text-align:right;">
+-0.53
+</td>
+<td style="text-align:right;">
 0.44
 </td>
 <td style="text-align:right;">
-0.27
-</td>
-<td style="text-align:right;">
-1.61
-</td>
-<td style="text-align:right;">
-0.12
-</td>
-<td style="text-align:right;">
--0.11
-</td>
-<td style="text-align:right;">
-0.98
-</td>
-<td style="text-align:right;">
-41
+43
 </td>
 </tr>
 <tr>
@@ -2376,25 +2285,25 @@ df
 0.25
 </td>
 <td style="text-align:right;">
--0.13
+0.742
 </td>
 <td style="text-align:right;">
 0.29
 </td>
 <td style="text-align:right;">
--0.45
+2.57
 </td>
 <td style="text-align:right;">
-0.66
+0.014
 </td>
 <td style="text-align:right;">
--0.71
+0.16
 </td>
 <td style="text-align:right;">
-0.45
+1.32
 </td>
 <td style="text-align:right;">
-45
+44
 </td>
 </tr>
 </tbody>
@@ -2431,13 +2340,13 @@ Power
 <tbody>
 <tr>
 <td style="text-align:left;">
-0.00
+0.01
 </td>
 <td style="text-align:left;">
-0.28
+0.27
 </td>
 <td style="text-align:left;">
-0.14
+0.12
 </td>
 </tr>
 <tr>
@@ -2448,7 +2357,7 @@ Power
 (0.01)
 </td>
 <td style="text-align:left;">
-(0.01)
+(0.02)
 </td>
 </tr>
 </tbody>
@@ -2465,15 +2374,16 @@ Power
 <p>An alternative way to do this is to write a “designer.” A designer is a function that makes designs based on a few design parameters. Designer help researchers flexibly explore design variations. Here’s a simple designer based on our running example:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">simple_designer</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sample_size</span>, <span class="va">effect_size</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="../reference/declare_population.html">declare_population</a></span><span class="op">(</span>N <span class="op">=</span> <span class="va">sample_size</span>, U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="../reference/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">effect_size</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="../reference/declare_estimand.html">declare_estimand</a></span><span class="op">(</span>PATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="../reference/declare_sampling.html">declare_sampling</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="../reference/reveal_outcomes.html">reveal_outcomes</a></span><span class="op">(</span>outcome_variables <span class="op">=</span> <span class="va">Y</span>, assignment_variables <span class="op">=</span> <span class="va">Z</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="../reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
-      <span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span>, model <span class="op">=</span> <span class="va">difference_in_means</span>, estimand <span class="op">=</span> <span class="st">"PATE"</span>
-    <span class="op">)</span>
+  <span class="fu"><a href="../reference/declare_model.html">declare_model</a></span><span class="op">(</span>
+    N <span class="op">=</span> <span class="va">sample_size</span>, 
+    U <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span><span class="op">)</span>,
+    <span class="fu">potential_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">effect_size</span> <span class="op">*</span> <span class="va">Z</span> <span class="op">+</span> <span class="va">U</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>PATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_sampling.html">declare_sampling</a></span><span class="op">(</span>S <span class="op">=</span> <span class="fu">complete_rs</span><span class="op">(</span><span class="va">N</span>, n <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_measurement.html">declare_measurement</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="fu">reveal_outcomes</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span>, model <span class="op">=</span> <span class="va">difference_in_means</span>, estimand <span class="op">=</span> <span class="st">"PATE"</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>To create a single design, based on our original parameters of a 100-unit sample size and a treatment effect of <code>0.25</code>, we can run:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
@@ -2485,7 +2395,7 @@ Power
   sample_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">500</span>, <span class="fl">1000</span><span class="op">)</span>, 
   effect_size <span class="op">=</span> <span class="fl">0.25</span>
 <span class="op">)</span></code></pre></div>
-<p>Our simulation and diagnosis tools can take a list of designs and simulate all of them at once, creating a column called <code>design_label</code> to keep track. For example:</p>
+<p>Our simulation and diagnosis tools can take a list of designs and simulate all of them at once, creating a column called <code>design</code> to keep track. For example:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/diagnose_design.html">diagnose_design</a></span><span class="op">(</span><span class="va">designs</span><span class="op">)</span></code></pre></div>
 </div>

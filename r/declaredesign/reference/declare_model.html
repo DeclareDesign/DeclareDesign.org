@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Declare the size and features of the population — declare_population • DeclareDesign</title>
+<title>Declare the size and features of the population — declare_model • DeclareDesign</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Declare the size and features of the population — declare_population" />
+<meta property="og:title" content="Declare the size and features of the population — declare_model" />
 <meta property="og:description" content="Declare the size and features of the population" />
 
 
@@ -129,15 +129,15 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Declare the size and features of the population</h1>
-    <small class="dont-index">Source: <a href='https://github.com/DeclareDesign/DeclareDesign/blob/master/R/declare_population.R'><code>R/declare_population.R</code></a></small>
-    <div class="hidden name"><code>declare_population.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/DeclareDesign/DeclareDesign/blob/master/R/declare_model.R'><code>R/declare_model.R</code></a></small>
+    <div class="hidden name"><code>declare_model.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Declare the size and features of the population</p>
     </div>
 
-    <pre class="usage"><span class='fu'>declare_population</span><span class='op'>(</span><span class='va'>...</span>, handler <span class='op'>=</span> <span class='va'>fabricate</span>, label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>declare_model</span><span class='op'>(</span><span class='va'>...</span>, handler <span class='op'>=</span> <span class='va'>fabricate</span>, label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,54 +158,173 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A potential outcomes declaration, which is a function that returns a data.frame.</p>
+    <p>A function that returns a data.frame.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Declare a single-level population with no covariates</span>
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'>declare_model</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_model(N = 100)</div><div class='input'>
+<span class='co'># declare_model returns a function:</span>
 
-<span class='co'># Declare a population from existing data</span>
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span><span class='va'>sleep</span><span class='op'>)</span>
-
-<span class='co'># Declare a single-level population with a covariate</span>
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
+<span class='va'>my_model</span> <span class='op'>&lt;-</span> <span class='fu'>declare_model</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'>my_model</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      ID
+#&gt; 1   001
+#&gt; 2   002
+#&gt; 3   003
+#&gt; 4   004
+#&gt; 5   005
+#&gt; 6   006
+#&gt; 7   007
+#&gt; 8   008
+#&gt; 9   009
+#&gt; 10  010
+#&gt; 11  011
+#&gt; 12  012
+#&gt; 13  013
+#&gt; 14  014
+#&gt; 15  015
+#&gt; 16  016
+#&gt; 17  017
+#&gt; 18  018
+#&gt; 19  019
+#&gt; 20  020
+#&gt; 21  021
+#&gt; 22  022
+#&gt; 23  023
+#&gt; 24  024
+#&gt; 25  025
+#&gt; 26  026
+#&gt; 27  027
+#&gt; 28  028
+#&gt; 29  029
+#&gt; 30  030
+#&gt; 31  031
+#&gt; 32  032
+#&gt; 33  033
+#&gt; 34  034
+#&gt; 35  035
+#&gt; 36  036
+#&gt; 37  037
+#&gt; 38  038
+#&gt; 39  039
+#&gt; 40  040
+#&gt; 41  041
+#&gt; 42  042
+#&gt; 43  043
+#&gt; 44  044
+#&gt; 45  045
+#&gt; 46  046
+#&gt; 47  047
+#&gt; 48  048
+#&gt; 49  049
+#&gt; 50  050
+#&gt; 51  051
+#&gt; 52  052
+#&gt; 53  053
+#&gt; 54  054
+#&gt; 55  055
+#&gt; 56  056
+#&gt; 57  057
+#&gt; 58  058
+#&gt; 59  059
+#&gt; 60  060
+#&gt; 61  061
+#&gt; 62  062
+#&gt; 63  063
+#&gt; 64  064
+#&gt; 65  065
+#&gt; 66  066
+#&gt; 67  067
+#&gt; 68  068
+#&gt; 69  069
+#&gt; 70  070
+#&gt; 71  071
+#&gt; 72  072
+#&gt; 73  073
+#&gt; 74  074
+#&gt; 75  075
+#&gt; 76  076
+#&gt; 77  077
+#&gt; 78  078
+#&gt; 79  079
+#&gt; 80  080
+#&gt; 81  081
+#&gt; 82  082
+#&gt; 83  083
+#&gt; 84  084
+#&gt; 85  085
+#&gt; 86  086
+#&gt; 87  087
+#&gt; 88  088
+#&gt; 89  089
+#&gt; 90  090
+#&gt; 91  091
+#&gt; 92  092
+#&gt; 93  093
+#&gt; 94  094
+#&gt; 95  095
+#&gt; 96  096
+#&gt; 97  097
+#&gt; 98  098
+#&gt; 99  099
+#&gt; 100 100</div><div class='input'>
+<span class='co'># Declare a single-level population with two covariates</span>
+<span class='fu'>declare_model</span><span class='op'>(</span>
   N <span class='op'>=</span> <span class='fl'>6</span>,
   female <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>N</span>, <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>,
   height_ft <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>5.67</span> <span class='op'>-</span> <span class='fl'>0.33</span> <span class='op'>*</span> <span class='va'>female</span>, sd <span class='op'>=</span> <span class='fl'>0.25</span><span class='op'>)</span>
 <span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_model(N = 6, female = rbinom(n = N, 1, prob = 0.5), height_ft = rnorm(N, 
+#&gt;     mean = 5.67 - 0.33 * female, sd = 0.25))</div><div class='input'>
+<span class='co'># Declare a single-level population with potential outcomes</span>
+<span class='fu'>declare_model</span><span class='op'>(</span>
+  N <span class='op'>=</span> <span class='fl'>6</span>, 
+  U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
+  <span class='fu'>potential_outcomes</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='va'>U</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_model(N = 6, U = rnorm(N), potential_outcomes(Y ~ Z + 
+#&gt;     U))</div><div class='input'>
+
+<span class='co'># Declare a single-level population with two sets of potential outcomes</span>
+<span class='fu'>declare_model</span><span class='op'>(</span>
+  N <span class='op'>=</span> <span class='fl'>6</span>,
+  U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
+  <span class='fu'>potential_outcomes</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z1</span> <span class='op'>+</span> <span class='va'>Z2</span> <span class='op'>+</span> <span class='va'>U</span>, 
+                     conditions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>Z1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span>, Z2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_model(N = 6, U = rnorm(N), potential_outcomes(Y ~ Z1 + 
+#&gt;     Z2 + U, conditions = list(Z1 = c(0, 1), Z2 = c(0, 1))))</div><div class='input'>
+
 
 
 <span class='co'># Declare a population from existing data</span>
 
-<span class='fu'>declare_population</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; declare_population(mtcars)</div><div class='input'>
+<span class='fu'>declare_model</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_model(mtcars)</div><div class='input'>
 <span class='co'># Resample from existing data</span>
 
-<span class='fu'>declare_population</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, handler <span class='op'>=</span> <span class='va'>resample_data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; declare_population(N = 100, data = mtcars, handler = resample_data)</div><div class='input'>
+<span class='fu'>declare_model</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, handler <span class='op'>=</span> <span class='va'>resample_data</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_model(N = 100, data = mtcars, handler = resample_data)</div><div class='input'>
 
 <span class='co'># Declare a two-level hierarchical population</span>
 <span class='co'># containing cities within regions and a</span>
 <span class='co'># pollution variable defined at the city level</span>
 
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
-  regions <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>,
-  cities <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>10</span>, pollution <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-
+<span class='fu'>declare_model</span><span class='op'>(</span>regions <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>,
+              cities <span class='op'>=</span> <span class='fu'>add_level</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>10</span>, pollution <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_model(regions = add_level(N = 5), cities = add_level(N = 10, 
+#&gt;     pollution = rnorm(N, mean = 5)))</div><div class='input'>
 <span class='co'># Declare a population using a custom function</span>
 
-<span class='co'># the default handler is fabricatr::fabricate, </span>
+<span class='co'># the default handler is fabricatr::fabricate,</span>
 <span class='co'># but you can supply any function that returns a data.frame</span>
 
-<span class='va'>my_population_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>my_model_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>u <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='va'>my_population_custom</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>10</span>, handler <span class='op'>=</span> <span class='va'>my_population_function</span><span class='op'>)</span>
-
-</div></pre>
+<span class='fu'>declare_model</span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>10</span>, handler <span class='op'>=</span> <span class='va'>my_model_function</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; declare_model(N = 10, handler = my_model_function)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -145,7 +145,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>lhs</th>
-      <td><p>A step in a research design, beginning with a function that draws the population. Steps are evaluated sequentially. With the exception of the first step, all steps must be functions that take a <code>data.frame</code> as an argument and return a <code>data.frame</code>. Typically, many steps are declared using the <code>declare_</code> functions, i.e., <code><a href='declare_population.html'>declare_population</a></code>, <code><a href='declare_population.html'>declare_population</a></code>, <code><a href='declare_sampling.html'>declare_sampling</a></code>, <code><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></code>, <code><a href='declare_estimand.html'>declare_estimand</a></code>, <code><a href='declare_assignment.html'>declare_assignment</a></code>, and <code><a href='declare_estimator.html'>declare_estimator</a></code>.</p></td>
+      <td><p>A step in a research design, beginning with a function that defines the model. Steps are evaluated sequentially. With the exception of the first step, all steps must be functions that take a <code>data.frame</code> as an argument and return a <code>data.frame</code>. Steps are declared using the <code>declare_</code> functions, i.e., <code><a href='declare_model.html'>declare_model</a></code>, <code><a href='declare_inquiry.html'>declare_inquiry</a></code>, <code><a href='declare_sampling.html'>declare_sampling</a></code>, <code><a href='declare_assignment.html'>declare_assignment</a></code>, <code><a href='declare_measurement.html'>declare_measurement</a></code>, <code><a href='declare_estimator.html'>declare_estimator</a></code>, and <code><a href='declare_test.html'>declare_test</a></code>.</p></td>
     </tr>
     <tr>
       <th>rhs</th>
@@ -155,254 +155,39 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list of two functions, the <code>design_function</code> and the <code>data_function</code>. The <code>design_function</code> runs the design once, i.e. draws the data and calculates any estimates and estimands defined in <code>...</code>, returned separately as two <code>data.frame</code>'s. The <code>data_function</code> runs the design once also, but only returns the final data.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Users can supply three kinds of functions to create a design:</p>
-<p>1. Data generating functions. These include population, assignment, and sampling functions.</p>
-<p>2. Estimand functions.</p>
-<p>3. Estimator functions.</p>
-<p>The location of the estimand and estimator functions in the pipeline of functions determine *when* the values of the estimand and estimator are calculated. This allows users to, for example, differentiate between a population average treatment effect and a sample average treatment effect by placing the estimand function before or after sampling.</p>
-<p>Design objects declared with the + operator can be investigated with a series of post-declaration commands, such as <code><a href='draw_functions.html'>draw_data</a></code>, <code><a href='draw_functions.html'>draw_estimands</a></code>, <code><a href='draw_functions.html'>draw_estimates</a></code>, and <code><a href='diagnose_design.html'>diagnose_design</a></code>.</p>
-<p>The print and summary methods for a design object return some helpful descriptions of the steps in your research design. If randomizr functions are used for any assignment or sampling steps, additional details about those steps are provided.</p>
+    <p>a design</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>500</span>, noise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>design</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
+    N <span class='op'>=</span> <span class='fl'>500</span>, 
+    U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
+    <span class='fu'>potential_outcomes</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='va'>U</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_inquiry.html'>declare_inquiry</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_sampling.html'>declare_sampling</a></span><span class='op'>(</span>S <span class='op'>=</span> <span class='fu'>complete_rs</span><span class='op'>(</span><span class='va'>N</span>, n <span class='op'>=</span> <span class='fl'>250</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span><span class='va'>N</span>, m <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_measurement.html'>declare_measurement</a></span><span class='op'>(</span>Y <span class='op'>=</span> <span class='fu'>reveal_outcomes</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, inquiry <span class='op'>=</span> <span class='st'>"ATE"</span><span class='op'>)</span> 
 
-<span class='va'>my_potential_outcomes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span> <span class='op'>+</span> <span class='va'>noise</span><span class='op'>)</span>
-
-<span class='va'>my_sampling</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_sampling.html'>declare_sampling</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>250</span><span class='op'>)</span>
-
-<span class='va'>my_assignment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
-
-<span class='va'>my_estimand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimand.html'>declare_estimand</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>my_estimator</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='va'>my_estimand</span><span class='op'>)</span>
-
-<span class='va'>my_mutate</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_step.html'>declare_step</a></span><span class='op'>(</span><span class='fu'>dplyr</span><span class='fu'>::</span><span class='va'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>, noise_sq <span class='op'>=</span> <span class='va'>noise</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
-
-<span class='va'>my_reveal</span> <span class='op'>&lt;-</span> <span class='fu'><a href='reveal_outcomes.html'>reveal_outcomes</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_population</span> <span class='op'>+</span> <span class='va'>my_potential_outcomes</span> <span class='op'>+</span> <span class='va'>my_sampling</span> <span class='op'>+</span>
-         <span class='va'>my_estimand</span> <span class='op'>+</span> <span class='va'>my_mutate</span> <span class='op'>+</span>
-         <span class='va'>my_assignment</span> <span class='op'>+</span> <span class='va'>my_reveal</span> <span class='op'>+</span> <span class='va'>my_estimator</span>
-
-<span class='va'>design</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 500, noise = rnorm(N)) -------------
-#&gt; 
-#&gt; N = 500 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      500 character
-#&gt; 
-#&gt; Added variable: noise 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.89  -0.02 -0.03 2.59 1.01         0      500
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ Z + noise) ---------
-#&gt; 
-#&gt; Formula: Y ~ Z + noise 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.89  -0.02 -0.03 2.59 1.01         0      500
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.89   0.98 0.97 3.59 1.01         0      500
-#&gt; 
-#&gt; Step 3 (sampling): declare_sampling(n = 250) -----------------------------------
-#&gt; 
-#&gt; N = 250 (250 subtracted) 
-#&gt; 
-#&gt; Added variable: S_inclusion_prob 
-#&gt;   0.5
-#&gt;   250
-#&gt;  1.00
-#&gt; 
-#&gt; Altered variable: ID 
-#&gt;   Before: 
-#&gt;  N_missing N_unique     class
-#&gt;          0      500 character
-#&gt; 
-#&gt;   After:
-#&gt;  N_missing N_unique     class
-#&gt;          0      250 character
-#&gt; 
-#&gt; Altered variable: noise 
-#&gt;   Before: 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.89  -0.02 -0.03 2.59 1.01         0      500
-#&gt; 
-#&gt;   After:
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.89  -0.02 -0.03 2.53 1.02         0      250
-#&gt; 
-#&gt; Altered variable: Y_Z_0 
-#&gt;   Before: 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.89  -0.02 -0.03 2.59 1.01         0      500
-#&gt; 
-#&gt;   After:
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.89  -0.02 -0.03 2.53 1.02         0      250
-#&gt; 
-#&gt; Altered variable: Y_Z_1 
-#&gt;   Before: 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.89   0.98 0.97 3.59 1.01         0      500
-#&gt; 
-#&gt;   After:
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.89   0.98 0.97 3.53 1.02         0      250
-#&gt; 
-#&gt; Step 4 (estimand): declare_estimand(ATE = mean(Y_Z_1 - Y_Z_0)) -----------------
-#&gt; 
-#&gt; A single draw of the estimand:
-#&gt;  estimand_label estimand
-#&gt;             ATE        1
-#&gt; 
-#&gt; Step 5 (custom): declare_step(dplyr::mutate, noise_sq = noise^2) ---------------
-#&gt; 
-#&gt; Added variable: noise_sq 
-#&gt;  min median mean  max   sd N_missing N_unique
-#&gt;    0   0.49 1.03 8.33 1.38         0      250
-#&gt; 
-#&gt; Step 6 (assignment): declare_assignment(m = 25) --------------------------------
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     0    1
-#&gt;   225   25
-#&gt;  0.90 0.10
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;   0.1  0.9
-#&gt;    25  225
-#&gt;  0.10 0.90
-#&gt; 
-#&gt; Step 7 (reveal): reveal_outcomes() ---------------------------------------------
-#&gt; 
-#&gt; Added variable: Y 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.89   0.02 0.07 2.97 1.08         0      250
-#&gt; 
-#&gt; Step 8 (estimator): declare_estimator(Y ~ Z, estimand = my_estimand) -----------
-#&gt; 
-#&gt; Formula: Y ~ Z 
-#&gt; 
-#&gt; A single draw of the estimator:
-#&gt;  estimator_label term estimate std.error statistic      p.value  conf.low
-#&gt;        estimator    Z 1.181839 0.2147376  5.503641 5.880218e-06 0.7430232
-#&gt;  conf.high       df outcome estimand_label
-#&gt;   1.620654 29.57761       Y            ATE
-#&gt; </div><div class='input'>
-<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_data</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-
-<span class='va'>estimates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-<span class='va'>estimands</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_estimands</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-
-<span class='co'># You can add steps to a design</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_population</span> <span class='op'>+</span> <span class='va'>my_potential_outcomes</span>
-<span class='va'>design</span> <span class='op'>+</span> <span class='va'>my_sampling</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 500, noise = rnorm(N)) -------------
-#&gt; 
-#&gt; N = 500 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      500 character
-#&gt; 
-#&gt; Added variable: noise 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.82   0.05    0 3.42 0.97         0      500
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y ~ Z + noise) ---------
-#&gt; 
-#&gt; Formula: Y ~ Z + noise 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.82   0.05    0 3.42 0.97         0      500
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.82   1.05    1 4.42 0.97         0      500
-#&gt; 
-#&gt; Step 3 (sampling): declare_sampling(n = 250) -----------------------------------
-#&gt; 
-#&gt; N = 250 (250 subtracted) 
-#&gt; 
-#&gt; Added variable: S_inclusion_prob 
-#&gt;   0.5
-#&gt;   250
-#&gt;  1.00
-#&gt; 
-#&gt; Altered variable: ID 
-#&gt;   Before: 
-#&gt;  N_missing N_unique     class
-#&gt;          0      500 character
-#&gt; 
-#&gt;   After:
-#&gt;  N_missing N_unique     class
-#&gt;          0      250 character
-#&gt; 
-#&gt; Altered variable: noise 
-#&gt;   Before: 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.82   0.05    0 3.42 0.97         0      500
-#&gt; 
-#&gt;   After:
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.82    0.1 0.03 3.42 0.95         0      250
-#&gt; 
-#&gt; Altered variable: Y_Z_0 
-#&gt;   Before: 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.82   0.05    0 3.42 0.97         0      500
-#&gt; 
-#&gt;   After:
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.82    0.1 0.03 3.42 0.95         0      250
-#&gt; 
-#&gt; Altered variable: Y_Z_1 
-#&gt;   Before: 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.82   1.05    1 4.42 0.97         0      500
-#&gt; 
-#&gt;   After:
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -1.82    1.1 1.03 4.42 0.95         0      250
-#&gt; </div><div class='input'>
-<span class='co'># Special Cases</span>
-
+<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_data</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>dat</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    ID            U        Y_Z_0      Y_Z_1 S Z            Y
+#&gt; 1 001  0.738216749  0.738216749  1.7382167 1 0  0.738216749
+#&gt; 2 003  1.233900927  1.233900927  2.2339009 1 0  1.233900927
+#&gt; 3 004  0.009686571  0.009686571  1.0096866 1 0  0.009686571
+#&gt; 4 005 -0.361037460 -0.361037460  0.6389625 1 0 -0.361037460
+#&gt; 5 006 -1.289058007 -1.289058007 -0.2890580 1 0 -1.289058007
+#&gt; 6 009 -0.234123209 -0.234123209  0.7658768 1 0 -0.234123209</div><div class='input'>
+<span class='fu'><a href='run_design.html'>run_design</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   inquiry estimand estimator term estimate std.error statistic     p.value
+#&gt; 1     ATE        1 estimator    Z 1.002549 0.1653079  6.064736 4.90165e-09
+#&gt;    conf.low conf.high  df outcome
+#&gt; 1 0.6769624  1.328135 248       Y</div><div class='input'>
 <span class='co'># You may wish to have a design with only one step:</span>
 
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_population</span> <span class='op'>+</span> <span class='cn'>NULL</span>
-<span class='va'>design</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 500, noise = rnorm(N)) -------------
-#&gt; 
-#&gt; N = 500 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      500 character
-#&gt; 
-#&gt; Added variable: noise 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -3.24   0.12 0.09 2.76 0.99         0      500
-#&gt; </div><div class='input'>
+<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>500</span>, noise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='cn'>NULL</span>
 
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'><a href='diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>

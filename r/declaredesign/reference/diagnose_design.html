@@ -142,6 +142,7 @@
   diagnosands <span class='op'>=</span> <span class='cn'>NULL</span>,
   sims <span class='op'>=</span> <span class='fl'>500</span>,
   bootstrap_sims <span class='op'>=</span> <span class='fl'>100</span>,
+  make_groups <span class='op'>=</span> <span class='cn'>NULL</span>,
   add_grouping_variables <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
@@ -150,8 +151,11 @@
   diagnosands <span class='op'>=</span> <span class='cn'>NULL</span>,
   sims <span class='op'>=</span> <span class='fl'>500</span>,
   bootstrap_sims <span class='op'>=</span> <span class='fl'>100</span>,
+  make_groups <span class='op'>=</span> <span class='cn'>NULL</span>,
   add_grouping_variables <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span>
+
+<span class='fu'>vars</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,7 +166,7 @@
     </tr>
     <tr>
       <th>diagnosands</th>
-      <td><p>A set of diagnosands created by <code><a href='diagnosand_handler.html'>declare_diagnosands</a></code>. By default, these include bias, root mean-squared error, power, frequentist coverage, the mean and standard deviation of the estimate(s), the "type S" error rate (Gelman and Carlin 2014), and the mean of the estimand(s).</p></td>
+      <td><p>A set of diagnosands created by <code><a href='diagnosand_handler.html'>declare_diagnosands</a></code>. By default, these include bias, root mean-squared error, power, frequentist coverage, the mean and standard deviation of the estimate(s), the "type S" error rate (Gelman and Carlin 2014), and the mean of the inquiry(s).</p></td>
     </tr>
     <tr>
       <th>sims</th>
@@ -173,8 +177,12 @@
       <td><p>Number of bootstrap replicates for the diagnosands to obtain the standard errors of the diagnosands, defaulting to <code>100</code>. Set to FALSE to turn off bootstrapping.</p></td>
     </tr>
     <tr>
+      <th>make_groups</th>
+      <td><p>Add group variables within which diagnosand values will be calculated. New variables can be created or variables already in the simulations data frame selected. Type name-value pairs within the function <code>vars</code>, i.e. <code>vars(significant = p.value &lt;= 0.05)</code>.</p></td>
+    </tr>
+    <tr>
       <th>add_grouping_variables</th>
-      <td><p>Variables used to generate groups of simulations for diagnosis. Added to list default list: c("design_label", "estimand_label", "estimator_label", "term")</p></td>
+      <td><p>Deprecated. Please use make_groups instead. Variables used to generate groups of simulations for diagnosis. Added to default list: c("design", "estimand_label", "estimator", "term")</p></td>
     </tr>
     </table>
 
@@ -188,30 +196,37 @@
 <p>If the packages <code>future</code> and <code>future.apply</code> are installed, you can set <code><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></code> to run multiple simulations in parallel.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>500</span>, noise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>my_potential_outcomes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span>
-  Y_Z_0 <span class='op'>=</span> <span class='va'>noise</span>, Y_Z_1 <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>2</span>, sd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>my_assignment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='va'>my_estimand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimand.html'>declare_estimand</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>my_reveal</span> <span class='op'>&lt;-</span> <span class='fu'><a href='reveal_outcomes.html'>reveal_outcomes</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='va'>my_estimator</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='va'>my_estimand</span><span class='op'>)</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_population</span> <span class='op'>+</span>
-   <span class='va'>my_potential_outcomes</span> <span class='op'>+</span>
-   <span class='va'>my_estimand</span> <span class='op'>+</span>
-   <span class='va'>my_assignment</span> <span class='op'>+</span>
-   <span class='va'>my_reveal</span> <span class='op'>+</span>
-   <span class='va'>my_estimator</span>
+    <pre class="examples"><div class='input'><span class='va'>design</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
+    N <span class='op'>=</span> <span class='fl'>500</span>, 
+    U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
+    Y_Z_0 <span class='op'>=</span> <span class='va'>U</span>, 
+    Y_Z_1 <span class='op'>=</span> <span class='va'>U</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>2</span>, sd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='declare_inquiry.html'>declare_inquiry</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_measurement.html'>declare_measurement</a></span><span class='op'>(</span>Y <span class='op'>=</span> <span class='fu'>reveal_outcomes</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, inquiry <span class='op'>=</span> <span class='st'>"ATE"</span><span class='op'>)</span>
 
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># using built-in defaults:</span>
 <span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'>diagnose_design</span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
+<span class='fu'><a href='reshape_diagnosis.html'>reshape_diagnosis</a></span><span class='op'>(</span><span class='va'>diagnosis</span>, select <span class='op'>=</span> <span class='st'>"Power"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Adding a group for within group diagnosis:</span>
+<span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'>diagnose_design</span><span class='op'>(</span><span class='va'>design</span>, 
+  make_groups <span class='op'>=</span> <span class='fu'>vars</span><span class='op'>(</span>significant <span class='op'>=</span> <span class='va'>p.value</span> <span class='op'>&lt;=</span> <span class='fl'>0.05</span><span class='op'>)</span>,
+  <span class='op'>)</span>
+<span class='va'>diagnosis</span>
+
+<span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'>diagnose_design</span><span class='op'>(</span><span class='va'>design</span>, 
+  make_groups <span class='op'>=</span> 
+    <span class='fu'>vars</span><span class='op'>(</span>effect_size <span class='op'>=</span> 
+      <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span><span class='op'>(</span><span class='va'>estimand</span>, <span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>estimand</span>, <span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>4</span><span class='op'>)</span>, 
+          include.lowest <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='op'>)</span>
 <span class='va'>diagnosis</span>
 <span class='op'>}</span>
 

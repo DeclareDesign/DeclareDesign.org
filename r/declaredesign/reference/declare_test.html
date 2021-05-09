@@ -41,8 +41,8 @@
 
 <meta property="og:title" content="Declare test — declare_test" />
 <meta property="og:description" content="Declares an test which generates a test statistic and associated inferential statistics.
-Use of declare_test is identical to use of declare_estimator. Use declare_test for hypothesis testing with no specific estimand in mind; use declare_estimator for hypothesis testing when you can link each estimate to an estimand. For example, declare_test could be used for a K-S test of distributional equality and declare_estimator for a difference-in-means estimate of an average treatment effect.
-See declare_estimator help for an explanation of how to use model_handler, which is used identically in both declare_estimator and declare_test. The main difference between declare_estimator and declare_test is that declare_test does not link with an explicit estimand." />
+Use of declare_test is identical to use of declare_estimator. Use declare_test for hypothesis testing with no specific inquiry in mind; use declare_estimator for hypothesis testing when you can link each estimate to an inquiry. For example, declare_test could be used for a K-S test of distributional equality and declare_estimator for a difference-in-means estimate of an average treatment effect.
+See declare_estimator help for an explanation of how to use model_handler, which is used identically in both declare_estimator and declare_test. The main difference between declare_estimator and declare_test is that declare_test does not link with an explicit inquiry." />
 
 
 
@@ -137,8 +137,8 @@ See declare_estimator help for an explanation of how to use model_handler, which
 
     <div class="ref-description">
     <p>Declares an test which generates a test statistic and associated inferential statistics.</p>
-<p>Use of <code>declare_test</code> is identical to use of <code><a href='declare_estimator.html'>declare_estimator</a></code>. Use <code>declare_test</code> for hypothesis testing with no specific estimand in mind; use <code>declare_estimator</code> for hypothesis testing when you can link each estimate to an estimand. For example, <code>declare_test</code> could be used for a K-S test of distributional equality and <code>declare_estimator</code> for a difference-in-means estimate of an average treatment effect.</p>
-<p>See <code><a href='declare_estimator.html'>declare_estimator</a></code> help for an explanation of how to use <code>model_handler</code>, which is used identically in both <code>declare_estimator</code> and <code>declare_test</code>. The main difference between <code>declare_estimator</code> and <code>declare_test</code> is that <code>declare_test</code> does not link with an explicit estimand.</p>
+<p>Use of <code>declare_test</code> is identical to use of <code><a href='declare_estimator.html'>declare_estimator</a></code>. Use <code>declare_test</code> for hypothesis testing with no specific inquiry in mind; use <code>declare_estimator</code> for hypothesis testing when you can link each estimate to an inquiry. For example, <code>declare_test</code> could be used for a K-S test of distributional equality and <code>declare_estimator</code> for a difference-in-means estimate of an average treatment effect.</p>
+<p>See <code><a href='declare_estimator.html'>declare_estimator</a></code> help for an explanation of how to use <code>model_handler</code>, which is used identically in both <code>declare_estimator</code> and <code>declare_test</code>. The main difference between <code>declare_estimator</code> and <code>declare_test</code> is that <code>declare_test</code> does not link with an explicit inquiry.</p>
     </div>
 
     <pre class="usage"><span class='fu'>declare_test</span><span class='op'>(</span><span class='va'>...</span>, handler <span class='op'>=</span> <span class='fu'>label_test</span><span class='op'>(</span><span class='va'>model_handler</span><span class='op'>)</span>, label <span class='op'>=</span> <span class='st'>"test"</span><span class='op'>)</span>
@@ -181,10 +181,13 @@ See declare_estimator help for an explanation of how to use model_handler, which
 <span class='co'># Balance test F test</span>
 
 <span class='va'>balance_test_design</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>
+  <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
     N <span class='op'>=</span> <span class='fl'>100</span>, 
-    cov1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, cov2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, cov3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span> <span class='op'>+</span>
+    cov1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, 
+    cov2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, 
+    cov3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span><span class='va'>N</span>, prob <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>declare_test</span><span class='op'>(</span><span class='va'>Z</span> <span class='op'>~</span> <span class='va'>cov1</span> <span class='op'>+</span> <span class='va'>cov2</span> <span class='op'>+</span> <span class='va'>cov3</span>, model <span class='op'>=</span> <span class='va'>lm_robust</span>, model_summary <span class='op'>=</span> <span class='va'>glance</span><span class='op'>)</span>
   
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
@@ -203,16 +206,19 @@ See declare_estimator help for an explanation of how to use model_handler, which
 <span class='op'>}</span>
 
 <span class='va'>distributional_equality_design</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span>Y_Z_1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, Y_Z_0 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, sd <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span> <span class='op'>+</span> 
-  <span class='fu'><a href='reveal_outcomes.html'>reveal_outcomes</a></span><span class='op'>(</span><span class='va'>Y</span>, <span class='va'>Z</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
+    N <span class='op'>=</span> <span class='fl'>100</span>, 
+    Y_Z_1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, 
+    Y_Z_0 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, sd <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span><span class='va'>N</span>, prob <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='declare_measurement.html'>declare_measurement</a></span><span class='op'>(</span>Y <span class='op'>=</span> <span class='fu'>reveal_outcomes</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
   <span class='fu'>declare_test</span><span class='op'>(</span>handler <span class='op'>=</span> <span class='fu'>label_test</span><span class='op'>(</span><span class='va'>ks_test</span><span class='op'>)</span>, label <span class='op'>=</span> <span class='st'>"ks-test"</span><span class='op'>)</span>
   
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>diagnosis</span> <span class='op'>&lt;-</span> <span class='fu'><a href='diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span>
   design <span class='op'>=</span> <span class='va'>distributional_equality_design</span>,
-  diagnosands <span class='op'>=</span> <span class='fu'><a href='diagnosand_handler.html'>declare_diagnosands</a></span><span class='op'>(</span>select <span class='op'>=</span> <span class='va'>power</span><span class='op'>)</span>
+  diagnosands <span class='op'>=</span> <span class='fu'><a href='diagnosand_handler.html'>declare_diagnosands</a></span><span class='op'>(</span>power <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>p.value</span> <span class='op'>&lt;=</span> <span class='fl'>0.05</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span> 
 <span class='op'>}</span>
 
@@ -230,7 +236,7 @@ See declare_estimator help for an explanation of how to use model_handler, which
 <span class='op'>}</span>
 
 <span class='va'>ttest_design</span> <span class='op'>&lt;-</span> 
-  <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>
+  <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
     N <span class='op'>=</span> <span class='fl'>100</span>, 
     Xclus <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>N</span>, size <span class='op'>=</span> <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span>, 
     outcome <span class='op'>=</span> <span class='fl'>3</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>

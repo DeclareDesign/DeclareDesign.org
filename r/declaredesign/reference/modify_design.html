@@ -177,22 +177,24 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
- <span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>100</span>, noise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, label <span class='op'>=</span> <span class='st'>"my_pop"</span><span class='op'>)</span>
+ <span class='va'>my_model</span> <span class='op'>&lt;-</span> 
+   <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
+     N <span class='op'>=</span> <span class='fl'>100</span>, 
+     U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
+     Y_Z_0 <span class='op'>=</span> <span class='va'>U</span>,
+     Y_Z_1 <span class='op'>=</span> <span class='va'>U</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>2</span>, sd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+   <span class='op'>)</span>
 
- <span class='va'>my_potential_outcomes</span> <span class='op'>&lt;-</span>
-   <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span>Y_Z_0 <span class='op'>=</span> <span class='va'>noise</span>,
-                              Y_Z_1 <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>2</span>, sd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+ <span class='va'>my_assignment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span><span class='va'>N</span>, m <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
+ <span class='va'>my_assignment_2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span><span class='va'>N</span>, m <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span><span class='op'>)</span>
 
- <span class='va'>my_assignment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
- <span class='va'>my_assignment_2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>m <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
-
- <span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_population</span> <span class='op'>+</span> <span class='va'>my_potential_outcomes</span> <span class='op'>+</span> <span class='va'>my_assignment</span>
+ <span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_model</span> <span class='op'>+</span> <span class='va'>my_assignment</span>
 
  <span class='va'>design</span>
 </div><div class='output co'>#&gt; 
 #&gt; Design Summary
 #&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, noise = rnorm(N), label = "my_pop") 
+#&gt; Step 1 (model): declare_model(N = 100, U = rnorm(N), Y_Z_0 = U, Y_Z_1 = U + rnorm(N,     mean = 2, sd = 2)) 
 #&gt; 
 #&gt; N = 100 
 #&gt; 
@@ -200,197 +202,51 @@
 #&gt;  N_missing N_unique     class
 #&gt;          0      100 character
 #&gt; 
-#&gt; Added variable: noise 
+#&gt; Added variable: U 
 #&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.81  -0.22 -0.2 2.97 1.02         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y_Z_0 = noise, Y_Z_1 = noise + rnorm(N,     mean = 2, sd = 2)) 
+#&gt;  -2.95   0.01 0.06 2.91 0.97         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_0 
 #&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.81  -0.22 -0.2 2.97 1.02         0      100
+#&gt;  -2.95   0.01 0.06 2.91 0.97         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_1 
-#&gt;    min median mean   max  sd N_missing N_unique
-#&gt;  -3.56   1.67 1.66 10.78 2.4         0      100
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -2.65   2.42 2.25 5.96 2.07         0      100
 #&gt; 
-#&gt; Step 3 (assignment): declare_assignment(m = 50) --------------------------------
+#&gt; Step 2 (assignment): declare_assignment(Z = complete_ra(N, m = 50)) ------------
 #&gt; 
 #&gt; Added variable: Z 
 #&gt;     0    1
 #&gt;    50   50
 #&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;   0.5
-#&gt;   100
-#&gt;  1.00
-#&gt; </div><div class='input'>
- <span class='fu'>insert_step</span><span class='op'>(</span><span class='va'>design</span>, <span class='fu'><a href='declare_step.html'>declare_step</a></span><span class='op'>(</span><span class='fu'>dplyr</span><span class='fu'>::</span><span class='va'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>, income <span class='op'>=</span> <span class='va'>noise</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>, after <span class='op'>=</span> <span class='va'>my_assignment</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, noise = rnorm(N), label = "my_pop") 
-#&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: noise 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.52  -0.15 -0.2 2.47 0.99         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y_Z_0 = noise, Y_Z_1 = noise + rnorm(N,     mean = 2, sd = 2)) 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.52  -0.15 -0.2 2.47 0.99         0      100
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -3.53   2.32 2.31 7.64 2.21         0      100
-#&gt; 
-#&gt; Step 3 (assignment): declare_assignment(m = 50) --------------------------------
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;   0.5
-#&gt;   100
-#&gt;  1.00
-#&gt; 
-#&gt; Step 4 (custom): declare_step(dplyr::mutate, income = noise^2) -----------------
-#&gt; 
-#&gt; Added variable: income 
-#&gt;  min median mean  max   sd N_missing N_unique
-#&gt;    0   0.47 1.01 6.33 1.34         0      100
-#&gt; </div><div class='input'> <span class='fu'>insert_step</span><span class='op'>(</span><span class='va'>design</span>, <span class='fu'><a href='declare_step.html'>declare_step</a></span><span class='op'>(</span><span class='fu'>dplyr</span><span class='fu'>::</span><span class='va'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>, income <span class='op'>=</span> <span class='va'>noise</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>, before <span class='op'>=</span> <span class='va'>my_assignment</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, noise = rnorm(N), label = "my_pop") 
-#&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: noise 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.92  -0.21 -0.23 3.18 1.13         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y_Z_0 = noise, Y_Z_1 = noise + rnorm(N,     mean = 2, sd = 2)) 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.92  -0.21 -0.23 3.18 1.13         0      100
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;   min median mean  max   sd N_missing N_unique
-#&gt;  -4.1    1.7 1.67 5.96 1.92         0      100
-#&gt; 
-#&gt; Step 3 (custom): declare_step(dplyr::mutate, income = noise^2) -----------------
-#&gt; 
-#&gt; Added variable: income 
-#&gt;  min median mean   max  sd N_missing N_unique
-#&gt;    0   0.52 1.32 10.12 1.9         0      100
-#&gt; 
-#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     0    1
-#&gt;    50   50
-#&gt;  0.50 0.50
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;   0.5
-#&gt;   100
-#&gt;  1.00
-#&gt; </div><div class='input'>
+#&gt; </div><div class='input'> 
+ <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+ <span class='fu'>insert_step</span><span class='op'>(</span><span class='va'>design</span>, <span class='fu'><a href='declare_step.html'>declare_step</a></span><span class='op'>(</span><span class='fu'>dplyr</span><span class='fu'>::</span><span class='va'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>, income <span class='op'>=</span> <span class='va'>noise</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>, 
+             after <span class='op'>=</span> <span class='va'>my_assignment</span><span class='op'>)</span>
+ <span class='fu'>insert_step</span><span class='op'>(</span><span class='va'>design</span>, <span class='fu'><a href='declare_step.html'>declare_step</a></span><span class='op'>(</span><span class='fu'>dplyr</span><span class='fu'>::</span><span class='va'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>, income <span class='op'>=</span> <span class='va'>noise</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>, 
+             before <span class='op'>=</span> <span class='va'>my_assignment</span><span class='op'>)</span>
+ 
+
  <span class='co'># If you are using a design created by a designer, for example from</span>
  <span class='co'>#   the DesignLibrary package, you will not have access to the step</span>
  <span class='co'>#   objects. Instead, you can always use the label of the step.</span>
  
  <span class='co'># get the labels for the steps</span>
  <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "my_pop"                "my_potential_outcomes" "my_assignment"        </div><div class='input'> 
- <span class='fu'>insert_step</span><span class='op'>(</span><span class='va'>design</span>, <span class='fu'><a href='declare_sampling.html'>declare_sampling</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>, after <span class='op'>=</span> <span class='st'>"my_pop"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; Design Summary
-#&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, noise = rnorm(N), label = "my_pop") 
-#&gt; 
-#&gt; N = 100 
-#&gt; 
-#&gt; Added variable: ID 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt; Added variable: noise 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.56  -0.16 -0.08 3.22 1.13         0      100
-#&gt; 
-#&gt; Step 2 (sampling): declare_sampling(n = 50) ------------------------------------
-#&gt; 
-#&gt; N = 50 (50 subtracted) 
-#&gt; 
-#&gt; Added variable: S_inclusion_prob 
-#&gt;   0.5
-#&gt;    50
-#&gt;  1.00
-#&gt; 
-#&gt; Altered variable: ID 
-#&gt;   Before: 
-#&gt;  N_missing N_unique     class
-#&gt;          0      100 character
-#&gt; 
-#&gt;   After:
-#&gt;  N_missing N_unique     class
-#&gt;          0       50 character
-#&gt; 
-#&gt; Altered variable: noise 
-#&gt;   Before: 
-#&gt;    min median  mean  max   sd N_missing N_unique
-#&gt;  -2.56  -0.16 -0.08 3.22 1.13         0      100
-#&gt; 
-#&gt;   After:
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.56  -0.02 0.01 2.85 1.09         0       50
-#&gt; 
-#&gt; Step 3 (potential outcomes): declare_potential_outcomes(Y_Z_0 = noise, Y_Z_1 = noise + rnorm(N,     mean = 2, sd = 2)) 
-#&gt; 
-#&gt; Added variable: Y_Z_0 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.56  -0.02 0.01 2.85 1.09         0       50
-#&gt; 
-#&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.07   1.83 2.18 9.18 2.15         0       50
-#&gt; 
-#&gt; Step 4 (assignment): declare_assignment(m = 50) --------------------------------
-#&gt; 
-#&gt; Added variable: Z 
-#&gt;     1
-#&gt;    50
-#&gt;  1.00
-#&gt; 
-#&gt; Added variable: Z_cond_prob 
-#&gt;     1
-#&gt;    50
-#&gt;  1.00
-#&gt; </div><div class='input'>
+ 
+ <span class='fu'>insert_step</span><span class='op'>(</span><span class='va'>design</span>, 
+   <span class='fu'><a href='declare_sampling.html'>declare_sampling</a></span><span class='op'>(</span>S <span class='op'>=</span> <span class='fu'>complete_rs</span><span class='op'>(</span><span class='va'>N</span>, n <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>, 
+   legacy <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+   after <span class='op'>=</span> <span class='st'>"my_pop"</span><span class='op'>)</span>
+ <span class='op'>}</span>
+
 
  <span class='fu'>delete_step</span><span class='op'>(</span><span class='va'>design</span>, <span class='va'>my_assignment</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Design Summary
 #&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, noise = rnorm(N), label = "my_pop") 
+#&gt; Step 1 (model): declare_model(N = 100, U = rnorm(N), Y_Z_0 = U, Y_Z_1 = U + rnorm(N,     mean = 2, sd = 2)) 
 #&gt; 
 #&gt; N = 100 
 #&gt; 
@@ -398,24 +254,22 @@
 #&gt;  N_missing N_unique     class
 #&gt;          0      100 character
 #&gt; 
-#&gt; Added variable: noise 
+#&gt; Added variable: U 
 #&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.56  -0.04 0.01 2.81 0.96         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y_Z_0 = noise, Y_Z_1 = noise + rnorm(N,     mean = 2, sd = 2)) 
+#&gt;  -2.59   0.07  0.1 2.96 0.92         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_0 
 #&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.56  -0.04 0.01 2.81 0.96         0      100
+#&gt;  -2.59   0.07  0.1 2.96 0.92         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_1 
-#&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -3.59   1.54 1.74 8.93 2.32         0      100
+#&gt;   min median mean  max   sd N_missing N_unique
+#&gt;  -2.9   1.69 1.71 7.43 2.14         0      100
 #&gt; </div><div class='input'> <span class='fu'>replace_step</span><span class='op'>(</span><span class='va'>design</span>, <span class='va'>my_assignment</span>, <span class='fu'><a href='declare_step.html'>declare_step</a></span><span class='op'>(</span><span class='fu'>dplyr</span><span class='fu'>::</span><span class='va'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>, words <span class='op'>=</span> <span class='st'>"income"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Design Summary
 #&gt; 
-#&gt; Step 1 (population): declare_population(N = 100, noise = rnorm(N), label = "my_pop") 
+#&gt; Step 1 (model): declare_model(N = 100, U = rnorm(N), Y_Z_0 = U, Y_Z_1 = U + rnorm(N,     mean = 2, sd = 2)) 
 #&gt; 
 #&gt; N = 100 
 #&gt; 
@@ -423,21 +277,19 @@
 #&gt;  N_missing N_unique     class
 #&gt;          0      100 character
 #&gt; 
-#&gt; Added variable: noise 
-#&gt;   min median  mean  max   sd N_missing N_unique
-#&gt;  -2.6   0.03 -0.08 2.79 0.99         0      100
-#&gt; 
-#&gt; Step 2 (potential outcomes): declare_potential_outcomes(Y_Z_0 = noise, Y_Z_1 = noise + rnorm(N,     mean = 2, sd = 2)) 
+#&gt; Added variable: U 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -3.48  -0.05 0.05 2.12 1.06         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_0 
-#&gt;   min median  mean  max   sd N_missing N_unique
-#&gt;  -2.6   0.03 -0.08 2.79 0.99         0      100
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -3.48  -0.05 0.05 2.12 1.06         0      100
 #&gt; 
 #&gt; Added variable: Y_Z_1 
 #&gt;    min median mean  max   sd N_missing N_unique
-#&gt;  -2.32   1.76 1.98 6.35 2.06         0      100
+#&gt;  -2.68   2.34 2.41 6.77 1.99         0      100
 #&gt; 
-#&gt; Step 3 (custom): declare_step(dplyr::mutate, words = "income") -----------------
+#&gt; Step 2 (custom): declare_step(dplyr::mutate, words = "income") -----------------
 #&gt; 
 #&gt; Added variable: words 
 #&gt;  income

@@ -161,23 +161,24 @@ structure of simulations is recorded in the dataset using a set of variables nam
 will be two distinct draws of step 1, indicated in variable "step_1_draw" (with values 1 and 2) and there will be three draws for step 4 within each of the step 1 draws, recorded in "step_4_draw" (with values 1 to 6).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>my_population</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>500</span>, noise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='va'>my_model</span> <span class='op'>&lt;-</span> 
+  <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>
+    N <span class='op'>=</span> <span class='fl'>500</span>, 
+    U <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
+    Y_Z_0 <span class='op'>=</span> <span class='va'>U</span>, 
+    Y_Z_1 <span class='op'>=</span> <span class='va'>U</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>2</span>, sd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
-<span class='va'>my_potential_outcomes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_potential_outcomes.html'>declare_potential_outcomes</a></span><span class='op'>(</span>
-  Y_Z_0 <span class='op'>=</span> <span class='va'>noise</span>, Y_Z_1 <span class='op'>=</span> <span class='va'>noise</span> <span class='op'>+</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>2</span>, sd <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>my_assignment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span>Z <span class='op'>=</span> <span class='fu'>complete_ra</span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>my_assignment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_assignment.html'>declare_assignment</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>my_inquiry</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_inquiry.html'>declare_inquiry</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>my_estimand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimand.html'>declare_estimand</a></span><span class='op'>(</span>ATE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>Y_Z_1</span> <span class='op'>-</span> <span class='va'>Y_Z_0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>my_estimator</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, inquiry <span class='op'>=</span> <span class='va'>my_inquiry</span><span class='op'>)</span>
 
-<span class='va'>my_estimator</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_estimator.html'>declare_estimator</a></span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span>, estimand <span class='op'>=</span> <span class='va'>my_estimand</span><span class='op'>)</span>
+<span class='va'>my_reveal</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_measurement.html'>declare_measurement</a></span><span class='op'>(</span>Y <span class='op'>=</span> <span class='fu'>reveal_outcomes</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>Z</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>my_reveal</span> <span class='op'>&lt;-</span> <span class='fu'><a href='reveal_outcomes.html'>reveal_outcomes</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_population</span> <span class='op'>+</span>
-  <span class='va'>my_potential_outcomes</span> <span class='op'>+</span>
-  <span class='va'>my_estimand</span> <span class='op'>+</span>
+<span class='va'>design</span> <span class='op'>&lt;-</span> <span class='va'>my_model</span> <span class='op'>+</span>
+  <span class='va'>my_inquiry</span> <span class='op'>+</span>
   <span class='va'>my_assignment</span> <span class='op'>+</span>
   <span class='va'>my_reveal</span> <span class='op'>+</span>
   <span class='va'>my_estimator</span>

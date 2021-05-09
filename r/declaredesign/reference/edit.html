@@ -156,7 +156,7 @@
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>N</span> <span class='op'>&lt;-</span> <span class='fl'>50</span>
 
-<span class='va'>pop50</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N<span class='op'>=</span><span class='va'>N</span>, noise<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>pop50</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>N<span class='op'>=</span><span class='va'>N</span>, noise<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='fu'>pop50</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>pop100</span> <span class='op'>&lt;-</span> <span class='fu'>DeclareDesign</span><span class='fu'>:::</span><span class='fu'>clone_step_edit</span><span class='op'>(</span><span class='va'>pop50</span>, N<span class='op'>=</span><span class='fl'>100</span><span class='op'>)</span>
@@ -168,7 +168,7 @@
 
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
-<span class='va'>my_design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_population.html'>declare_population</a></span><span class='op'>(</span>N<span class='op'>=</span><span class='va'>N</span>, noise<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='cn'>NULL</span>
+<span class='va'>my_design</span> <span class='op'>&lt;-</span> <span class='fu'><a href='declare_model.html'>declare_model</a></span><span class='op'>(</span>N<span class='op'>=</span><span class='va'>N</span>, noise<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='cn'>NULL</span>
 <span class='va'>my_design2</span> <span class='op'>&lt;-</span> <span class='fu'>DeclareDesign</span><span class='fu'>:::</span><span class='fu'>clone_design_edit</span><span class='op'>(</span><span class='va'>my_design</span>, N<span class='op'>=</span><span class='fl'>100</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='fu'><a href='draw_functions.html'>draw_data</a></span><span class='op'>(</span><span class='va'>my_design</span><span class='op'>)</span><span class='op'>)</span>
