@@ -176,7 +176,7 @@ get_diagnosands(diagnosis_3) %>%
   geom_hline(yintercept = 0, size = .5, linetype = "dashed") +
   geom_point() + geom_line() +
   theme(legend.position = "bottom", strip.background = element_blank()) +
-  facet_grid(~ estimand_label)
+  facet_grid(~ inquiry)
 
 ```
 
@@ -188,7 +188,7 @@ get_diagnosands(diagnosis_3) %>%
   ggplot(aes(J, rmse, group = estimator, color = estimator)) +
   geom_point() + geom_line() +
   theme(legend.position = "bottom", strip.background = element_blank()) +
-  facet_grid(~ estimand_label)
+  facet_grid(~ inquiry)
 ```
 
 We see that all approaches estimate the population average effect quite well. No bias and a RMSE that starts to vanish as `J` grows. They differ though in their estimates of variability and, because of this, in their predictions about the probability that the effect in a *next* study will be positive (`prob_pos`). They also differ in their final inferences about effects in the already completed studies (`study_effect`). In particular:

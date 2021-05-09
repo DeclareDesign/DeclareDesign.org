@@ -131,12 +131,12 @@ simulations <- read_rds("rfiles/22_bad_questions.rds")
 ```{r, echo=FALSE, message=FALSE, warning = FALSE}
 summary_df <- 
   simulations %>%
-  group_by(estimand_label) %>%
+  group_by(inquiry) %>%
   summarize(estimand = mean(estimand))
 ggplot(simulations, aes(estimate)) +
   geom_histogram(bins = 30) +
   geom_vline(data = summary_df, aes(xintercept = estimand), color = "purple") +
-  facet_wrap(~estimand_label)
+  facet_wrap(~inquiry)
 kable(reshape_diagnosis(diagnose_design(simulations), select = c("Mean Estimate", "Mean Inquiry", "Bias", "Coverage", "Power")))
 ```
 

@@ -69,7 +69,7 @@ get_diagnosands(diagnosis) %>%
   mutate(N = as.numeric(paste(N))) %>%
   ggplot(aes(N, power)) +
   geom_line() +
-  facet_wrap(~estimand_label)
+  facet_wrap(~inquiry)
 ```
 
 <!-- wilcox_test <- function(data) -->
@@ -88,7 +88,7 @@ If you plot the estimates and the estimands from the simulations you will notice
 get_simulations(diagnosis) %>%
   ggplot(aes(estimand, estimate)) +
   geom_point(alpha = 0.05, size = 0.5, stroke = 0) +
-  facet_grid(N~estimand_label)
+  facet_grid(N~inquiry)
 ```
 
 ```{r, echo = FALSE}
@@ -97,7 +97,7 @@ get_simulations(diagnosis) %>%
   ggplot(aes(estimand, estimate)) +
   geom_point(alpha = 0.075, size = 0.75, stroke = 0) +
   coord_cartesian(xlim = c(-2, 2), ylim = c(-2, 2)) +
-  facet_grid(N~estimand_label) +
+  facet_grid(N~inquiry) +
   geom_hline(yintercept = 0)
 ```
 

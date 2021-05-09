@@ -196,9 +196,9 @@ diagnosis <- read_rds("rfiles/11_model_spillovers_3.rds")
 ```{r, echo = FALSE}
 get_diagnosands(diagnosis) %>% 
   filter(estimator!="naive") %>% 
-#  mutate(estimator = factor(estimand_label, levels = c("naive", "saturated"))) %>%
-  ggplot(aes(x = estimand_label, y = power, color = estimand_label)) +
-  geom_hline(aes(yintercept = power, color = estimand_label), alpha = .3, linetype = "dashed") +
+#  mutate(estimator = factor(inquiry, levels = c("naive", "saturated"))) %>%
+  ggplot(aes(x = inquiry, y = power, color = inquiry)) +
+  geom_hline(aes(yintercept = power, color = inquiry), alpha = .3, linetype = "dashed") +
   scale_y_continuous(labels = scales::percent, breaks = seq(.4,1,.1)) +
   geom_point() + 
   facet_wrap( ~  design) +

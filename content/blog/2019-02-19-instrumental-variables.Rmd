@@ -262,10 +262,10 @@ gg_df <-
 
 label_df <- gg_df %>% filter(path_weight == 0.5)
 
-ggplot(gg_df, aes(path_weight, bias, color = estimand_label)) +
+ggplot(gg_df, aes(path_weight, bias, color = inquiry)) +
   geom_point() +
   geom_line() +
-  geom_label_repel(data = label_df, aes(label = estimand_label)) +
+  geom_label_repel(data = label_df, aes(label = inquiry)) +
   xlab("Fraction of all compliers who are U1 compliers (the rest are Z compliers!)") +
   theme_bw() +
   theme(legend.position = "none")
