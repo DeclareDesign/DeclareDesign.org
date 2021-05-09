@@ -493,10 +493,10 @@ observations into the estimation that have no missingness on any outcome.</p>
 #&gt; x           -0.462500  0.3599288 -1.284976 2.230493e-01 -1.246718 0.3217174 12</div><div class='input'>
 <span class='co'># One can also choose to set the significance level for different CIs</span>
 <span class='fu'>lm_robust</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>z</span>, data <span class='op'>=</span> <span class='va'>dat</span>, alpha <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;               Estimate Std. Error    t value     Pr(&gt;|t|)   CI Lower  CI Upper
-#&gt; (Intercept)  4.5970879  0.4386909 10.4791036 1.261673e-12  3.7082156 5.4859602
-#&gt; x            0.1735281  0.3813973  0.4549799 6.517822e-01 -0.5992562 0.9463125
-#&gt; z           -0.9016607  0.5423749 -1.6624308 1.048766e-01 -2.0006166 0.1972952
+</div><div class='output co'>#&gt;               Estimate Std. Error    t value     Pr(&gt;|t|)   CI Lower   CI Upper
+#&gt; (Intercept)  4.5970879  0.4386909 10.4791036 1.261673e-12  3.8569752 5.33720059
+#&gt; x            0.1735281  0.3813973  0.4549799 6.517822e-01 -0.4699248 0.81698110
+#&gt; z           -0.9016607  0.5423749 -1.6624308 1.048766e-01 -1.8166979 0.01337647
 #&gt;             DF
 #&gt; (Intercept) 37
 #&gt; x           37
