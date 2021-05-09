@@ -581,7 +581,7 @@ draw_estimates(design)
 
 ```{r simpledesignestimatedraw, echo = FALSE}
 draw_estimates(design) %>% 
-  select(-estimator_label) %>%
+  select(-estimator) %>%
   kable(digits = 3, caption = "Estimates calculated from simulated data.", booktabs = TRUE)
 ```
 
@@ -599,7 +599,7 @@ simulation_df <- simulate_design(design, sims = sims)
 ```{r simpledesignsimulationsdf, echo = FALSE}
 simulation_df %>% 
   head(5) %>% 
-  select(-design_label, -estimator_label, -inquiry_label, -term, -outcome) %>% 
+  select(-design, -estimator, -inquiry, -term, -outcome) %>% 
   kable(digits = 3, caption = "Simulations data frame.", booktabs = TRUE)
 ```
 
@@ -679,7 +679,7 @@ designs <- expand_design(
 )
 ```
 
-Our simulation and diagnosis tools can take a list of designs and simulate all of them at once, creating a column called `design_label` to keep track. For example:
+Our simulation and diagnosis tools can take a list of designs and simulate all of them at once, creating a column called `design` to keep track. For example:
 
 ```{r, eval = FALSE}
 diagnose_design(designs)

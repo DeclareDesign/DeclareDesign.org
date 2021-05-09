@@ -119,7 +119,7 @@ The diagnoses object now contains full diagnoses for a whole sequence of designs
 ```{r, fig.align="center"}
 diagnoses$diagnosands_df %>%
   ggplot(aes(N, power)) +
-  geom_line(aes(color = estimator_label))
+  geom_line(aes(color = estimator))
 ```
 
 We see here that if you had 45 units and wanted to use simple differences in means your power would be around 80%. You could up your power to just over 90% by increasing the size of the experiment to about 60 units. Or, conditional on speculations about the heterogeneous effects of treatment, you could do the same thing by staying at 45 but switching over to the Lin estimator.

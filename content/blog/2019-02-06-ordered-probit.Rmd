@@ -138,7 +138,7 @@ diagnosis %>%
   ggplot(aes(estimate)) +
   geom_histogram(bins = 30, alpha = 0.6) +
   geom_vline(data = summary_df, aes(xintercept = value, linetype = Diagnosand)) +
-  facet_wrap(~ estimator_label) +
+  facet_wrap(~ estimator) +
   theme_bw() +
   theme(strip.background = element_blank())
 ```
