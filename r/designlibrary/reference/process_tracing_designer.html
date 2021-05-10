@@ -242,17 +242,15 @@
     <pre class="examples"><div class='input'><span class='co'># Generate a process-tracing design using default arguments:</span>
 <span class='va'>pt_1</span> <span class='op'>&lt;-</span> <span class='fu'>process_tracing_designer</span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/draw_functions.html'>draw_inquiries</a></span><span class='op'>(</span><span class='va'>pt_1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   inquiry_label estimand
+</div><div class='output co'>#&gt;         inquiry estimand
 #&gt; 1 did_X_cause_Y     TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>pt_1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                     estimator_label posterior_H result inquiry_label
+</div><div class='output co'>#&gt;                           estimator posterior_H result       inquiry
 #&gt; 1                  No tests (Prior)   0.5000000   TRUE did_X_cause_Y
 #&gt; 2                 Straw in the Wind   0.2000000  FALSE did_X_cause_Y
 #&gt; 3                       Smoking Gun   0.4117647  FALSE did_X_cause_Y
 #&gt; 4 Straw in the Wind and Smoking Gun   0.1489362     00 did_X_cause_Y</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/draw_functions.html'>draw_data</a></span><span class='op'>(</span><span class='va'>pt_1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    ID causal_process    X    Y S_inclusion_prob fab_ID_1 test_results   E1
-#&gt; 1 043   Y_regardless TRUE TRUE       0.03571429        1           10 TRUE
-#&gt;      E2
-#&gt; 1 FALSE</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+</div><div class='output co'>#&gt;    ID causal_process    X    Y S test_results   E1    E2
+#&gt; 1 043   Y_regardless TRUE TRUE 1           10 TRUE FALSE</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>pt_1</span>, sims <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -268,12 +266,12 @@
                                  p_E2_H <span class='op'>=</span> <span class='fl'>.05</span>,p_E2_not_H <span class='op'>=</span> <span class='fl'>.80</span>,
                                  label_E2 <span class='op'>=</span> <span class='st'>"Doubly-Decisive: Not H"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>pt_3</span><span class='op'>)</span>                                
-</div><div class='output co'>#&gt;                                 estimator_label posterior_H result
+</div><div class='output co'>#&gt;                                       estimator posterior_H result
 #&gt; 1                              No tests (Prior)  0.50000000   TRUE
 #&gt; 2                            Doubly-Decisive: H  0.17391304  FALSE
 #&gt; 3                        Doubly-Decisive: Not H  0.05882353   TRUE
 #&gt; 4 Doubly-Decisive: H and Doubly-Decisive: Not H  0.01298701     01
-#&gt;   inquiry_label
+#&gt;         inquiry
 #&gt; 1 did_X_cause_Y
 #&gt; 2 did_X_cause_Y
 #&gt; 3 did_X_cause_Y

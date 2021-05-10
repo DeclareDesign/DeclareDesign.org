@@ -202,8 +202,8 @@
     <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_X_1</span><span class="op">[</span><span class="va">type</span> <span class="op">==</span> <span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">Y_X_0</span><span class="op">[</span><span class="va">type</span> <span class="op">==</span> <span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> 
     <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_X_1</span><span class="op">[</span><span class="va">type</span> <span class="op">==</span> <span class="fl">4</span><span class="op">]</span> <span class="op">-</span> <span class="va">Y_X_0</span><span class="op">[</span><span class="va">type</span> <span class="op">==</span> <span class="fl">4</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> 
     <span class="fl">3</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">estimator_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">X</span> <span class="op">~</span> <span class="va">Z</span>, inquiry <span class="op">=</span> <span class="st">"first_stage"</span>, 
-    label <span class="op">=</span> <span class="st">"d-i-m"</span><span class="op">)</span>
+<span class="va">estimator_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">X</span> <span class="op">~</span> <span class="va">Z</span>, model <span class="op">=</span> <span class="va">difference_in_means</span>, 
+    inquiry <span class="op">=</span> <span class="st">"first_stage"</span>, label <span class="op">=</span> <span class="st">"d-i-m"</span><span class="op">)</span>
 <span class="va">estimator_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span>, inquiry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ate"</span>, 
     <span class="st">"late"</span>, <span class="st">"late_het"</span><span class="op">)</span>, model <span class="op">=</span> <span class="va">lm_robust</span>, label <span class="op">=</span> <span class="st">"lm_robust"</span><span class="op">)</span>
 <span class="va">estimator_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span> <span class="op">|</span> <span class="va">Z</span>, inquiry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ate"</span>, 
@@ -237,24 +237,24 @@
 <p>We highlight a few takeaways. Firstly, our estimates are unbiased when all assumption hold. We show that violating any of the first three assumptions yields biased estimates.</p>
 <table class="table">
 <thead><tr class="header">
-<th align="left">Design Label</th>
-<th align="left">Inquiry Label</th>
-<th align="left">Estimator Label</th>
+<th align="left">Design</th>
+<th align="left">Inquiry</th>
+<th align="left">Estimator</th>
 <th align="left">Bias</th>
 <th align="left">Power</th>
-<th align="left">Mean Inquiry</th>
+<th align="left">Mean Estimand</th>
 </tr></thead>
 <tbody></tbody>
 </table>
 <p>In the absence of the monotonicity assumption, our IV estimates are less biased for the LATE than the ATE estimand in the presence of heterogeneous treatment effects. Moreover, in these cases, the IV is best at estimating the weighted average of treatment effects for compliers and defiers (<span class="math inline">\(LATE_{het}\)</span>).</p>
 <table class="table">
 <thead><tr class="header">
-<th align="left">Design Label</th>
-<th align="left">Inquiry Label</th>
-<th align="left">Estimator Label</th>
+<th align="left">Design</th>
+<th align="left">Inquiry</th>
+<th align="left">Estimator</th>
 <th align="left">Bias</th>
 <th align="left">Power</th>
-<th align="left">Mean Inquiry</th>
+<th align="left">Mean Estimand</th>
 </tr></thead>
 <tbody></tbody>
 </table>

@@ -151,7 +151,7 @@
 <span class="va">estimand_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"ATE on Y"</span><span class="op">)</span>
 <span class="va">estimand_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">[</span><span class="va">R</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, 
     label <span class="op">=</span> <span class="st">"ATE on Y (Given R)"</span><span class="op">)</span>
-<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
 <span class="va">reveal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span>outcome_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"Y"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_step.html">declare_step</a></span><span class="op">(</span>Y_obs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">R</span>, <span class="va">Y</span>, <span class="cn">NA</span><span class="op">)</span>, handler <span class="op">=</span> <span class="va">fabricate</span><span class="op">)</span>
 <span class="va">estimator_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">R</span> <span class="op">~</span> <span class="va">Z</span>, term <span class="op">=</span> <span class="st">"Z"</span>, inquiry <span class="op">=</span> <span class="va">estimand_1</span>, 
@@ -186,7 +186,7 @@
 ## top level of simulation.</code></pre>
 <table class="table">
 <thead><tr class="header">
-<th align="left">estimator_label</th>
+<th align="left">estimator</th>
 <th align="right">rho_WZ</th>
 <th align="right">rho_WY</th>
 <th align="right">bias</th>
@@ -197,36 +197,36 @@
 <td align="left">No controls</td>
 <td align="right">0.0</td>
 <td align="right">0.0</td>
-<td align="right">-0.01</td>
-<td align="right">0.44</td>
+<td align="right">0.01</td>
+<td align="right">0.36</td>
 </tr>
 <tr class="even">
 <td align="left">With controls</td>
 <td align="right">0.0</td>
 <td align="right">0.0</td>
-<td align="right">-0.02</td>
-<td align="right">0.41</td>
+<td align="right">-0.04</td>
+<td align="right">0.38</td>
 </tr>
 <tr class="odd">
 <td align="left">Lin</td>
 <td align="right">0.0</td>
 <td align="right">0.0</td>
-<td align="right">-0.03</td>
-<td align="right">0.43</td>
+<td align="right">-0.02</td>
+<td align="right">0.36</td>
 </tr>
 <tr class="even">
 <td align="left">No controls</td>
 <td align="right">0.0</td>
 <td align="right">0.8</td>
-<td align="right">0.06</td>
-<td align="right">0.53</td>
+<td align="right">0.18</td>
+<td align="right">0.45</td>
 </tr>
 <tr class="odd">
 <td align="left">With controls</td>
 <td align="right">0.0</td>
 <td align="right">0.8</td>
-<td align="right">0.00</td>
-<td align="right">0.23</td>
+<td align="right">-0.04</td>
+<td align="right">0.26</td>
 </tr>
 <tr class="even">
 <td align="left">Lin</td>
@@ -239,43 +239,43 @@
 <td align="left">No controls</td>
 <td align="right">0.8</td>
 <td align="right">0.0</td>
-<td align="right">-0.36</td>
-<td align="right">0.51</td>
+<td align="right">-0.33</td>
+<td align="right">0.49</td>
 </tr>
 <tr class="even">
 <td align="left">With controls</td>
 <td align="right">0.8</td>
 <td align="right">0.0</td>
-<td align="right">-0.09</td>
+<td align="right">-0.06</td>
 <td align="right">0.48</td>
 </tr>
 <tr class="odd">
 <td align="left">Lin</td>
 <td align="right">0.8</td>
 <td align="right">0.0</td>
-<td align="right">-0.06</td>
-<td align="right">0.53</td>
+<td align="right">-0.16</td>
+<td align="right">0.62</td>
 </tr>
 <tr class="even">
 <td align="left">No controls</td>
 <td align="right">0.8</td>
 <td align="right">0.8</td>
-<td align="right">-1.39</td>
-<td align="right">1.44</td>
+<td align="right">-1.33</td>
+<td align="right">1.39</td>
 </tr>
 <tr class="odd">
 <td align="left">With controls</td>
 <td align="right">0.8</td>
 <td align="right">0.8</td>
-<td align="right">-0.06</td>
+<td align="right">-0.04</td>
 <td align="right">0.32</td>
 </tr>
 <tr class="even">
 <td align="left">Lin</td>
 <td align="right">0.8</td>
 <td align="right">0.8</td>
-<td align="right">-0.05</td>
-<td align="right">0.29</td>
+<td align="right">-0.08</td>
+<td align="right">0.35</td>
 </tr>
 </tbody>
 </table>

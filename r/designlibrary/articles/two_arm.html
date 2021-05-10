@@ -151,7 +151,7 @@
     <span class="va">Z</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">u_0</span> <span class="op">*</span> <span class="va">control_sd</span> <span class="op">+</span> <span class="va">control_mean</span><span class="op">)</span> <span class="op">+</span> <span class="va">Z</span> <span class="op">*</span> <span class="op">(</span><span class="va">u_1</span> <span class="op">*</span> <span class="va">treatment_sd</span> <span class="op">+</span> 
     <span class="va">treatment_mean</span><span class="op">)</span><span class="op">)</span>
 <span class="va">estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>ATE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">)</span>
-<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="va">assignment_prob</span><span class="op">)</span>
+<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="va">assignment_prob</span><span class="op">)</span><span class="op">)</span>
 <span class="va">reveal_Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">estimator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">Z</span>, inquiry <span class="op">=</span> <span class="va">estimand</span><span class="op">)</span>
 <span class="va">two_arm_design</span> <span class="op">&lt;-</span> <span class="va">population</span> <span class="op">+</span> <span class="va">potential_outcomes</span> <span class="op">+</span> <span class="va">estimand</span> <span class="op">+</span> 
@@ -175,7 +175,7 @@
 <col width="12%">
 <col width="8%">
 <col width="12%">
-<col width="13%">
+<col width="14%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Term</th>
@@ -187,28 +187,28 @@
 <th align="left">SD Estimate</th>
 <th align="left">Mean Se</th>
 <th align="left">Type S Rate</th>
-<th align="left">Mean Inquiry</th>
+<th align="left">Mean Estimand</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">Z</td>
-<td align="left">-0.05</td>
-<td align="left">0.14</td>
+<td align="left">0.01</td>
+<td align="left">0.18</td>
 <td align="left">1.00</td>
-<td align="left">1.00</td>
-<td align="left">0.95</td>
-<td align="left">0.13</td>
+<td align="left">0.96</td>
+<td align="left">1.01</td>
+<td align="left">0.18</td>
 <td align="left">0.20</td>
 <td align="left">0.00</td>
 <td align="left">1.00</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
-<td align="left">(0.03)</td>
+<td align="left">(0.04)</td>
 <td align="left">(0.02)</td>
 <td align="left">(0.00)</td>
-<td align="left">(0.00)</td>
-<td align="left">(0.03)</td>
+<td align="left">(0.04)</td>
+<td align="left">(0.04)</td>
 <td align="left">(0.02)</td>
 <td align="left">(0.00)</td>
 <td align="left">(0.00)</td>

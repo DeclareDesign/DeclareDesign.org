@@ -146,8 +146,8 @@
 <span class="va">potential_outcomes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_potential_outcomes.html">declare_potential_outcomes</a></span><span class="op">(</span>Y_Z_Yes <span class="op">=</span> <span class="fl">1</span>, 
     Y_Z_Truth <span class="op">=</span> <span class="va">sensitive_trait</span><span class="op">)</span>
 <span class="va">estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>true_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">sensitive_trait</span><span class="op">)</span><span class="op">)</span>
-<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="va">prob_forced_yes</span>, 
-    conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Truth"</span>, <span class="st">"Yes"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="va">prob_forced_yes</span>, 
+    conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Truth"</span>, <span class="st">"Yes"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">estimator_randomized_response</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>handler <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">label_estimator</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">data</span>, 
     <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>estimate <span class="op">=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">-</span> <span class="va">prob_forced_yes</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> 
         <span class="va">prob_forced_yes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, inquiry <span class="op">=</span> <span class="va">estimand</span>, label <span class="op">=</span> <span class="st">"Forced Randomized Response"</span><span class="op">)</span>
@@ -169,9 +169,9 @@
 ## top level of simulation.</code></pre>
 <table class="table">
 <thead><tr class="header">
-<th align="left">Design Label</th>
-<th align="left">Inquiry Label</th>
-<th align="left">Estimator Label</th>
+<th align="left">Design</th>
+<th align="left">Inquiry</th>
+<th align="left">Estimator</th>
 <th align="left">N Sims</th>
 <th align="left">Bias</th>
 </tr></thead>

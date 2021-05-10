@@ -151,7 +151,7 @@
 <span class="va">estimand_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span>, label <span class="op">=</span> <span class="st">"ATE on Y"</span><span class="op">)</span>
 <span class="va">estimand_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">Y_Z_1</span> <span class="op">-</span> <span class="va">Y_Z_0</span><span class="op">)</span><span class="op">[</span><span class="va">R</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, 
     label <span class="op">=</span> <span class="st">"ATE on Y (Given R)"</span><span class="op">)</span>
-<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">assignment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_assignment.html">declare_assignment</a></span><span class="op">(</span>Z <span class="op">=</span> <span class="fu">complete_ra</span><span class="op">(</span><span class="va">N</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
 <span class="va">reveal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_reveal.html">declare_reveal</a></span><span class="op">(</span>outcome_variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"Y"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">observed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_step.html">declare_step</a></span><span class="op">(</span>Y_obs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">R</span>, <span class="va">Y</span>, <span class="cn">NA</span><span class="op">)</span>, handler <span class="op">=</span> <span class="va">fabricate</span><span class="op">)</span>
 <span class="va">estimator_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span><span class="va">R</span> <span class="op">~</span> <span class="va">Z</span>, term <span class="op">=</span> <span class="st">"Z"</span>, inquiry <span class="op">=</span> <span class="va">estimand_1</span>, 
@@ -184,9 +184,9 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reshape_diagnosis.html">reshape_diagnosis</a></span><span class="op">(</span><span class="va">diagnoses</span>,select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Bias"</span>,<span class="st">"Power"</span><span class="op">)</span><span class="op">)</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th align="left">Design Label</th>
-<th align="left">Inquiry Label</th>
-<th align="left">Estimator Label</th>
+<th align="left">Design</th>
+<th align="left">Inquiry</th>
+<th align="left">Estimator</th>
 <th align="left">Term</th>
 <th align="left">N Sims</th>
 <th align="left">Bias</th>
@@ -199,7 +199,25 @@
 <td align="left">DIM on R</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.01</td>
+<td align="left">0.02</td>
+<td align="left">0.96</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">(0.02)</td>
+<td align="left">(0.04)</td>
+</tr>
+<tr class="odd">
+<td align="left">design_1</td>
+<td align="left">ATE on Y</td>
+<td align="left">DIM on Y</td>
+<td align="left">Z</td>
+<td align="left">25</td>
+<td align="left">0.02</td>
 <td align="left">0.96</td>
 </tr>
 <tr class="even">
@@ -209,25 +227,7 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.01)</td>
-<td align="left">(0.04)</td>
-</tr>
-<tr class="odd">
-<td align="left">design_1</td>
-<td align="left">ATE on Y</td>
-<td align="left">DIM on Y</td>
-<td align="left">Z</td>
-<td align="left">25</td>
-<td align="left">0.01</td>
-<td align="left">1.00</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">(0.01)</td>
-<td align="left">(0.00)</td>
+<td align="left">(0.03)</td>
 </tr>
 <tr class="odd">
 <td align="left">design_1</td>
@@ -236,7 +236,7 @@
 <td align="left">Z</td>
 <td align="left">25</td>
 <td align="left">0.02</td>
-<td align="left">0.92</td>
+<td align="left">0.84</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -245,7 +245,7 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.02)</td>
-<td align="left">(0.05)</td>
+<td align="left">(0.06)</td>
 </tr>
 <tr class="odd">
 <td align="left">design_1</td>
@@ -253,8 +253,8 @@
 <td align="left">DIM on Y</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">0.00</td>
-<td align="left">1.00</td>
+<td align="left">0.02</td>
+<td align="left">0.96</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -262,8 +262,8 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left">(0.01)</td>
-<td align="left">(0.00)</td>
+<td align="left">(0.02)</td>
+<td align="left">(0.03)</td>
 </tr>
 <tr class="odd">
 <td align="left">design_1</td>
@@ -272,7 +272,7 @@
 <td align="left">Z</td>
 <td align="left">25</td>
 <td align="left">0.01</td>
-<td align="left">0.92</td>
+<td align="left">0.84</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -281,7 +281,7 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.02)</td>
-<td align="left">(0.05)</td>
+<td align="left">(0.06)</td>
 </tr>
 <tr class="odd">
 <td align="left">design_2</td>
@@ -289,24 +289,6 @@
 <td align="left">DIM on R</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.01</td>
-<td align="left">0.96</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">(0.01)</td>
-<td align="left">(0.04)</td>
-</tr>
-<tr class="odd">
-<td align="left">design_2</td>
-<td align="left">ATE on Y</td>
-<td align="left">DIM on Y</td>
-<td align="left">Z</td>
-<td align="left">25</td>
 <td align="left">0.01</td>
 <td align="left">0.96</td>
 </tr>
@@ -316,8 +298,26 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left">(0.01)</td>
+<td align="left">(0.02)</td>
 <td align="left">(0.04)</td>
+</tr>
+<tr class="odd">
+<td align="left">design_2</td>
+<td align="left">ATE on Y</td>
+<td align="left">DIM on Y</td>
+<td align="left">Z</td>
+<td align="left">25</td>
+<td align="left">0.02</td>
+<td align="left">0.96</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">(0.01)</td>
+<td align="left">(0.03)</td>
 </tr>
 <tr class="odd">
 <td align="left">design_2</td>
@@ -325,8 +325,8 @@
 <td align="left">DIM on Y_obs</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.04</td>
-<td align="left">0.68</td>
+<td align="left">-0.02</td>
+<td align="left">0.84</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -335,7 +335,7 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.02)</td>
-<td align="left">(0.09)</td>
+<td align="left">(0.06)</td>
 </tr>
 <tr class="odd">
 <td align="left">design_2</td>
@@ -352,8 +352,8 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left"></td>
-<td align="left">(0.01)</td>
-<td align="left">(0.04)</td>
+<td align="left">(0.02)</td>
+<td align="left">(0.03)</td>
 </tr>
 <tr class="odd">
 <td align="left">design_2</td>
@@ -362,7 +362,7 @@
 <td align="left">Z</td>
 <td align="left">25</td>
 <td align="left">-0.02</td>
-<td align="left">0.68</td>
+<td align="left">0.84</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -371,7 +371,7 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.02)</td>
-<td align="left">(0.09)</td>
+<td align="left">(0.06)</td>
 </tr>
 <tr class="odd">
 <td align="left">design_3</td>
@@ -379,61 +379,7 @@
 <td align="left">DIM on R</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.01</td>
-<td align="left">0.96</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">(0.01)</td>
-<td align="left">(0.04)</td>
-</tr>
-<tr class="odd">
-<td align="left">design_3</td>
-<td align="left">ATE on Y</td>
-<td align="left">DIM on Y</td>
-<td align="left">Z</td>
-<td align="left">25</td>
-<td align="left">0.01</td>
-<td align="left">0.96</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">(0.01)</td>
-<td align="left">(0.04)</td>
-</tr>
-<tr class="odd">
-<td align="left">design_3</td>
-<td align="left">ATE on Y</td>
-<td align="left">DIM on Y_obs</td>
-<td align="left">Z</td>
-<td align="left">25</td>
-<td align="left">-0.17</td>
-<td align="left">0.44</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">(0.01)</td>
-<td align="left">(0.09)</td>
-</tr>
-<tr class="odd">
-<td align="left">design_3</td>
-<td align="left">ATE on Y (Given R)</td>
-<td align="left">DIM on Y</td>
-<td align="left">Z</td>
-<td align="left">25</td>
-<td align="left">0.06</td>
+<td align="left">0.02</td>
 <td align="left">0.96</td>
 </tr>
 <tr class="even">
@@ -447,12 +393,12 @@
 </tr>
 <tr class="odd">
 <td align="left">design_3</td>
-<td align="left">ATE on Y (Given R)</td>
-<td align="left">DIM on Y_obs</td>
+<td align="left">ATE on Y</td>
+<td align="left">DIM on Y</td>
 <td align="left">Z</td>
 <td align="left">25</td>
-<td align="left">-0.12</td>
-<td align="left">0.44</td>
+<td align="left">0.02</td>
+<td align="left">1.00</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
@@ -461,7 +407,61 @@
 <td align="left"></td>
 <td align="left"></td>
 <td align="left">(0.01)</td>
-<td align="left">(0.09)</td>
+<td align="left">(0.00)</td>
+</tr>
+<tr class="odd">
+<td align="left">design_3</td>
+<td align="left">ATE on Y</td>
+<td align="left">DIM on Y_obs</td>
+<td align="left">Z</td>
+<td align="left">25</td>
+<td align="left">-0.21</td>
+<td align="left">0.24</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">(0.02)</td>
+<td align="left">(0.08)</td>
+</tr>
+<tr class="odd">
+<td align="left">design_3</td>
+<td align="left">ATE on Y (Given R)</td>
+<td align="left">DIM on Y</td>
+<td align="left">Z</td>
+<td align="left">25</td>
+<td align="left">0.07</td>
+<td align="left">1.00</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">(0.01)</td>
+<td align="left">(0.00)</td>
+</tr>
+<tr class="odd">
+<td align="left">design_3</td>
+<td align="left">ATE on Y (Given R)</td>
+<td align="left">DIM on Y_obs</td>
+<td align="left">Z</td>
+<td align="left">25</td>
+<td align="left">-0.16</td>
+<td align="left">0.24</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">(0.01)</td>
+<td align="left">(0.08)</td>
 </tr>
 </tbody>
 </table>
