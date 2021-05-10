@@ -522,10 +522,10 @@
 ## and only the first element will be used</code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">ht_cl</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></code></pre></div>
-<pre><code>##              estimator_label term estimate std.error statistic   p.value
+<pre><code>##                    estimator term estimate std.error statistic   p.value
 ## 1 Horvitz-Thompson Clustered    Z 1.972115  2.169537 0.9090028 0.3633487
-##    conf.low conf.high df outcome inquiry_label
-## 1 -2.280099  6.224328 NA       Y           ATE</code></pre>
+##    conf.low conf.high df outcome inquiry
+## 1 -2.280099  6.224328 NA       Y     ATE</code></pre>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">diff_cl_des</span> <span class="op">&lt;-</span> <span class="va">diff_size_cls</span> <span class="op">+</span> 
   <span class="va">clustered_assign</span> <span class="op">+</span> 

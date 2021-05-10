@@ -6228,22 +6228,22 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reshape_diagnosis.html">reshape_diagnosis</a></span><span class="op">(</span><span class="va">dx1</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="9%">
-<col width="7%">
-<col width="8%">
+<col width="10%">
+<col width="5%">
+<col width="5%">
 <col width="2%">
-<col width="3%">
-<col width="15%">
-<col width="12%">
-<col width="7%">
-<col width="15%">
-<col width="7%">
-<col width="7%">
+<col width="4%">
+<col width="16%">
+<col width="13%">
+<col width="8%">
+<col width="16%">
+<col width="8%">
+<col width="8%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">Design Label</th>
-<th align="left">Inquiry Label</th>
-<th align="left">Estimator Label</th>
+<th align="left">Design</th>
+<th align="left">Inquiry</th>
+<th align="left">Estimator</th>
 <th align="left">Term</th>
 <th align="left">N Sims</th>
 <th align="left">Bias Of Estimated Variance</th>
@@ -24385,22 +24385,22 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reshape_diagnosis.html">reshape_diagnosis</a></span><span class="op">(</span><span class="va">dx2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="7%">
+<col width="6%">
 <col width="8%">
-<col width="9%">
-<col width="2%">
+<col width="6%">
+<col width="3%">
 <col width="4%">
-<col width="15%">
+<col width="16%">
 <col width="13%">
 <col width="8%">
-<col width="15%">
+<col width="16%">
 <col width="8%">
 <col width="8%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">Design Label</th>
-<th align="left">Inquiry Label</th>
-<th align="left">Estimator Label</th>
+<th align="left">Design</th>
+<th align="left">Inquiry</th>
+<th align="left">Estimator</th>
 <th align="left">Term</th>
 <th align="left">N Sims</th>
 <th align="left">Bias Of Estimated Variance</th>
@@ -132497,7 +132497,7 @@
 ## Warning: The argument 'estimand = ' is deprecated. Please use 'inquiry = '
 ## instead.</code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">dx3</span><span class="op">$</span><span class="va">diagnosands_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">N</span>, y <span class="op">=</span> <span class="va">`Bias of Estimated Variance`</span>, color <span class="op">=</span> <span class="va">estimator_label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">dx3</span><span class="op">$</span><span class="va">diagnosands_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">N</span>, y <span class="op">=</span> <span class="va">`Bias of Estimated Variance`</span>, color <span class="op">=</span> <span class="va">estimator</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="fl">2</span>, color <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span>
