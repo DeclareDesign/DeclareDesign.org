@@ -28,7 +28,7 @@ dd_theme <- theme_bw() +
 
 set.seed(1)
 sims = 1000
-do_diagnosis = FALSE
+do_diagnosis <- FALSE
 ```
 
 Spillovers are often seen as a nuisance that lead researchers into error when estimating effects of interest. In a [previous post,](https://declaredesign.org/blog/2018-09-18-spillovers.html) we discussed sampling strategies to reduce these risks. A more substantively satisfying approach is to try to study spillovers directly. If we do it right we can remove errors in our estimation of primary quantities of interest and learn about how spillovers work at the same time. 

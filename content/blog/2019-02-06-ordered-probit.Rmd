@@ -48,6 +48,7 @@ We call the `zelig` library, set some parameters, and define a function to take 
 
 ```{r, echo = TRUE, message = FALSE}
 library(Zelig)
+library(ZeligChoice)
 
 # This helper function implements an ordered probit model using zelig; calculates 
 # quantities of interest and return tidy output
@@ -93,9 +94,9 @@ ordered_probit_design <-
   
   declare_measurement(Y = reveal_outcomes(Y ~ Z)) +
   
-  declare_estimator(Y ~ Z, estimand = "ate", label = "DIM") +
+  declare_estimator(Y ~ Z, inquiry = "ate", label = "DIM") +
   
-  declare_estimator(handler = label_estimator(ordered_probit), estimand = "ate", label = "Ordered Probit")
+  declare_estimator(handler = label_estimator(ordered_probit), inquiry = "ate", label = "Ordered Probit")
 ```
 
 Sample treatment/outcome data look like this:

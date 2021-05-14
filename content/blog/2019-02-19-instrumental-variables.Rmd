@@ -160,17 +160,25 @@ design <-
 Let's now diagnose this design to show that -- pretty counterintuitively for us at least! -- the IV estimator still recovers the LATE even when $Z$ and $X$ have a common cause.
 
 ```{r, eval = FALSE, message = FALSE}
+diagnosands <- 
+  declare_diagnosands(bias = mean(estimate - estimand),
+                      mean_estimate = mean(estimate),
+                      mean_estimand = mean(estimand))
 diagnosis_1 <- 
   diagnose_design(
-    design, diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)))
+    design, diagnosands = diagnosands)
 ```
 
 ```{r, echo = FALSE, warning = FALSE}
+diagnosands <- 
+  declare_diagnosands(bias = mean(estimate - estimand),
+                      mean_estimate = mean(estimate),
+                      mean_estimand = mean(estimand))
 if(do_diagnosis){
   diagnosis_1 <- 
     diagnose_design(
       design, 
-      diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
+      diagnosands = diagnosands,
       sims = sims, bootstrap_sims = b_sims)
   write_rds(diagnosis_1, path = "rfiles/iv1.rds")
 }
@@ -200,7 +208,7 @@ design_h <- redesign(design, heterogeneity = 1)
 
 diagnosis_2 <- 
   diagnose_design(
-    design_h, diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)))
+    design_h, diagnosands = diagnosands)
 ```
 
 ```{r, echo = FALSE, warning = FALSE}
@@ -210,7 +218,7 @@ if(do_diagnosis){
   diagnosis_2 <- 
     diagnose_design(
       design_h, 
-      diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
+      diagnosands = diagnosands,
       sims = sims, bootstrap_sims = b_sims)
   write_rds(diagnosis_2, path = "rfiles/iv2.rds")
 }
@@ -238,7 +246,7 @@ These cases are the two extremes of a continuum of the relative strength of the 
 designs <- redesign(design, heterogeneity = 1, path_weight = seq(0.01, .99, length = 5))
 
 diagnosis_3 <- diagnose_design(
-  designs, diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)))
+  designs, diagnosands = diagnosands)
 ```
 
 ```{r, echo = FALSE, warning = FALSE}
@@ -248,7 +256,7 @@ if(do_diagnosis){
   diagnosis_3 <- 
     diagnose_design(
       designs, 
-      diagnosands = declare_diagnosands(select = c(bias, mean_estimate, mean_estimand)),
+      diagnosands = diagnosands,
       sims = sims, bootstrap_sims = b_sims)
   write_rds(diagnosis_3, path = "rfiles/iv3.rds")
 }

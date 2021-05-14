@@ -175,7 +175,7 @@ make_blocks <- declare_step(handler =  block_function)
 Let's make a design that includes this step and now uses `block_id` instead of `class` for blocking:
 
 ```{r}
-design <- make_data + make_blocks + declare_assignment(blocks = block_id)
+design <- make_data + make_blocks + declare_assignment(Z = block_ra(blocks = block_id))
 ```
 
 When we draw data we now get the block variables and the assignment probabilities included. One out of two units is assigned to each block of two and singleton blocks are assigned independently with 0.5 probability to treatment.

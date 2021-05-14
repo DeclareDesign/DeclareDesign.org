@@ -137,7 +137,7 @@ ggplot(simulations, aes(estimate)) +
   geom_histogram(bins = 30) +
   geom_vline(data = summary_df, aes(xintercept = estimand), color = "purple") +
   facet_wrap(~inquiry)
-kable(reshape_diagnosis(diagnose_design(simulations), select = c("Mean Estimate", "Mean Inquiry", "Bias", "Coverage", "Power")))
+kable(reshape_diagnosis(diagnose_design(simulations), select = c("Mean Estimate", "Mean Estimand", "Bias", "Coverage", "Power")))
 ```
 
 We learn three things from the design diagnosis. 

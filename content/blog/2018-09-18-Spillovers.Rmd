@@ -70,7 +70,7 @@ inquiry <- declare_inquiry(Treat_one = mean(
                  sapply(I, function(i) dgp(i, I==i, G, n) - dgp(i, zeros, G, n))
                  ))
 
-assign    <- declare_assignment(prob = .5)
+assign    <- declare_assignment(Z = complete_ra(N, prob = .5))
 
 measurement  <- declare_measurement(Y = sapply(1:N, function(i) dgp(i, Z, G, n)))
 
@@ -127,7 +127,7 @@ Here is an alternative design that implements the original data and analysis str
 
 ```{r, error = TRUE, warning = FALSE}
 sparse_design <- insert_step(spillover_design, after = "Treat_one",
-                          declare_sampling(strata = G, prob = 1/3))
+                          declare_sampling(S = strata_rs(strata = G, prob = 1/3)))
 ```
 
 Note that it is important that the sampling takes place here *after* the definition of the estimand. Spillovers operate as a function of population characteristics, not just sample characteristics.
