@@ -728,7 +728,7 @@ base
 </tbody>
 </table>
 <p>However, the real speed gains come with robust standard errors. Let’s compare <code>lm_robust</code> to getting “HC2” standard errors and doing inference using them from the <code>coeftest</code> and <code>sandwich</code> packages.</p>
-<pre><code><a href="http://sandwich.R-Forge.R-project.org/">library(sandwich)
+<pre><code><a href="https://sandwich.R-Forge.R-project.org/">library(sandwich)
 library(lmtest)
 
 test_rob &lt;- lapply(data_list, function(dat) {

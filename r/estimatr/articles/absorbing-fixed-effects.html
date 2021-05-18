@@ -160,7 +160,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Load packages for comparison</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/joshuaulrich/microbenchmark/">microbenchmark</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://sandwich.R-Forge.R-project.org/">sandwich</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sandwich.R-Forge.R-project.org/">sandwich</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">lmtest</span><span class="op">)</span>
 
 <span class="co"># Create matched-pairs dataset using fabricatr</span>
@@ -191,9 +191,9 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 168.72643 171.58270 179.92112 173.25420 174.96863 288.4951
-##        lm_robust  76.18662  77.50253  79.47736  79.54352  80.48525  85.4734
-##  lm_robust + fes  47.93267  49.02534  52.78409  50.08189  51.49327 179.7035
+##  base + sandwich 171.31092 176.12680 195.46944 179.51090 188.05631 334.3303
+##        lm_robust  77.95361  81.07955  87.64364  84.35669  88.93613 130.3249
+##  lm_robust + fes  49.16145  51.55747  59.67416  53.27615  57.44732 187.5147
 ##  neval cld
 ##     50   c
 ##     50  b 
@@ -221,13 +221,13 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr        min         lq       mean     median         uq
-##  base + sandwich 167.358000 171.844049 180.261001 173.964271 175.348975
-##        lm_robust  60.695305  62.450725  66.650431  64.022590  65.244757
-##  lm_robust + fes   7.462794   7.705608   8.631386   8.260863   8.556594
+##  base + sandwich 171.726638 180.130745 202.686598 185.385652 211.970160
+##        lm_robust  61.201850  64.674055  75.596923  66.975808  74.804311
+##  lm_robust + fes   7.624364   8.101014   9.361467   8.547253   9.886763
 ##        max neval cld
-##  285.81334    50   c
-##  190.15176    50  b 
-##   13.17101    50 a</code></pre>
+##  352.39221    50   c
+##  210.04970    50  b 
+##   16.32043    50 a</code></pre>
 </div>
   </div>
 
