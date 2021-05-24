@@ -190,14 +190,14 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 160.49062 166.91372 182.45338 172.02517 178.90089 330.3898
-##        lm_robust  72.68797  75.68876  79.35883  77.97407  80.69387 108.7483
-##  lm_robust + fes  46.01936  47.22682  52.66486  49.17816  51.00703 182.1166
-##  neval cld
-##     50   c
-##     50  b 
-##     50 a</code></pre>
+##             expr       min        lq      mean    median        uq       max
+##  base + sandwich 169.66296 173.53156 177.36160 175.18003 177.03028 234.04586
+##        lm_robust  76.27531  78.89214  80.12159  79.76041  81.13023  86.91354
+##  lm_robust + fes  48.23685  49.64788  52.02191  50.22730  51.58560 121.68389
+##  neval
+##     50
+##     50
+##     50</code></pre>
 <p>Speed gains are <em>considerably</em> greater with HC1 standard errors. This is because we need to get the hat matrix for HC2, HC3, and CR2 standard errors, which requires inverting that large matrix of dummies we previously avoided doing. HC0, HC1, CR0, and CRstata standard errors do not require this inversion.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># With HC1</span>
@@ -220,14 +220,14 @@
   times <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
-##             expr        min         lq      mean     median         uq
-##  base + sandwich 164.914433 167.984425 181.39848 171.195220 175.955926
-##        lm_robust  57.483413  60.690736  68.30472  63.035645  65.343330
-##  lm_robust + fes   6.839325   7.518293   8.92432   7.951073   8.666722
-##        max neval cld
-##  335.23628    50   c
-##  176.59328    50  b 
-##   31.66816    50 a</code></pre>
+##             expr       min         lq       mean     median         uq
+##  base + sandwich 168.94929 172.897772 175.713925 174.720837 176.475661
+##        lm_robust  61.57191  63.742718  64.788831  64.496817  65.592604
+##  lm_robust + fes   7.32998   7.757646   8.822228   8.302285   8.723156
+##        max neval
+##  231.64487    50
+##   69.69662    50
+##   13.00624    50</code></pre>
 </div>
   </div>
 
