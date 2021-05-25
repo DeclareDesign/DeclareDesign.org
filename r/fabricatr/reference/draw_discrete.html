@@ -344,17 +344,17 @@ break labels are provided.</p>
 <span class='fu'><a href='fabricate.html'>fabricate</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>3</span>,
    x <span class='op'>=</span> <span class='fl'>10</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
    binary <span class='op'>=</span> <span class='fu'>draw_binary</span><span class='op'>(</span>latent <span class='op'>=</span> <span class='va'>x</span>, link <span class='op'>=</span> <span class='st'>"probit"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   ID          x binary
-#&gt; 1  1 12.1515166      1
-#&gt; 2  2  0.4221889      0
-#&gt; 3  3  3.9740704      1</div><div class='input'>
+</div><div class='output co'>#&gt;   ID         x binary
+#&gt; 1  1 -6.109455      0
+#&gt; 2  2 12.518842      1
+#&gt; 3  3  2.503195      1</div><div class='input'>
 <span class='co'># Repeated trials: `draw_binomial`</span>
 <span class='fu'><a href='fabricate.html'>fabricate</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>3</span>,
    p <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.5</span>, <span class='fl'>1</span><span class='op'>)</span>,
    binomial <span class='op'>=</span> <span class='fu'>draw_binomial</span><span class='op'>(</span>prob <span class='op'>=</span> <span class='va'>p</span>, trials <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   ID   p binomial
 #&gt; 1  1 0.0        0
-#&gt; 2  2 0.5        6
+#&gt; 2  2 0.5        4
 #&gt; 3  3 1.0       10</div><div class='input'>
 <span class='co'># Ordered data: transforming latent data into observed, ordinal data.</span>
 <span class='co'># useful for survey responses.</span>
@@ -362,10 +362,10 @@ break labels are provided.</p>
    x <span class='op'>=</span> <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
    ordered <span class='op'>=</span> <span class='fu'>draw_ordered</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>,
                           breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='cn'>Inf</span>, <span class='op'>-</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='cn'>Inf</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   ID          x ordered
-#&gt; 1  1 -0.7245082       2
-#&gt; 2  2 -1.6222348       1
-#&gt; 3  3 -0.8628245       2</div><div class='input'>
+</div><div class='output co'>#&gt;   ID         x ordered
+#&gt; 1  1  4.333357       3
+#&gt; 2  2  3.080771       3
+#&gt; 3  3 -7.412788       1</div><div class='input'>
 <span class='co'># Providing break labels for latent data.</span>
 <span class='fu'><a href='fabricate.html'>fabricate</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>3</span>,
    x <span class='op'>=</span> <span class='fl'>5</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
@@ -375,33 +375,33 @@ break labels are provided.</p>
                                            <span class='st'>"Somewhat concerned"</span>,
                                            <span class='st'>"Very concerned"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   ID          x              ordered
-#&gt; 1  1 -6.1803146 Not at all concerned
-#&gt; 2  2 -9.5115210 Not at all concerned
-#&gt; 3  3 -0.4725201   Somewhat concerned</div><div class='input'>
+#&gt; 1  1  0.6809368   Somewhat concerned
+#&gt; 2  2  6.4749434       Very concerned
+#&gt; 3  3 -6.4532501 Not at all concerned</div><div class='input'>
 <span class='co'># Likert data: often used for survey data</span>
 <span class='fu'><a href='fabricate.html'>fabricate</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>10</span>,
           support_free_college <span class='op'>=</span> <span class='fu'>draw_likert</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
                                              type <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    ID support_free_college
-#&gt; 1  01 Don't Know / Neutral
-#&gt; 2  02 Don't Know / Neutral
-#&gt; 3  03                Agree
+#&gt; 1  01             Disagree
+#&gt; 2  02       Strongly Agree
+#&gt; 3  03 Don't Know / Neutral
 #&gt; 4  04 Don't Know / Neutral
 #&gt; 5  05                Agree
-#&gt; 6  06 Don't Know / Neutral
-#&gt; 7  07             Disagree
-#&gt; 8  08             Disagree
+#&gt; 6  06             Disagree
+#&gt; 7  07 Don't Know / Neutral
+#&gt; 8  08 Don't Know / Neutral
 #&gt; 9  09             Disagree
-#&gt; 10 10 Don't Know / Neutral</div><div class='input'>
+#&gt; 10 10    Strongly Disagree</div><div class='input'>
 <span class='co'># Count data: useful for rates of occurrences over time.</span>
 <span class='fu'><a href='fabricate.html'>fabricate</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>5</span>,
    x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>5</span>, <span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span>,
    theft_rate <span class='op'>=</span> <span class='fu'>draw_count</span><span class='op'>(</span>mean<span class='op'>=</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   ID   x theft_rate
 #&gt; 1  1   0          0
-#&gt; 2  2   5          5
-#&gt; 3  3  25         26
-#&gt; 4  4  50         51
+#&gt; 2  2   5          3
+#&gt; 3  3  25         25
+#&gt; 4  4  50         45
 #&gt; 5  5 100         88</div><div class='input'>
 <span class='co'># Categorical data: useful for demographic data.</span>
 <span class='fu'><a href='fabricate.html'>fabricate</a></span><span class='op'>(</span>N <span class='op'>=</span> <span class='fl'>6</span>, p1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, p2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>, p3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span>,
