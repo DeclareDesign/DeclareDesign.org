@@ -562,11 +562,11 @@ declare_estimator(handler = label_estimator(my_fun), inquiry = "ATE")
 <span class='co'># If we use logit, we'll need to estimate the average marginal effect with </span>
 <span class='co'># margins::margins. We wrap this up in function we'll pass to model_summary</span>
 
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>margins</span><span class='op'>)</span> <span class='co'># for margins</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in library(margins): there is no package called ‘margins’</span></div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span> <span class='co'># for tidy</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/leeper/margins'>margins</a></span><span class='op'>)</span> <span class='co'># for margins</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span> <span class='co'># for tidy</span>
 
 <span class='va'>tidy_margins</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='fu'>margins</span><span class='op'>(</span><span class='va'>x</span>, data <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>, conf.int <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/margins/man/margins.html'>margins</a></span><span class='op'>(</span><span class='va'>x</span>, data <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>data</span><span class='op'>)</span>, conf.int <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='op'>}</span>
 
 <span class='va'>design</span> <span class='op'>+</span>
@@ -577,7 +577,66 @@ declare_estimator(handler = label_estimator(my_fun), inquiry = "ATE")
     model_summary <span class='op'>=</span> <span class='va'>tidy_margins</span>,
     term <span class='op'>=</span> <span class='st'>"Z"</span>
   <span class='op'>)</span> 
-</div><div class='output co'>#&gt; <span class='error'>Error in margins(x, data = x$data): could not find function "margins"</span></div><div class='input'>
+</div><div class='output co'>#&gt; 
+#&gt; Design Summary
+#&gt; 
+#&gt; Step 1 (model): declare_model(N = 100, female = rbinom(N, 1, 0.5), U = rnorm(N),     potential_outcomes(Y ~ rbinom(N, 1, prob = pnorm(0.2 * Z +         0.2 * female + 0.1 * Z * female + U)))) 
+#&gt; 
+#&gt; N = 100 
+#&gt; 
+#&gt; Added variable: ID 
+#&gt;  N_missing N_unique     class
+#&gt;          0      100 character
+#&gt; 
+#&gt; Added variable: female 
+#&gt;     0    1
+#&gt;    36   64
+#&gt;  0.36 0.64
+#&gt; 
+#&gt; Added variable: U 
+#&gt;    min median mean  max   sd N_missing N_unique
+#&gt;  -2.58   0.02 0.11 3.14 1.03         0      100
+#&gt; 
+#&gt; Added variable: Y_Z_0 
+#&gt;     0    1
+#&gt;    38   62
+#&gt;  0.38 0.62
+#&gt; 
+#&gt; Added variable: Y_Z_1 
+#&gt;     0    1
+#&gt;    32   68
+#&gt;  0.32 0.68
+#&gt; 
+#&gt; Step 2 (inquiry): declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0)) -------------------
+#&gt; 
+#&gt; A single draw of the inquiry:
+#&gt;  inquiry estimand
+#&gt;      ATE     0.06
+#&gt; 
+#&gt; Step 3 (assignment): declare_assignment(Z = complete_ra(N, m = 50)) ------------
+#&gt; 
+#&gt; Added variable: Z 
+#&gt;     0    1
+#&gt;    50   50
+#&gt;  0.50 0.50
+#&gt; 
+#&gt; Step 4 (measurement): declare_measurement(Y = reveal_outcomes(Y ~ Z)) ----------
+#&gt; 
+#&gt; Added variable: Y 
+#&gt;     0    1
+#&gt;    34   66
+#&gt;  0.34 0.66
+#&gt; 
+#&gt; Step 5 (estimator): declare_estimator(Y ~ Z + female, model = glm, family = binomial("logit"),     model_summary = tidy_margins, term = "Z") 
+#&gt; 
+#&gt; Formula: Y ~ Z + female 
+#&gt; 
+#&gt; Model:	glm 
+#&gt; 
+#&gt; A single draw of the estimator:
+#&gt;  estimator term   estimate  std.error statistic   p.value   conf.low conf.high
+#&gt;  estimator    Z 0.03996332 0.09439188 0.4233766 0.6720205 -0.1450414  0.224968
+#&gt; </div><div class='input'>
 <span class='co'># Multiple estimators for one inquiry</span>
 
 <span class='va'>two_estimators</span> <span class='op'>&lt;-</span>
@@ -597,8 +656,12 @@ declare_estimator(handler = label_estimator(my_fun), inquiry = "ATE")
   <span class='op'>)</span>
 
 <span class='fu'><a href='run_design.html'>run_design</a></span><span class='op'>(</span><span class='va'>two_estimators</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error: Error in step 6 (logit):</span>
-#&gt; <span class='error'>	Error in margins(x, data = x$data): could not find function "margins"</span></div><div class='input'>
+</div><div class='output co'>#&gt;   inquiry estimand estimator term   estimate  std.error statistic   p.value
+#&gt; 1     ATE     0.08       OLS    Z 0.10000000 0.10032600 0.9967506 0.3213404
+#&gt; 2     ATE     0.08     logit    Z 0.09935046 0.09735218 1.0205263 0.3074789
+#&gt;      conf.low conf.high df outcome
+#&gt; 1 -0.09909368 0.2990937 98       Y
+#&gt; 2 -0.09145630 0.2901572 NA    &lt;NA&gt;</div><div class='input'>
 <span class='co'># Declare estimator using a custom handler</span>
 
 <span class='co'># Define your own estimator and use the `label_estimator` function for labeling</span>
