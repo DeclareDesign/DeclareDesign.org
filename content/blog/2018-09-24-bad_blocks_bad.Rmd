@@ -53,7 +53,7 @@ model <- declare_model(
 )
 inquiry     <- declare_inquiry(ATE = mean(Y_Z_1 - Y_Z_0))
 blocking    <- declare_step(fabricate, couples = rep(1:(N/2), each = 2))
-assignment  <- declare_assignment(Z = block_ra(blocks = couples), legacy = FALSE)
+assignment  <- declare_assignment(Z = block_ra(blocks = couples))
 measurement <- declare_measurement(Y = reveal_outcomes(Y ~ Z))
 estimator   <- declare_estimator(Y ~ Z)
 
@@ -78,7 +78,7 @@ We also want to compare both of these to a design with no blocking. To do this w
 ```{r}
 design_no_blocks <-  replace_step(design_likes,
                                   assignment,
-                                  declare_assignment(Z = complete_ra(N), legacy = FALSE)
+                                  declare_assignment(Z = complete_ra(N))
 )
 ```
 
@@ -149,7 +149,7 @@ diagnose_design(Like_blocks_250  = redesign(design_likes,     N = 250),
                 Like_blocks_2500 = redesign(design_likes,     N = 2500),
                 No_blocks_2500   = redesign(design_no_blocks, N = 2500),
                 Opposites_2500   = redesign(design_opposites, N = 2500),
-                diagnosands      = declare_diagnosands(select = sd_estimate))
+                diagnosands      = declare_diagnosands(sd_estimate = sd(estimate))
 ```
 
 
@@ -161,7 +161,7 @@ diagnosis   <- diagnose_design(
                 Like_blocks_2500 = redesign(design_likes,     N = 2500),
                 No_blocks_2500   = redesign(design_no_blocks, N = 2500),
                 Opposites_2500   = redesign(design_opposites, N = 2500),
-                diagnosands      = declare_diagnosands(select = sd_estimate),
+                diagnosands      = declare_diagnosands(sd_estimate = sd(estimate)),
                 sims = sims, bootstrap_sims = 0)
 
 write_rds(diagnosis, path = "rfiles/3_bad_blocks_3.rds")
