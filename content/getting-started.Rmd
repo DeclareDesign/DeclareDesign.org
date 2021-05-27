@@ -687,7 +687,7 @@ diagnose_design(designs)
 
 ### Comparing designs
 
-Alternatively, we can compare a pair of designs directly with the `compare_designs` function. This function is most useful for comparing the differences between a planned design and an implemented design (see Section \@ref(p4reconciliation)).
+Alternatively, we can compare a pair of designs directly with the `compare_designs` function. This function is most useful for comparing the differences between a planned design and an implemented design.
 
 ```{r, eval = FALSE}
 compare_designs(planned_design, implemented_design)
@@ -717,7 +717,6 @@ block_cluster_design <- block_cluster_two_arm_designer(N = 1000, N_blocks = 10)
 
 For much more detail and help, we recommend the following resources.
 
-- Short introduction to the [MIDA framework](/mida/)
 - Short introduction to DeclareDesign on the [World Bank Development Impact blog](https://blogs.worldbank.org/impactevaluations/declaring-and-diagnosing-research-designs)
 - Our paper in the [*American Political Science Review*](/declare.pdf) ([appendices](/declare_SI.pdf))
 - [Library of research designs](/library), which includes a range of canonical designs that can be declared with a single line of code and then tailored for your own uses
