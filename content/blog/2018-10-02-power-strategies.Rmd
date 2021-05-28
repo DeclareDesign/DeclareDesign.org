@@ -40,7 +40,7 @@ model <- declare_model(N, W = rep(0:1, N / 2), u = rnorm(N), potential_outcomes(
 inquiry     <- declare_inquiry(ate = 1)  
 
 # Data strategy
-assignment   <- declare_assignment(assignment_variable = "Z", blocks = W)
+assignment   <- declare_assignment(Z = block_ra(blocks = W))
 measurement  <- declare_measurement(Y = reveal_outcomes(Y ~ Z))
 
 # Answer strategy
