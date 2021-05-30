@@ -183,7 +183,7 @@
 <span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html">microbenchmark</a></span><span class="op">(</span>
   `base + sandwich` <span class="op">=</span> <span class="op">{</span>
     <span class="va">lo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">z</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">blocks</span><span class="op">)</span>, <span class="va">dat</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/coeftest.html">coeftest</a></span><span class="op">(</span><span class="va">lo</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHC.html">vcovHC</a></span><span class="op">(</span><span class="va">lo</span>, type <span class="op">=</span> <span class="st">"HC2"</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/coeftest.html">coeftest</a></span><span class="op">(</span><span class="va">lo</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sandwich/man/vcovHC.html">vcovHC</a></span><span class="op">(</span><span class="va">lo</span>, type <span class="op">=</span> <span class="st">"HC2"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span>,
   `lm_robust` <span class="op">=</span> <span class="fu"><a href="../reference/lm_robust.html">lm_robust</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">z</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">blocks</span><span class="op">)</span>, <span class="va">dat</span><span class="op">)</span>,
   `lm_robust + fes` <span class="op">=</span> <span class="fu"><a href="../reference/lm_robust.html">lm_robust</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">z</span>, data <span class="op">=</span> <span class="va">dat</span>, fixed_effects <span class="op">=</span> <span class="op">~</span> <span class="va">blocks</span><span class="op">)</span>,
@@ -191,9 +191,9 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr       min        lq      mean    median        uq      max
-##  base + sandwich 166.76316 172.81135 195.11346 176.99750 197.55528 345.8105
-##        lm_robust  75.16926  78.72330  82.83695  80.89927  83.32797 116.1922
-##  lm_robust + fes  47.41194  48.85876  55.22665  50.01081  52.29330 206.8211
+##  base + sandwich 169.23447 174.90009 188.35937 177.52702 180.08616 297.5600
+##        lm_robust  77.19685  79.60403  84.67968  80.94056  84.52691 145.4092
+##  lm_robust + fes  47.71419  50.01054  57.72788  51.41995  53.94126 184.3505
 ##  neval cld
 ##     50   c
 ##     50  b 
@@ -204,7 +204,7 @@
 <span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html">microbenchmark</a></span><span class="op">(</span>
   `base + sandwich` <span class="op">=</span> <span class="op">{</span>
     <span class="va">lo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">z</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">blocks</span><span class="op">)</span>, <span class="va">dat</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/coeftest.html">coeftest</a></span><span class="op">(</span><span class="va">lo</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://sandwich.R-Forge.R-project.org//reference/vcovHC.html">vcovHC</a></span><span class="op">(</span><span class="va">lo</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/coeftest.html">coeftest</a></span><span class="op">(</span><span class="va">lo</span>, vcov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sandwich/man/vcovHC.html">vcovHC</a></span><span class="op">(</span><span class="va">lo</span>, type <span class="op">=</span> <span class="st">"HC1"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span>,
   `lm_robust` <span class="op">=</span> <span class="fu"><a href="../reference/lm_robust.html">lm_robust</a></span><span class="op">(</span>
     <span class="va">y</span> <span class="op">~</span> <span class="va">z</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">blocks</span><span class="op">)</span>,
@@ -221,13 +221,13 @@
 <span class="op">)</span></code></pre></div>
 <pre><code>## Unit: milliseconds
 ##             expr        min         lq       mean     median         uq
-##  base + sandwich 168.940591 174.646092 195.855976 182.052113 206.474454
-##        lm_robust  58.703615  61.839513  64.652861  64.207737  67.032674
-##  lm_robust + fes   6.916656   7.462516   8.098073   7.730352   8.321622
-##        max neval cld
-##  315.89954    50   c
-##   72.82827    50  b 
-##   13.17546    50 a</code></pre>
+##  base + sandwich 170.509757 176.429398 194.148705 178.623173 199.254586
+##        lm_robust  60.773631  64.931595  68.895444  66.922104  68.898717
+##  lm_robust + fes   7.170917   7.788074   8.443547   8.118451   8.639359
+##       max neval cld
+##  330.7683    50   c
+##  121.5751    50  b 
+##   13.1574    50 a</code></pre>
 </div>
   </div>
 
