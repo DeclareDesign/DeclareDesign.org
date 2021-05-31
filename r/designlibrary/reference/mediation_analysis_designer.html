@@ -209,7 +209,7 @@ Note this model is not guaranteed to be unbiased despite randomization of Z beca
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Generate a mediation analysis design using default arguments:</span>
 <span class='va'>mediation_1</span> <span class='op'>&lt;-</span> <span class='fu'>mediation_analysis_designer</span><span class='op'>(</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/draw_functions.html'>draw_inquiries</a></span><span class='op'>(</span><span class='va'>mediation_1</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/draw_functions.html'>draw_estimands</a></span><span class='op'>(</span><span class='va'>mediation_1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;               inquiry estimand
 #&gt; 1          FirstStage    0.365
 #&gt; 2          Indirect_0    0.400
@@ -223,7 +223,7 @@ Note this model is not guaranteed to be unbiased despite randomization of Z beca
 
 <span class='co'># A design with a violation of sequential ignorability and heterogeneous effects:</span>
 <span class='va'>mediation_2</span> <span class='op'>&lt;-</span> <span class='fu'>mediation_analysis_designer</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, rho <span class='op'>=</span> <span class='fl'>.5</span>, c <span class='op'>=</span> <span class='fl'>1</span>, d <span class='op'>=</span> <span class='fl'>.75</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/draw_functions.html'>draw_inquiries</a></span><span class='op'>(</span><span class='va'>mediation_2</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/draw_functions.html'>draw_estimands</a></span><span class='op'>(</span><span class='va'>mediation_2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;               inquiry estimand
 #&gt; 1          FirstStage    0.335
 #&gt; 2          Indirect_0    0.400
