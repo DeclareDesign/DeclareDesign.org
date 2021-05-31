@@ -288,7 +288,7 @@ Print code to recreate a design" />
 <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_data</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
 
 <span class='va'>estimates</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_estimates</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
-<span class='va'>inquiries</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_inquiries</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
+<span class='va'>inquiries</span> <span class='op'>&lt;-</span> <span class='fu'><a href='draw_functions.html'>draw_estimands</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
 
 <span class='fu'>print_code</span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; model &lt;- declare_model(N = 500, U = rnorm(N), potential_outcomes(Y ~ U + Z * rnorm(N, 2, 2))) 

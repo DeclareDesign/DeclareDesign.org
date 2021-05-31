@@ -2030,7 +2030,7 @@ Y
 <p><code>draw_data</code> runs all of the “data steps” in a design, which are both from the model (population and potential outcomes) and from the data strategy (sampling, assignment, and measurement).</p>
 <p>To simulate the estimands from a single run of the design, we use <code>draw_estimands</code>. This runs two operations at once: it draws the data, and calculates the estimands at the point defined by the design. For example, in our design, the estimand comes just after the potential outcomes. In this design, <code>draw_estimands</code> will run the first two steps and then calculate the estimands from the <code>estimand</code> function we declared:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/draw_functions.html">draw_inquiries</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/draw_functions.html">draw_estimands</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></code></pre></div>
 <table class="table table">
 <caption>
 Estimands calculated from simulated data.

@@ -139,13 +139,9 @@
 
     <pre class="usage"><span class='fu'>draw_data</span><span class='op'>(</span><span class='va'>design</span>, data <span class='op'>=</span> <span class='cn'>NULL</span>, start <span class='op'>=</span> <span class='fl'>1</span>, end <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'>draw_inquiry</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
-
-<span class='fu'>draw_inquiries</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>draw_estimand</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>draw_estimands</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
-
-<span class='fu'>draw_estimand</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>draw_estimates</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
@@ -193,7 +189,7 @@
 
 <span class='va'>dat_no_sampling</span> <span class='op'>&lt;-</span> <span class='fu'>draw_data</span><span class='op'>(</span><span class='va'>design</span>, end <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 
-<span class='fu'>draw_inquiries</span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
+<span class='fu'>draw_estimands</span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   inquiry estimand
 #&gt; 1     ATE        1</div><div class='input'>
 <span class='fu'>draw_estimates</span><span class='op'>(</span><span class='va'>design</span><span class='op'>)</span>
