@@ -11,5 +11,8 @@ articles:
   resampling: resampling.html
   time_series: time_series.html
   variable_generation: variable_generation.html
-last_built: 2021-06-05T23:19Z
+last_built: 2021-06-06T01:04Z
+urls:
+  reference: https://declaredesign.org/r/fabricatr/reference
+  article: https://declaredesign.org/r/fabricatr/articles
 
