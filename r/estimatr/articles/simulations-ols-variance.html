@@ -139,7 +139,7 @@
     
 <p>This document exposes the properties of different variance estimators using <a href="/r/declaredesign/"><code>DeclareDesign</code></a> and <a href="/r/estimatr/"><code>estimatr</code></a>. More details about the variance estimators with references can be found in the <a href="/r/estimatr/articles/mathematical-notes.html">mathematical notes</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://declaredesign.org">DeclareDesign</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://declaredesign.org/r/declaredesign">DeclareDesign</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></code></pre></div>
 <div id="homoskedastic-errors" class="section level1">
@@ -181,20 +181,20 @@
 <pre><code>## [1] 0.07831866</code></pre>
 <p>Now, using <a href="/r/declaredesign/"><code>DeclareDesign</code></a>, let’s specify the rest of the data generating process (DGP). Let’s set <span class="math inline">\(\beta = [0, 1]^\top\)</span>, so that the true DGP is <span class="math inline">\(\mathbf{y} = \mathbf{x_1} + \epsilon\)</span>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">simp_pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_population.html">declare_population</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">simp_pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_population.html">declare_population</a></span><span class="op">(</span>
   epsilon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
   y <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="va">epsilon</span>
 <span class="op">)</span></code></pre></div>
 <p>Now let’s tell DeclareDesign that our target, our estimand, is the true variance.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">varb_estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>true_varb <span class="op">=</span> <span class="va">true_varb</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">varb_estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>true_varb <span class="op">=</span> <span class="va">true_varb</span><span class="op">)</span></code></pre></div>
 <p>Our estimator for this estimand will be the classical OLS variance estimator, which we know should be unbiased:</p>
 <p><span class="math display">\[
 \widehat{\mathbb{V}[\widehat{\beta}]} = \frac{\mathbf{e}^\top\mathbf{e}}{N - K} (\mathbf{X}^\top \mathbf{X})^{-1},
 \]</span></p>
 <p>where the residuals <span class="math inline">\(\mathbf{e} = \mathbf{y} - \mathbf{X}\widehat{\beta}\)</span>, <span class="math inline">\(N\)</span> is the number of observations, and <span class="math inline">\(K\)</span> is the number of regressors—two in our case. We can easily get this estimate of the variance by squaring the standard error we get out from <code>lm_robust</code> in <a href="/r/estimatr/"><code>estimatr</code></a>. Let’s tell <a href="/r/declaredesign/"><code>DeclareDesign</code></a> to use that estimator and get the coefficient on the <span class="math inline">\(\mathbf{x}_1\)</span> variable.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">lmc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
   <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>,
   model <span class="op">=</span> <span class="va">lm_robust</span>,
   se_type <span class="op">=</span> <span class="st">"classical"</span>,
@@ -205,11 +205,11 @@
 <p>Let’s first set up the design and our diagnosands.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># First declare all the steps of our design, starting with our fixed data</span>
-<span class="va">classical_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_population.html">declare_population</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">+</span> <span class="va">simp_pop</span> <span class="op">+</span> <span class="va">varb_estimand</span> <span class="op">+</span> <span class="va">lmc</span>
+<span class="va">classical_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_population.html">declare_population</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">+</span> <span class="va">simp_pop</span> <span class="op">+</span> <span class="va">varb_estimand</span> <span class="op">+</span> <span class="va">lmc</span>
 
 <span class="co"># Declare a set of diagnosands that help us check if</span>
 <span class="co"># we have unbiasedness</span>
-<span class="va">my_diagnosands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_diagnosands.html">declare_diagnosands</a></span><span class="op">(</span>
+<span class="va">my_diagnosands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_diagnosands.html">declare_diagnosands</a></span><span class="op">(</span>
   `Bias of Estimated Variance` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">std.error</span><span class="op">^</span><span class="fl">2</span> <span class="op">-</span> <span class="va">estimand</span><span class="op">)</span>,
   `Bias of Standard Error` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">std.error</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">)</span><span class="op">)</span>,
   `Coverage Rate` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">&lt;=</span> <span class="va">conf.low</span> <span class="op">&amp;</span> <span class="fl">1</span> <span class="op">&gt;=</span> <span class="va">conf.high</span><span class="op">)</span>,
@@ -220,7 +220,7 @@
 <p>Now let’s run the simulations!</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-<span class="va">dx1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html">diagnose_design</a></span><span class="op">(</span>
+<span class="va">dx1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/diagnose_design.html">diagnose_design</a></span><span class="op">(</span>
   <span class="va">classical_design</span>,
   sims <span class="op">=</span> <span class="va">sims</span>,
   diagnosands <span class="op">=</span> <span class="va">my_diagnosands</span>
@@ -6225,7 +6225,7 @@
 ## Warning: The argument 'estimand = ' is deprecated. Please use 'inquiry = '
 ## instead.</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reshape_diagnosis.html">reshape_diagnosis</a></span><span class="op">(</span><span class="va">dx1</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/reshape_diagnosis.html">reshape_diagnosis</a></span><span class="op">(</span><span class="va">dx1</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="10%">
@@ -6333,16 +6333,16 @@
   <span class="va">true_varb_het</span> <span class="op">&lt;-</span> <span class="va">varb</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span>
 
   <span class="co"># Population function now has heteroskedastic noise</span>
-  <span class="va">simp_pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_population.html">declare_population</a></span><span class="op">(</span>
+  <span class="va">simp_pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_population.html">declare_population</a></span><span class="op">(</span>
     <span class="va">dat</span>,
     epsilon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">N</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">noise_var</span><span class="op">)</span><span class="op">)</span>,
     y <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="va">epsilon</span>
   <span class="op">)</span>
 
-  <span class="va">varb_het_estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>true_varb_het <span class="op">=</span> <span class="va">true_varb_het</span><span class="op">)</span>
+  <span class="va">varb_het_estimand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_inquiry.html">declare_inquiry</a></span><span class="op">(</span>true_varb_het <span class="op">=</span> <span class="va">true_varb_het</span><span class="op">)</span>
 
   <span class="co"># Now we declare all three estimators</span>
-  <span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
+  <span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
     <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>,
     model <span class="op">=</span> <span class="va">lm_robust</span>,
     se_type <span class="op">=</span> <span class="st">"classical"</span>,
@@ -6351,7 +6351,7 @@
     label <span class="op">=</span> <span class="st">"classical"</span>
   <span class="op">)</span>
 
-  <span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
+  <span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
     <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>,
     model <span class="op">=</span> <span class="va">lm_robust</span>,
     se_type <span class="op">=</span> <span class="st">"HC1"</span>,
@@ -6360,7 +6360,7 @@
     label <span class="op">=</span> <span class="st">"HC1"</span>
   <span class="op">)</span>
   
-  <span class="va">lm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
+  <span class="va">lm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/declare_estimator.html">declare_estimator</a></span><span class="op">(</span>
     <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>,
     model <span class="op">=</span> <span class="va">lm_robust</span>,
     se_type <span class="op">=</span> <span class="st">"HC2"</span>,
@@ -6377,7 +6377,7 @@
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Create a design using our template and the data we have been using</span>
 <span class="va">het_design</span> <span class="op">&lt;-</span> <span class="fu">het_designer</span><span class="op">(</span>N <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
-<span class="va">dx2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html">diagnose_design</a></span><span class="op">(</span>
+<span class="va">dx2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/diagnose_design.html">diagnose_design</a></span><span class="op">(</span>
   <span class="va">het_design</span>,
   diagnosands <span class="op">=</span> <span class="va">my_diagnosands</span>,
   sims <span class="op">=</span> <span class="va">sims</span>
@@ -24382,7 +24382,7 @@
 ## Warning: The argument 'estimand = ' is deprecated. Please use 'inquiry = '
 ## instead.</code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/reshape_diagnosis.html">reshape_diagnosis</a></span><span class="op">(</span><span class="va">dx2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/reshape_diagnosis.html">reshape_diagnosis</a></span><span class="op">(</span><span class="va">dx2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="6%">
@@ -24493,10 +24493,10 @@
 </table>
 <p>The bias for the HC2 errors is much closer to zero, whereas the bias for the classical error is much larger, especially when compared to the standard error of the bias diagnosand. How does this bias change as the sample size changes? As the HC2 variance estimate is consistent under heteroskedasticity, it should converge to zero.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">designs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/expand_design.html">expand_design</a></span><span class="op">(</span><span class="va">het_designer</span>, N <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">2500</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">designs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/expand_design.html">expand_design</a></span><span class="op">(</span><span class="va">het_designer</span>, N <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">500</span>, <span class="fl">1000</span>, <span class="fl">2500</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>
-<span class="va">dx3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html">diagnose_design</a></span><span class="op">(</span><span class="va">designs</span>, sims <span class="op">=</span> <span class="va">sims</span>, diagnosands <span class="op">=</span> <span class="va">my_diagnosands</span><span class="op">)</span></code></pre></div>
+<span class="va">dx3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/declaredesign/reference/diagnose_design.html">diagnose_design</a></span><span class="op">(</span><span class="va">designs</span>, sims <span class="op">=</span> <span class="va">sims</span>, diagnosands <span class="op">=</span> <span class="va">my_diagnosands</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: The argument 'estimand = ' is deprecated. Please use 'inquiry = '
 ## instead.
 
