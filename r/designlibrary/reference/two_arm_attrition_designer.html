@@ -211,17 +211,17 @@
     <pre class="examples"><div class='input'><span class='co'># To make a design using default argument (missing completely at random):</span>
 <span class='va'>two_arm_attrition_design</span> <span class='op'>&lt;-</span> <span class='fu'>two_arm_attrition_designer</span><span class='op'>(</span><span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>two_arm_attrition_design</span><span class='op'>)</span>
+<span class='fu'><a href='https://declaredesign.org/r/declaredesign/reference/diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='va'>two_arm_attrition_design</span><span class='op'>)</span>
 <span class='op'>}</span>
 <span class='co'># Attrition can produce bias even for unconditional ATE even when not</span>
 <span class='co'># associated with treatment</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='fu'>two_arm_attrition_designer</span><span class='op'>(</span>b_R <span class='op'>=</span> <span class='fl'>0</span>, rho <span class='op'>=</span> <span class='fl'>.3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://declaredesign.org/r/declaredesign/reference/diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='fu'>two_arm_attrition_designer</span><span class='op'>(</span>b_R <span class='op'>=</span> <span class='fl'>0</span>, rho <span class='op'>=</span> <span class='fl'>.3</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 <span class='co'># Here the linear estimate using R=1 data is unbiased for</span>
 <span class='co'># "ATE on Y (Given R)" with b_R = 0 but not when  b_R = 1   </span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/DeclareDesign/man/redesign.html'>redesign</a></span><span class='op'>(</span><span class='va'>two_arm_attrition_design</span>, b_R <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>, rho <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://declaredesign.org/r/declaredesign/reference/diagnose_design.html'>diagnose_design</a></span><span class='op'>(</span><span class='fu'><a href='https://declaredesign.org/r/declaredesign/reference/redesign.html'>redesign</a></span><span class='op'>(</span><span class='va'>two_arm_attrition_design</span>, b_R <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>, rho <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>
